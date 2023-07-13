@@ -12,8 +12,6 @@ public class Driver {
         SpecialVendingMachine specialMachine = null;
 
         while (MaininUse) {
-            System.out.println(regularMachine + "\n");
-            System.out.println(specialMachine + "\n");
             System.out.println("\nSelect an option: ");
             System.out.println("1. Create a regular vending machine ");
             System.out.println("2. Test vending machine ");
@@ -150,7 +148,7 @@ public class Driver {
     }
 
     static void testVendingMachine(SpecialVendingMachine machine){
-
+        
     }
 
     static void Usermenu(RegularVendingMachine machine){

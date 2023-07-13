@@ -3,8 +3,12 @@ package VendingModel.VendingMachineClasses;
 import VendingModel.ItemsSlotsClass.ItemsSlots;
 import VendingModel.MoneyClass.Money;
 
-public class SpecialVendingMachine extends AbstractVendingMachine implements InterfaceVendingMachine{
-    // methods used for files
+public class SpecialVendingMachine extends VendingMachine implements InterfaceVendingMachine{
+    
+    public SpecialVendingMachine(){
+        super();
+    }
+
     public void fileItemScan(){
 
     }

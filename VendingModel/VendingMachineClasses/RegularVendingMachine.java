@@ -16,7 +16,11 @@ import java.util.Scanner;
  * amount of money of the user, amount of transactions, a boolean of whether or not a sale was done, 
  * money stored in the vending machine, user's money, a list of the transactions, and the item slots.
  */
-public class RegularVendingMachine extends AbstractVendingMachine implements InterfaceVendingMachine{
+public class RegularVendingMachine extends VendingMachine implements InterfaceVendingMachine{
+
+    public RegularVendingMachine(){
+        super();
+    }
 
     /**
      * A method that scans a file for the <code>Items</code> made in the program
