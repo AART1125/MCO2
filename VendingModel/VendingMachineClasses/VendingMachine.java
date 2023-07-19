@@ -68,25 +68,50 @@ abstract class VendingMachine{
         this.vendoItem = new ItemsSlots[MAXROW][MAXCOL];
     }
 
-    public int getOccupiedSlots(){
+    /**
+     * Gets the occupied slots in the object
+     * @return Occupied slots
+     */
+    public int getOccupiedSlots() {
         return this.occupiedSlots;
     }
 
+    /**
+     * Gets the value of whether a sale has been done
+     * @return true or false
+     */
     public boolean getSalesWasDone() {
         return this.salesWasDone;
     }
+
+    /**
+     * Gets the <code>ItemsSlots</code> of the machine
+     * @return Item Slots
+     */
     public ItemsSlots[][] getVendoItem() {
         return this.vendoItem;
     }
 
-    public Money[] getStoredMoney(){
+    /**
+     * Gets the stored money in the machine
+     * @return Stored money
+     */
+    public Money[] getStoredMoney() {
         return this.storedMoney;
     }
 
-    public Money[] getUserMoney(){
-        return this.userMoney;
+   /**
+     * Gets the User's money in the machine
+     * @return User's Money array
+     */
+    public Money[] getUserMoney() {
+         return this.userMoney;
     }
 
+    /**
+     * Sets the value of salesWasDone variable
+     * @param salesWasDone Value used to set the variable
+     */
     public void setSalesWasDone(boolean salesWasDone) {
         this.salesWasDone = salesWasDone;
     }
