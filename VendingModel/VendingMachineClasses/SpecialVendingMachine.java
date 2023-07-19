@@ -231,8 +231,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         build.append("------------------------------------------------------------------\n");
         build.append("| Slot |         Name       |   Price  |  Quantity  |  Calories  |\n");
         build.append("------------------------------------------------------------------\n");
-        for (int i = 0; i < MAXROW; i++) {
-            for (int j = 0; j < MAXCOL; j++) {
+        for (i = 0; i < MAXROW; i++) {
+            for (j = 0; j < MAXCOL; j++) {
                 if (this.vendoItem[i][j].getProductItem()[0] != null && this.vendoItem[i][j].getProductItem()[0].getName() != null) {
                     build.append(String.format("|%-6s|", this.vendoItem[i][j].getLabel()));
                     build.append(String.format("%-20s|", "")); // omit itemName
