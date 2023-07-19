@@ -14,10 +14,8 @@ public class VendingMachineUI {
 
         this.mainFrame = new JFrame("Smoothie Machine");
         this.mainFrame.setIconImage(this.icon.getImage());
-        this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.mainFrame.setLayout(new GridLayout());
+        this.mainFrame.setLayout(new GridLayout(5, 3));
         this.mainFrame.setSize(500, 750);
-
         this.mainFrame.setVisible(true);
         
     }

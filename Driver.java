@@ -1,7 +1,9 @@
 import java.util.Scanner;
 
+import VendingController.VendingMachineController;
 import VendingModel.VendingMachineClasses.RegularVendingMachine;
 import VendingModel.VendingMachineClasses.SpecialVendingMachine;
+import VendingView.VendingMachineUI;
 
 public class Driver {
     static boolean UserinUse = false, MaintenanceinUse = false, VendinginUse = false, MaininUse = true;
@@ -148,7 +150,8 @@ public class Driver {
     }
 
     static void testVendingMachine(SpecialVendingMachine machine){
-        
+        VendingMachineUI ui = new VendingMachineUI();
+        VendingMachineController controller = new VendingMachineController(machine, ui);
     }
 
     static void Usermenu(RegularVendingMachine machine){
