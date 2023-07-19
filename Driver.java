@@ -82,9 +82,6 @@ public class Driver {
     static SpecialVendingMachine createSpecialVendingMachine(){
         SpecialVendingMachine machine = new SpecialVendingMachine();
 
-        machine.initialization(machine.getVendoItem());
-        machine.initialization(machine.getUserMoney());
-        machine.initialization(machine.getStoredMoney());
         machine.fileItemScan();
         machine.fileMoneyScan();
         machine.fileTransactionScan();

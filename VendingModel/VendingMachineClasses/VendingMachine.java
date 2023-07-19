@@ -7,7 +7,7 @@ import VendingModel.TransactionsClass.Transactions;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-interface InterfaceVendingMachine {
+interface InterfaceVendingMachineRegular {
     // methods used for files
     public void fileItemScan();
     public void fileItemWrite();
@@ -32,14 +32,28 @@ interface InterfaceVendingMachine {
     public void dispenseChange(Money[] userMoneys);
     public double total(Money[] moneys);
 
-}
-
-interface InterfaceVendingMachineMaintenance {
     public void inputDenomenations();
     public void inputItems();
     public void changePrice();
     public void decreaseItem(ItemsSlots[][] itemArr);
     public void collectMoneyInMachine();
+
+}
+
+interface InterfaceVendingMachineSpecial {
+    // methods used for files
+    public void fileItemScan();
+    public void fileItemWrite();
+    public void fileMoneyScan();
+    public void fileMoneyWrite();
+    public void fileTransactionScan();
+    public void fileTransactionWrite();
+
+    // Operating methods
+    public void collectMoney(Money[] userMoneys);
+    public boolean buyItem(Money[] userMoneys);
+    public void dispenseChange(Money[] userMoneys);
+    public double total(Money[] moneys);
 }
 
 abstract class VendingMachine{
