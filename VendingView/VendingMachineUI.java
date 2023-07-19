@@ -11,7 +11,7 @@ public class VendingMachineUI {
 
     public VendingMachineUI(){
         this.icon = new ImageIcon("VendingView/Images/mainIcon.jpg");
-
+        
         this.mainFrame = new JFrame("Smoothie Machine");
         this.mainFrame.setIconImage(this.icon.getImage());
         this.mainFrame.setLayout(new GridLayout(5, 3));

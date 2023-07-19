@@ -31,12 +31,15 @@ interface InterfaceVendingMachine {
     public boolean buyItem(Money[] userMoneys);
     public void dispenseChange(Money[] userMoneys);
     public double total(Money[] moneys);
+
+}
+
+interface InterfaceVendingMachineMaintenance {
     public void inputDenomenations();
     public void inputItems();
     public void changePrice();
     public void decreaseItem(ItemsSlots[][] itemArr);
     public void collectMoneyInMachine();
-
 }
 
 abstract class VendingMachine{
@@ -87,5 +90,5 @@ abstract class VendingMachine{
     public void setSalesWasDone(boolean salesWasDone) {
         this.salesWasDone = salesWasDone;
     }
-    
+
 }
