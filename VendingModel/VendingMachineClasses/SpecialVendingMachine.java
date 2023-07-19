@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import VendingModel.ItemsClass.Items;
+import VendingModel.ItemsClass.Items; 
 import VendingModel.ItemsSlotsClass.ItemsSlots;
 import VendingModel.MoneyClass.Money;
 
@@ -16,6 +16,9 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         super();
     }
 
+    /**
+     * A method that scans a file for the <code>Items</code> made in the program
+     */
     public void fileItemScan(){
         int quantity, calories, row = 0, col = 0;
         String name, itemType;
@@ -49,31 +52,61 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * A method that creates/overwrite a file for the <code>Items</code> in the program
+     */
     public void fileItemWrite(){
 
     }
+
+    /**
+     * A method that scans a file for the <code>Money</code> made in the program
+     */
     public void fileMoneyScan(){
 
     }
+
+    /**
+     * A method that creates/overwrite a file for the <code>Transactions</code> made in the program
+     */
     public void fileMoneyWrite(){
 
     }
+
+    /**
+     * A method that scans a file for the <code>Transactions</code> made in the program
+     */
     public void fileTransactionScan(){
 
     }
+
+    /**
+     * A method that creates/overwrite a file for the <code>Transactions</code> made in the program
+     */
     public void fileTransactionWrite(){
 
     }
 
-    // initialization methods
+    /**
+     * Initializes all <code>ItemSlots</code> instances in the array
+     * @param vendoItems ItemsSlots array
+     */
     public void initialization(ItemsSlots[][] vendoItems){
 
     }
+
+    /**
+     * Initializes all <code>Money</code> instances in the array
+     * @param moneys Money array
+     */
     public void initialization(Money[] moneys){
 
     }
 
-    // display methods
+    /**
+     * Displays the available items in the <code>ItemsSlots</code> array of the machine
+     * @return Display of items
+     */
     public String display(){
         return null;
     }
@@ -87,21 +120,38 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
     }
 
-    // Operating methods
+    /**
+     * This method collects the money of the user and add it in the machines userMoney array
+     * @param userMoney User's money in the machine
+     */
     public void collectMoney(Money[] userMoneys){
 
     }
+
+    /**
+     * This method is where the buying of an item will be done
+     * @param userMoneys User's Money
+     * @return true or false
+     */
     public boolean buyItem(Money[] userMoneys){
         return false;
     }
+
+    /**
+     * This method dispenses the change of the user
+     * @param userMoney User's Money
+     */
     public void dispenseChange(Money[] userMoneys){
 
     }
+
+    /**
+     * This method generates the total of a <code>Money</code> array
+     * @param moneys Money array
+     * @return Sum
+     */
     public double total(Money[] moneys){
         return 0.0;
     }
     
-    public Money[] getUserMoney() {
-        return this.userMoney;
-    }
 }
