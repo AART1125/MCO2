@@ -190,59 +190,282 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * Initializes all <code>ItemSlots</code> instances in the array
      * @param vendoItems ItemsSlots array
      */
-    public void initialization(ItemsSlots[][] vendoItems){
+    public void initialization(ItemsSlots[][] vendoItems) {
+    int i, j;
+    int itemCount = 0;
 
+    for (i = 0; i < MAXROW; i++) {
+        for (j = 0; j < MAXCOL; j++) {
+            vendoItems[i][j] = new ItemsSlots(i, j);
+        }
     }
+
+    for (i = 0; i < MAXROW; i++) {
+        for (j = 0; j < MAXCOL; j++) {
+            for (itemCount = 0; itemCount < MAXITEMS; itemCount++) {
+                vendoItems[i][j].getProductItem()[itemCount] = new Items();
+            }
+        }
+    }
+}
 
     /**
      * Initializes all <code>Money</code> instances in the array
      * @param moneys Money array
      */
-    public void initialization(Money[] moneys){
-
+     public void initialization(Money[] moneys){
+        int i;
+        for ( i = 0; i < moneys.length; i++) {
+            moneys[i] = new Money();
+        }
     }
 
     /**
      * Displays the available items in the <code>ItemsSlots</code> array of the machine
      * @return Display of items
      */
-    public String display(){
-        return null;
+    public String display() {
+        int j;
+        int i;
+        StringBuilder build = new StringBuilder();
+        build.append("------------------------------------------------------------------\n");
+        build.append("| Slot |         Name       |   Price  |  Quantity  |  Calories  |\n");
+        build.append("------------------------------------------------------------------\n");
+        for (int i = 0; i < MAXROW; i++) {
+            for (int j = 0; j < MAXCOL; j++) {
+                if (this.vendoItem[i][j].getProductItem()[0] != null && this.vendoItem[i][j].getProductItem()[0].getName() != null) {
+                    build.append(String.format("|%-6s|", this.vendoItem[i][j].getLabel()));
+                    build.append(String.format("%-20s|", "")); // omit itemName
+                    build.append(String.format("P%9.2f|", this.vendoItem[i][j].getPrice()));
+                    build.append(String.format("%12d|", this.vendoItem[i][j].getQuantity()));
+                    build.append(String.format("%10d g|\n", 0)); // omit calorie amount
+            }
+        }
     }
-    public void showTransactions(){
+    build.append("------------------------------------------------------------------\n");
 
-    }
-    public void showNewTransactions(){
+    return build.toString();
+}
+    
+    /**
+     * This method shows the all the <code>Transactions</code> made
+     */
+    public void showTransactions() {
+    double sum = 0;
+    if (this.transactionList != null && this.transactionAmount != 0) {
+        System.out.println("------------------------------------------------------------------------------");
+        System.out.println("|  TR#  |         Name       |   Total  |  Payment |  Change  |     Date     |");
+        System.out.println("------------------------------------------------------------------------------");
+        for (Transactions transaction : this.transactionList) {
+            sum += transaction.getTotal();
 
+            System.out.print(String.format("|%7d|", transaction.getNumber()));
+            System.out.print(String.format("%20s|", "")); // omit itemName
+            System.out.print(String.format("P%9.2f|", transaction.getTotal()));
+            System.out.print(String.format("P%9.2f|", transaction.getPayment()));
+            System.out.print(String.format("P%9.2f|", transaction.getChange()));
+            System.out.print(String.format("%14s|\n", "")); // transaction string
+            System.out.println("------------------------------------------------------------------------------");
+        }
+        System.out.println("Total: " + sum + "\n");
+    } else {
+        System.out.println("There are no transactions available to check");
     }
-    public void checkDenom(){
+}
+    
+ /**
+     * This method shows the newest <code>Transactions</code> that the maintenance hasn't seen yet
+     */
+    public void showNewTransactions() {
+    double sum = 0;
 
+    if (this.transactionList != null && this.transactionAmount != 0) {
+        System.out.println("------------------------------------------------------------------------------");
+        System.out.println("|  TR#  |         Name       |   Total  |  Payment |  Change  |     Date     |");
+        System.out.println("------------------------------------------------------------------------------");
+        for (Transactions transaction : this.transactionList) {
+            if (!transaction.getCheck()) {
+                sum += transaction.getTotal();
+
+                System.out.print(String.format("|%7d|", transaction.getNumber()));
+                System.out.print(String.format("%20s|", "")); // omit itemName
+                System.out.print(String.format("P%9.2f|", transaction.getTotal()));
+                System.out.print(String.format("P%9.2f|", transaction.getPayment()));
+                System.out.print(String.format("P%9.2f|", transaction.getChange()));
+                System.out.print(String.format("%14s|\n", "")); // transaction string
+                System.out.println("------------------------------------------------------------------------------");
+                transaction.setCheck(true);
+            }
+        }
+        System.out.println("Total: " + sum + "\n");
+    } else {
+        System.out.println("There are no transactions available to check");
     }
+}
+
+    /**
+     * This method checks the amount of every denomination left in the machine
+     */
+    public void checkDenom() {
+    if (total(this.storedMoney) > 0) {
+        System.out.println("\n------------------------");
+        System.out.println("|    Value    | Amount |");
+        System.out.println("------------------------");
+        for (Money money : this.storedMoney) {
+            if (money.getValue() > 0) {
+                System.out.print(String.format("|P%12.2f|", money.getValue()));
+                System.out.println(String.format("%8d|", money.getAmount()));
+                System.out.println("------------------------");
+            }
+        }
+    } else {
+        System.out.println("\nThere is no money available in the machine");
+    }
+}
 
     /**
      * This method collects the money of the user and add it in the machines userMoney array
      * @param userMoney User's money in the machine
      */
-    public void collectMoney(Money[] userMoneys){
+    public void collectMoney(Money[] userMoney) {
+    boolean adding = true;
+    int amount;
+    double value;
+    char choice;
+    Money tempMoney;
 
+    while (adding) {
+        do {
+            // omit input values
+        } while (value != 1 && value != 5 && value != 10 && value != 20 && value != 50 &&
+                value != 100 && value != 200 && value != 500 && value != 1000);// get value
+
+        do {
+            // omit input values
+        } while (amount < 0);// get amount
+
+        // Prompt if adding more denominations
+        // omit input values
+
+        if (value > 0 && amount > 0) {
+            tempMoney = new Money(value, amount);
+
+            userMoney[this.currentMon] = tempMoney;
+            this.currentMon++;
+
+            switch (choice) {
+                case 'Y':
+                case 'y':
+                    adding = true;
+                    break;
+                case 'N':
+                case 'n':
+                    adding = false;
+                    break;
+                default:
+                    adding = false;
+                    System.out.println("Invalid input! Returning to main");
+            }
+        } else {
+            System.out.println("Invalid value inputted");
+        }
     }
+}
+
 
     /**
      * This method is where the buying of an item will be done
      * @param userMoneys User's Money
      * @return true or false
      */
-    public boolean buyItem(Money[] userMoneys){
-        return false;
+    public boolean buyItem(Money[] userMoneys) {
+    boolean success = false;
+    int row, col, origQuantity;
+    double change, price, payment = total(userMoney);
+    char choice;
+    String slotLabel = null;
+    ItemsSlots slot;
+
+    // omit slotLabel value
+    slotLabel = slotLabel.toUpperCase();
+
+    row = slotLabel.charAt(0) - 'A';
+    col = Integer.parseInt(slotLabel.substring(1)) - 1;
+
+    if ((row >= 0 && row < MAXROW) && (col >= 0 && col < MAXCOL)) {// check if valid
+        slot = vendoItem[row][col];
+
+        if (slot != null && slot.getProductItem()[0].getName() != null) {
+            //final check if user want to continue with the transactions
+            if (isItemSellable(slot.getProductItem()[0])) {// checks if item is sellable
+                price = slot.getPrice();
+
+                
+                System.out.println("Item details:\n");
+                System.out.println("Name: " + "");
+                System.out.println("Price: " + price);
+
+                // omit input of choice value
+
+                if (choice == 'Y' || choice == 'y') {
+                    if (total(userMoney) >= price) {
+                        change = produceChange(userMoney, price);// produce change in different denominations
+                        if (change >= 0 && total(this.storedMoney) > 0) {
+                            success = true;
+
+                            generateTransactions(slot.getProductItem()[0], slot.getPrice(), payment, change);
+
+                            origQuantity = slot.getQuantity();
+                            slot.decreaseQuantity(1);
+                            slot.decreaseItemsFromSlot(slot.getProductItem(), origQuantity);
+
+                            System.out.println("Item purchased successfully!");
+                            if (change > 0)
+                                dispenseChange(userMoneys);
+
+                            this.salesWasDone = true;
+                        } else {
+                            System.out.println("Insufficient denominations to produce change.");
+                            dispenseChange(userMoneys);
+                        }
+                    } else {
+                        System.out.println("\nInsufficient funds.");
+                        dispenseChange(userMoneys);
+                    }
+                } else {
+                    System.out.println("Transaction canceled.");
+                    dispenseChange(userMoneys);
+                }
+            } else {
+                System.out.println("Item chosen is not sellable!");
+                dispenseChange(userMoneys);
+            }
+        } else {
+            System.out.println("Invalid slot label inputted!");
+            dispenseChange(userMoneys);
+        }
+    } else {
+        System.out.println("Invalid slot label.");
+        dispenseChange(userMoneys);
     }
+    return success;
+}
+
 
     /**
      * This method dispenses the change of the user
      * @param userMoney User's Money
      */
-    public void dispenseChange(Money[] userMoneys){
-
+    public void dispenseChange(Money[] userMoneys) {
+    for (int i = 0; i < userMoneys.length; i++) {
+        if (userMoneys[i].getValue() > 0) {
+            System.out.println("\nDispensing change: P" + userMoneys[i].getValue() + "| Amount : " + userMoneys[i].getAmount());
+            this.currentMon--;
+        }
+        
+        userMoneys[i] = new Money();
     }
+}
 
     /**
      * This method generates the total of a <code>Money</code> array
@@ -250,7 +473,12 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * @return Sum
      */
     public double total(Money[] moneys){
-        return 0.0;
+        int i;
+        double sum = 0.0;
+        for(i = 0; i < moneys.length; i++){
+            sum += moneys[i].getTotal();
+        }
+        return sum;
     }
     
 }
