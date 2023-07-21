@@ -25,7 +25,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * A method that scans a file for the <code>Items</code> made in the program
      */
-   public void fileItemScan() {
+    public void fileItemScan() {
         int row = 0, col = 0;
         try {
             File contentFile = new File("./Files/Items.txt");
@@ -328,5 +328,5 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
         return sum;
     }
-    
+       
 }

@@ -50,14 +50,14 @@ interface InterfaceVendingMachineSpecial {
     public void fileTransactionWrite();
 
     // Operating methods
-    public void collectMoney(Money[] userMoneys);
+    public boolean collectMoney(Money[] userMoneys);
     public boolean buyItem(Money[] userMoneys);
     public void dispenseChange(Money[] userMoneys);
     public double total(Money[] moneys);
 }
 
 abstract class VendingMachine{
-    protected static final int MAXROW = 6;
+    protected static final int MAXROW = 5;
     protected static final int MAXCOL = 5;
     protected static final int DENOMINATIONS = 9;
     protected static final int MAXITEMS = 20;

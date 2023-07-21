@@ -16,7 +16,7 @@ import java.util.Scanner;
  * amount of money of the user, amount of transactions, a boolean of whether or not a sale was done, 
  * money stored in the vending machine, user's money, a list of the transactions, and the item slots.
  */
-public class RegularVendingMachine extends VendingMachine implements InterfaceVendingMachine, InterfaceVendingMachineMaintenance{
+public class RegularVendingMachine extends VendingMachine implements InterfaceVendingMachineRegular{
 
     /**
      * A <code>RegularVendingMachine</code> constructor that calls on the contructor of the parent class
