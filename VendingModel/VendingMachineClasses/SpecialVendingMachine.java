@@ -79,7 +79,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             mainWriter.close();
 
         } catch (IOException e) {
-            System.out.println("\nAn error occurred.");
+            //cathces error
         }
     }
 
@@ -105,7 +105,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             }
             reader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("\nFile can't be read....");
+            //cathces error        
         }
     }
 
@@ -128,7 +128,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             }
             mainWriter.close();
         } catch (IOException e) {
-            System.out.println("\nAn error occurred.");
+            //cathces error
         }
     }
 
@@ -164,7 +164,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             }
             reader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("\nFile can't be read....");
+            //cathces error
         }
     }
 
@@ -188,7 +188,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             mainWriter.close();
 
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            //cathces error
         }
     }
 
@@ -231,49 +231,13 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method collects the money of the user and add it in the machines userMoney array
      * @param userMoney User's money in the machine
      */
-    public boolean collectMoney(Money[] userMoney) {
+    public boolean collectMoney() {
         boolean adding = true, success = false;
         int amount = 0;
         double value = 0;
-        char choice =' ';
         Money tempMoney;
 
-        while (adding) {
-            do {
-                // omit input values
-            } while (value != 1 && value != 5 && value != 10 && value != 20 && value != 50 &&
-                    value != 100 && value != 200 && value != 500 && value != 1000);// get value
-
-            do {
-                // omit input values
-            } while (amount < 0);// get amount
-
-            // Prompt if adding more denominations
-            // omit input values
-
-            if (value > 0 && amount > 0) {
-                tempMoney = new Money(value, amount);
-
-                userMoney[this.currentMon] = tempMoney;
-                this.currentMon++;
-
-                switch (choice) {
-                    case 'Y':
-                    case 'y':
-                        adding = true;
-                        break;
-                    case 'N':
-                    case 'n':
-                        adding = false;
-                        break;
-                    default:
-                        adding = false;
-                        System.out.println("Invalid input! Returning to main");
-                }
-            } else {
-                System.out.println("Invalid value inputted");
-            }
-        }
+                
 
         return success;
     }
@@ -285,7 +249,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * @param userMoneys User's Money
      * @return true or false
      */
-    public boolean buyItem(Money[] userMoneys) {
+    public boolean buyItem(String input) {
         boolean success = false;
         int row, col, origQuantity;
         double change, price, payment = total(userMoney);
@@ -304,14 +268,14 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method dispenses the change of the user
      * @param userMoney User's Money
      */
-    public void dispenseChange(Money[] userMoneys) {
-        for (int i = 0; i < userMoneys.length; i++) {
-            if (userMoneys[i].getValue() > 0) {
-                System.out.println("\nDispensing change: P" + userMoneys[i].getValue() + "| Amount : " + userMoneys[i].getAmount());
+    public void dispenseChange() {
+        for (int i = 0; i < this.userMoney.length; i++) {
+            if (this.userMoney[i].getValue() > 0) {
+                System.out.println("\nDispensing change: P" + this.userMoney[i].getValue() + "| Amount : " + this.userMoney[i].getAmount());
                 this.currentMon--;
             }
             
-            userMoneys[i] = new Money();
+            this.userMoney[i] = new Money();
         }
     }
 
@@ -327,6 +291,131 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             sum += moneys[i].getTotal();
         }
         return sum;
+    }
+
+    /**
+     * This method inputs the denomination of money
+     */
+    public void inputDenomenations(){
+        int i, tempAmount = 0; 
+        double value = 0;
+        Money tempMoney;
+        
+    }
+
+    /**
+     * This method inputs <code>Items</code> objects into the <code>ItemsSlots</code> array
+     */
+    public void inputItems(){
+        boolean finish = false, found = false;
+        char input;
+        int row = 0, col = 0, i = 0, j = 0;
+
+        //looks for an empty slot within the occupied range
+        while(i < this.occupiedRow+1 && !found){
+            while(j < this.occupiedSlots % MAXCOL && !found){
+                if (this.vendoItem[i][j % MAXCOL].getQuantity() == 0 && this.vendoItem[i][j % MAXCOL].getProductItem()[0].getName() == null) {
+                    row = i;
+                    col = j % MAXCOL;
+                    found = true;
+                }
+                j++;
+            }
+            i++;
+        }
+
+        
+    }
+
+    /**
+     * This method changes the price of <code>Items</code>
+     */
+    public void changePrice(){
+        int row, col;
+        double newPrice;
+        String slotLabel;
+
+        
+        slotLabel = sc.next().toUpperCase();
+
+        row = slotLabel.charAt(0) - 'A';
+        col = Integer.parseInt(slotLabel.substring(1)) - 1;
+
+        if(this.vendoItem[row][col] != null && this.vendoItem[row][col].getProductItem()[0].getName() != null){
+            
+        }
+    } 
+
+    /**
+     * This method decreases the <code>Items</code> in a <code>ItemsSlots</code> array
+     * @param itemArr Item Slot
+     */
+    public void decreaseItem(ItemsSlots[][] itemArr) {
+        int row, col, qnty, origQuantity;
+        String slotLabel;
+        ItemsSlots item;
+
+        slotLabel = sc.next().toUpperCase();
+       
+        row = slotLabel.charAt(0) - 'A';
+        col = Integer.parseInt(slotLabel.substring(1)) - 1;
+        
+        origQuantity = itemArr[row][col].getQuantity();
+
+        if (row >= 0 && row < itemArr.length && col >= 0 && col < itemArr[row].length) {
+        
+        } 
+    }
+
+    /**
+     * This method collects the <code>Money</code> in the machine and saves them in a file
+     */
+    public void collectMoneyInMachine(){
+        int i = 0, amount = 0;
+        double sum = 0;
+        boolean reachedTotal = false;
+        String check = null;
+        File contentFile = new File("./Files/Collections.txt");
+
+        //checks if money is available
+        if(total(storedMoney) > 0){
+            try {//scans the current collection in file
+            Scanner reader = new Scanner(contentFile);
+            while (reader.hasNextLine() && !reachedTotal) {
+                check = reader.nextLine();
+                if (!check.equals("Total: ")) {
+                    amount = Integer.parseInt(reader.nextLine());
+                    reader.nextLine();
+                } else {
+                    sum += Double.parseDouble(reader.nextLine());
+                    reachedTotal = true;
+                }
+            }
+            reader.close();
+            } catch (IOException e) {
+                //
+            }
+
+            try {//print collection money and total to file
+                PrintWriter mainWriter = new PrintWriter(contentFile);
+
+                for (i = 0; i < storedMoney.length; i++) {
+                    if (this.storedMoney[i] != null) {
+                        sum += this.storedMoney[i].getValue() * this.storedMoney[i].getAmount();
+                        mainWriter.println(this.storedMoney[i].getValue());
+                        mainWriter.println(this.storedMoney[i].getAmount() + amount);
+                        mainWriter.print("\n");
+                    }
+                    this.storedMoney[i] = new Money();
+                }
+                mainWriter.println("Total: ");
+                mainWriter.println(sum);
+                mainWriter.close();
+                
+            } catch (IOException e) {
+                
+            }
+        } 
     }
        
 }

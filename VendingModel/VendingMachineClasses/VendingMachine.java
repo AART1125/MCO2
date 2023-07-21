@@ -20,14 +20,8 @@ interface InterfaceVendingMachineRegular {
     public void initialization(ItemsSlots[][] vendoItems);
     public void initialization(Money[] moneys);
 
-    // display methods
-    public String display();
-    public void showTransactions();
-    public void showNewTransactions();
-    public void checkDenom();
-
     // Operating methods
-    public void collectMoney(Money[] userMoneys);
+    public boolean collectMoney(Money[] userMoneys);
     public boolean buyItem(Money[] userMoneys);
     public void dispenseChange(Money[] userMoneys);
     public double total(Money[] moneys);
@@ -49,11 +43,29 @@ interface InterfaceVendingMachineSpecial {
     public void fileTransactionScan();
     public void fileTransactionWrite();
 
+    // initialization methods
+    public void initialization(ItemsSlots[][] vendoItems);
+    public void initialization(Money[] moneys);
+
     // Operating methods
-    public boolean collectMoney(Money[] userMoneys);
-    public boolean buyItem(Money[] userMoneys);
-    public void dispenseChange(Money[] userMoneys);
+    public boolean collectMoney();
+    public boolean buyItem(String input);
+    public void dispenseChange();
     public double total(Money[] moneys);
+
+    public void inputDenomenations();
+    public void inputItems();
+    public void changePrice();
+    public void decreaseItem(ItemsSlots[][] itemArr);
+    public void collectMoneyInMachine();
+
+}
+
+interface VendingDisplays{
+    public String display();
+    public void showTransactions();
+    public void showNewTransactions();
+    public void checkDenom();
 }
 
 abstract class VendingMachine{
@@ -114,7 +126,7 @@ abstract class VendingMachine{
         return this.storedMoney;
     }
 
-   /**
+    /**
      * Gets the User's money in the machine
      * @return User's Money array
      */
@@ -129,5 +141,4 @@ abstract class VendingMachine{
     public void setSalesWasDone(boolean salesWasDone) {
         this.salesWasDone = salesWasDone;
     }
-
 }
