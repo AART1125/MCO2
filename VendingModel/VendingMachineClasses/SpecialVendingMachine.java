@@ -273,10 +273,111 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
-    public boolean createProduct(){
-        
-        
+   public boolean createProductFromItems(List<Item> purchasedItems, String productName) {
+    // Define the required ingredients for the specified product
+     List<Items> requiredIngredients = new ArrayList<>();
+   switch (productName) {
+        case "Strawberry smoothie":
+        requiredIngredients.add("Strawberry", 3);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Sugar", 1);
+        break;
+    case "Mango smoothie":
+        requiredIngredients.add("Mango", 3);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Sugar", 1);
+        break;
+    case "Mixed Berry Smoothie":
+        requiredIngredients.add("MixedBerries", 2);
+        requiredIngredients.add("Strawberry", 1);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Sugar", 1);
+        break;
+    case "Strawberry banana smoothie":
+        requiredIngredients.add("Strawberry", 2);
+        requiredIngredients.add("Banana", 1);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Sugar", 1);
+        break;
+    case "Mango Graham Smoothie":
+        requiredIngredients.add("Mango", 3);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Graham", 1);
+        requiredIngredients.add("Sugar", 1);
+        break;
+    case "Spring smoothie":
+        requiredIngredients.add("Mango", 1);
+        requiredIngredients.add("Orange", 1);
+        requiredIngredients.add("Carrot", 1);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Honey", 1);
+        break;
+    case "Tropical Dragon Smoothie":
+        requiredIngredients.add("DragonFruit", 2);
+        requiredIngredients.add("MixedBerries", 1);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Oats", 1);
+        break;
+    case "Watermelon Smoothie":
+        requiredIngredients.add("Watermelon", 2);
+        requiredIngredients.add("Grapes", 1);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Honey", 1);
+        break;
+    case "Peach Smoothie":
+        requiredIngredients.add("Peach", 2);
+        requiredIngredients.add("Orange", 1);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Wafer", 1);
+        break;
+    case "Oreo Banana Smoohie":
+        requiredIngredients.add("Banana", 3);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Oreo", 1);
+        break;
+    case "PB Banana Smoothie":
+        requiredIngredients.add("Banana", 3);
+        requiredIngredients.add("Milk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("PeanutButter", 1);
+        break;
+    case "Health smoothie":
+        requiredIngredients.add("Apple", 2);
+        requiredIngredients.add("Spinach", 1);
+        requiredIngredients.add("AlmondMilk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("SpirulinaPowder", 1);
+        break;
+    case "Forest Smoothie":
+        requiredIngredients.add("Mango", 1);
+        requiredIngredients.add("Orange", 1);
+        requiredIngredients.add("Kale", 1);
+        requiredIngredients.add("OatMilk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Honey", 1);
+        break;
+    case "Protein smoothie":
+        requiredIngredients.add("Banana", 3);
+        requiredIngredients.add("OatMilk", 1);
+        requiredIngredients.add("Ice", 1);
+        requiredIngredients.add("Protein powder", 1);
+        break;
+        default:
+            return false; // The specified product is not supported
+    }
         return false;
+       // check if item is enough to create a product
+       // Decrease the quantities of purchased items from the itemList
     }
 
     /**
