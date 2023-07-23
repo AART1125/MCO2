@@ -48,12 +48,14 @@ interface InterfaceVendingMachineSpecial {
     public void initialization(Money[] moneys);
 
     // Operating methods
-    public boolean collectMoney();
+    public boolean addItem(String label);
+    public boolean createProduct();
+    public boolean collectMoney(double price);
     public boolean buyItem(String input);
     public void dispenseChange();
     public double total(Money[] moneys);
 
-    public void inputDenomenations();
+    public void inputDenomenations(double price);
     public void inputItems();
     public void changePrice();
     public void decreaseItem(ItemsSlots[][] itemArr);
@@ -69,8 +71,8 @@ interface VendingDisplays{
 }
 
 abstract class VendingMachine{
-    protected static final int MAXROW = 5;
-    protected static final int MAXCOL = 5;
+    protected static final int MAXROW = 4;
+    protected static final int MAXCOL = 6;
     protected static final int DENOMINATIONS = 9;
     protected static final int MAXITEMS = 20;
     protected static Scanner sc = new Scanner(System.in);

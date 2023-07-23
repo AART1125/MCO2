@@ -2,8 +2,10 @@ package VendingModel.TransactionsClass;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import VendingModel.ItemsClass.Items;
+import VendingModel.ItemsSlotsClass.ItemsSlots;
 
 /**
  * This is the <code>Transactions</code> class. This represent the transactiions made in the vending machine.
@@ -15,6 +17,7 @@ public class Transactions {
     private int number;
     private boolean check;
     private Items item;
+    private ArrayList<ItemsSlots> itemArr = new ArrayList<ItemsSlots>();
     private LocalDate date;
 
     /**
@@ -28,6 +31,24 @@ public class Transactions {
     public Transactions(double total, double payment, double change, Items item, int number){
         this.total = total;
         this.item = item;
+        this.number = number;
+        this.date = LocalDate.now();
+        this.payment = payment;
+        this.change = change;
+        this.check = false;
+    }
+
+    /**
+     * Constructor class for a new <code>Transactions</code> object
+     * @param total Total of the transaction
+     * @param payment Payment of user in transaction
+     * @param change Change produced in transaction
+     * @param item Item bought in transaction
+     * @param number Transaction number
+     */
+    public Transactions(double total, double payment, double change, ArrayList<ItemsSlots> item, int number){
+        this.total = total;
+        this.itemArr = item;
         this.number = number;
         this.date = LocalDate.now();
         this.payment = payment;
@@ -61,7 +82,7 @@ public class Transactions {
      * @return String form of date
      */
     public String toString() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
         return format.format(this.date);
     }
     
@@ -95,6 +116,10 @@ public class Transactions {
      */
     public Items getItem(){
         return this.item;
+    }
+
+    public ArrayList<ItemsSlots> getItemArr() {
+        return this.itemArr;
     }
 
     /**

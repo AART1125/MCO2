@@ -128,7 +128,7 @@ public class ItemsSlots{
      * Sets the product items array in the slot
      * @param productItems new product items
      */
-    public void setProductItems(Items[] productItems) {
+    private void setProductItems(Items[] productItems) {
         this.productItems = productItems;
     }
 

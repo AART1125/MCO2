@@ -3,6 +3,8 @@ package VendingModel.VendingMachineClasses;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.time.LocalDate;
@@ -12,14 +14,23 @@ import java.io.IOException;
 import VendingModel.ItemsClass.Items; 
 import VendingModel.ItemsSlotsClass.ItemsSlots;
 import VendingModel.MoneyClass.Money;
-import VendingModel.TransactionsClass.Transactions;
+import VendingModel.TransactionsClass.Transactions;   
 
 
 public class SpecialVendingMachine extends VendingMachine implements InterfaceVendingMachineSpecial{
-    private ArrayList<Items> itemList = new ArrayList<Items>();
+    private ArrayList<ItemsSlots> itemList;
+    private Dictionary<ArrayList<ItemsSlots>, Items> products;
+    private int storedMoneyAmount;
 
     public SpecialVendingMachine(){
         super();
+        this.itemList = new ArrayList<ItemsSlots>();
+        this.products = new Hashtable();
+        this.storedMoneyAmount = 0;
+    }
+
+    public void initializeProducts(){
+        
     }
 
     /**
@@ -109,7 +120,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-
     /**
      * A method that creates/overwrite a file for the <code>Transactions</code> made in the program
      */
@@ -145,10 +155,10 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         try {
             File contentFile = new File("./Files/Transactions.txt");
             Scanner reader = new Scanner(contentFile);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
             while (reader.hasNextLine()) {// reads file
                 number = Integer.parseInt(reader.nextLine());
-                item = new Items();
+                item = new Items(reader.nextLine(), Integer.parseInt(reader.nextLine()), reader.nextLine());
                 total = Double.parseDouble(reader.nextLine());
                 payment = Double.parseDouble(reader.nextLine());
                 change = Double.parseDouble(reader.nextLine());
@@ -178,11 +188,14 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             mainWriter.println(this.transactionAmount);
             for (Transactions transactions : this.transactionList) {// write to file
                 mainWriter.println(transactions.getNumber());
-
-                // Omit output of transactions.getItem().getName(), transactions.getItem().getCalories(),
-                // transactions.getItem().getItemType(), transactions.getTotal(), transactions.getPayment(),
-                // transactions.getChange(), transactions.toString(), and transactions.getCheck()
-
+                mainWriter.println(transactions.getItem().getName());
+                mainWriter.println(transactions.getItem().getCalories());
+                mainWriter.println(transactions.getItem().getItemType());
+                mainWriter.println(transactions.getTotal());
+                mainWriter.println(transactions.getPayment());
+                mainWriter.println(transactions.getChange());
+                mainWriter.println(transactions.toString());
+                mainWriter.println(transactions.getCheck());
                 mainWriter.print("\n");
             }
             mainWriter.close();
@@ -226,23 +239,56 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    public boolean addItem(String label){
+        int row, col;
+        boolean success = false;
+        ItemsSlots slot;
+
+        row = label.toUpperCase().charAt(0) - 'A';
+        col = Integer.parseInt(label.substring(1));
+
+        try {
+            slot = this.vendoItem[row][col];
+            if (slot != null) {
+                this.itemList.add(slot);
+                success = true;
+            }
+        } catch (NullPointerException e) {
+            // TODO: handle exception
+        }
+
+        return success;
+    }
+
+    public boolean createProduct(){
+        
+        
+        return false;
+    }
 
     /**
      * This method collects the money of the user and add it in the machines userMoney array
      * @param userMoney User's money in the machine
      */
-    public boolean collectMoney() {
-        boolean adding = true, success = false;
-        int amount = 0;
-        double value = 0;
-        Money tempMoney;
+    public boolean collectMoney(double price) {
+        boolean exists = false, success = false;
+        int i = 0;
+        
+        while (i < this.currentMon && !exists) {
+            if (this.storedMoney[i].getValue() == price) {
+                exists = true;
+                this.storedMoney[i] = new Money(price, this.storedMoney[i].getAmount()+1);
+            }
+            i++;
+        }
 
-                
-
+        if (!exists) {
+            this.storedMoney[this.currentMon] = new Money(price, 1);
+            this.currentMon++;
+        }
+        
         return success;
     }
-
-
 
     /**
      * This method is where the buying of an item will be done
@@ -250,19 +296,176 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * @return true or false
      */
     public boolean buyItem(String input) {
-        boolean success = false;
-        int row, col, origQuantity;
-        double change, price, payment = total(userMoney);
-        char choice;
-        String slotLabel = null;
-        ItemsSlots slot;
+        boolean success = true;
+        int i = 0, origQuantity;
+        double price = 0, change;
 
-        // omit slotLabel value
-        slotLabel = slotLabel.toUpperCase();
+        while (i < this.itemList.size() && success) {
+            if(isItemSellable(this.itemList.get(i).getProductItem()[0]) && (total(userMoney) >= this.itemList.get(i).getPrice())){
+                success = true;
+                origQuantity = this.itemList.get(i).getQuantity();
+                price = this.itemList.get(i).getPrice();
+                
+                if (origQuantity > 0){
+                    change = produceChange(userMoney, price);
+                    this.transactionList.add(new Transactions(price, total(storedMoney), change, this.itemList.get(i).getProductItem()[0], transactionAmount+1));
+                    this.itemList.get(i).decreaseQuantity(origQuantity);
+                    this.itemList.get(i).decreaseItemsFromSlot(this.itemList.get(i).getProductItem(), origQuantity);
+
+                } else {
+                    success = false;
+                }
+                
+            } else {
+                success = false;
+            }
+            i++;
+        }
 
         return success;
     }
 
+    /**
+     * This method produces the change for the user. It is used in the buyItems method
+     * @param userMoneys User's money
+     * @param total Total price
+     * @return change
+     */
+    private double produceChange(Money[] userMoneys, double total){
+        double change = total(userMoneys) - total,
+               temp = change;
+        int numBills = 0,  denomCount = 0;
+        int i = DENOMINATIONS-1, j = 0;
+        Money[] tempMoney = new Money[DENOMINATIONS];
+
+        if(change < 0){
+           
+        } else {
+            for (Money money : userMoneys) {
+                tempMoney[j] = new Money(money.getValue(), money.getAmount());
+                j++;
+            }
+            addPaymentToMachine(userMoneys);
+            while(i >= 0){
+                numBills = (int)temp/(int)this.storedMoney[i].getValue();
+                if(numBills > 0){
+                    if(this.storedMoney[i].getAmount() >= numBills){
+                        temp -= this.storedMoney[i].getValue()*numBills;
+                        removeDenomination(this.storedMoney[i].getValue(), numBills);
+
+                        userMoneys[denomCount] = new Money(this.storedMoney[i].getValue(), numBills);
+                        denomCount++;
+                    } else {
+                        j = 0;
+                        for (Money money : tempMoney) {
+                            userMoneys[j] = new Money(money.getValue(), money.getAmount());
+                            j++;
+                        }
+                        change = -1;
+                    }
+                }
+                i--;
+            }
+
+        }
+        return change;
+    }
+    /**
+     * This method removes the denominations of <code>Money</code> objects in an array. It is used in the buyItems method
+     * @param value Value of the money
+     * @param amount Ammount of the money
+     */
+    private void removeDenomination(double value, int amount) {
+        int denominationIndex = -1,
+            decrement = 0;
+        // Find index
+        switch ((int) value) {
+            case 1: denominationIndex = 0; break;
+            case 5: denominationIndex = 1; break;
+            case 10: denominationIndex = 2; break;
+            case 20: denominationIndex = 3; break;
+            case 50: denominationIndex = 4; break;
+            case 100: denominationIndex = 5; break;
+            case 200: denominationIndex = 6; break;
+            case 500: denominationIndex = 7; break;
+            case 1000: denominationIndex = 8; break;
+        }
+        // If the denomination is found, remove 1
+        if (denominationIndex != -1) {
+            if (this.storedMoney[denominationIndex].getAmount() > 0) {
+                decrement = this.storedMoney[denominationIndex].getAmount() - amount;
+                this.storedMoney[denominationIndex].setAmount(decrement);
+            } 
+        }
+    }
+
+    /**
+     * This method checks if the item is sellaable. It is used in the buyItems method
+     * @param item item to be checked
+     * @returnn true or false
+     */
+    private boolean isItemSellable(Items item){
+        boolean sellable = true;
+
+        if(item.getItemType() != null){
+            if(item.getItemType().equalsIgnoreCase("Add-ons") ||
+               item.getItemType().equalsIgnoreCase("Addons")){
+                   sellable = false;
+               }
+        }
+
+        return sellable;
+    }
+
+    /**
+     * This method gets all the <code>Money</code> in the user. It is used in the buyItems method
+     * @param userMoney User's Money 
+     */
+    private void addPaymentToMachine(Money[] userMoney){
+        int newAmount;
+        int i, j;
+        
+        for(i = 0; i < DENOMINATIONS; i++){
+            for(j = 0; j < this.currentMon; j++){
+                if(this.storedMoney[i].getValue() == userMoney[j].getValue()){
+                    newAmount = this.storedMoney[i].getAmount() + userMoney[j].getAmount();
+                    this.storedMoney[i] = new Money(this.storedMoney[i].getValue(), newAmount);
+                }
+            }
+        }
+
+        initialization(userMoney);
+    }
+
+    /**
+     * This method generates the transaction of the sale. It is used in the buyItems method
+     * @param item Items being bought
+     * @param total Total price
+     * @param payment Payment for item
+     * @param change Change from payment
+     */
+    public String createTransactions(Items item, double total, double payment, double change){
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("\n\nTransaction #" + this.transactionList.get(this.transactionAmount).getNumber() + "\n");
+        builder.append("----------------------------------------------\n");
+        builder.append("|         Name       |  Calories  |   Total  |\n");
+        builder.append("----------------------------------------------\n");
+
+        for (ItemsSlots items : this.transactionList.get(this.transactionAmount).getItemArr()) {
+            builder.append(String.format("|%-20s|",items.getProductItem()[0].getName()));
+            builder.append(String.format("%10d g|",items.getProductItem()[0].getCalories()));
+            builder.append(String.format("P%9.2f|",items.getPrice()));
+        }
+
+        builder.append("----------------------------------------------\n\n");
+        builder.append(String.format("Total  : P%9.2f\n", this.transactionList.get(this.transactionAmount).getTotal()));
+        builder.append(String.format("Payment: P%9.2f\n", this.transactionList.get(this.transactionAmount).getPayment()));
+        builder.append(String.format("Change : P%9.2f\n", change));
+        builder.append("----------------------------------------------\n\n");
+        
+        return builder.toString();
+    }
 
     /**
      * This method dispenses the change of the user
@@ -296,19 +499,29 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * This method inputs the denomination of money
      */
-    public void inputDenomenations(){
-        int i, tempAmount = 0; 
-        double value = 0;
-        Money tempMoney;
-        
+    public void inputDenomenations(double price){
+        int i = 0;
+        boolean exists = false;
+
+        while (i < this.storedMoney.length && !exists) {
+            if (this.storedMoney[i].getValue() == price) {
+                exists = true;
+                this.storedMoney[i] = new Money(price, this.storedMoney[i].getAmount()+1);
+            }
+            i++;
+        }
+
+        if (!exists) {
+            this.storedMoney[this.storedMoneyAmount] = new Money(price, 1);
+            this.storedMoneyAmount++;
+        }
     }
 
     /**
      * This method inputs <code>Items</code> objects into the <code>ItemsSlots</code> array
      */
-    public void inputItems(){
-        boolean finish = false, found = false;
-        char input;
+    public void inputItems(String name, String type, double price, int quantity, int calories){
+        boolean found = false;
         int row = 0, col = 0, i = 0, j = 0;
 
         //looks for an empty slot within the occupied range
@@ -324,17 +537,32 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             i++;
         }
 
+        if (found){
+            this.vendoItem[row][col].setPrice(price);
+            this.vendoItem[row][col].setQuantity(quantity);
+            this.vendoItem[row][col].getProductItem()[0] = new Items(name, calories, type);
+            this.vendoItem[row][col].setProductItems(this.vendoItem[row][col].getProductItem()[0]);
+        } else {
+            this.vendoItem[this.occupiedRow][this.occupiedSlots].setPrice(price);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots].setQuantity(quantity);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots].getProductItem()[0] = new Items(name, calories, type);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots].setProductItems(this.vendoItem[this.occupiedRow][this.occupiedSlots].getProductItem()[0]);
         
+            this.occupiedSlots++;
+        
+            if(this.occupiedSlots > 0 && this.occupiedSlots % MAXCOL == 0){
+                this.occupiedRow++;
+            }
+        } 
     }
 
     /**
      * This method changes the price of <code>Items</code>
      */
-    public void changePrice(){
+    @Override
+    public void changePrice(double newPrice){
         int row, col;
-        double newPrice;
         String slotLabel;
-
         
         slotLabel = sc.next().toUpperCase();
 
@@ -342,7 +570,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         col = Integer.parseInt(slotLabel.substring(1)) - 1;
 
         if(this.vendoItem[row][col] != null && this.vendoItem[row][col].getProductItem()[0].getName() != null){
-            
+            this.vendoItem[row][col].setPrice(newPrice);
         }
     } 
 
@@ -350,8 +578,9 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method decreases the <code>Items</code> in a <code>ItemsSlots</code> array
      * @param itemArr Item Slot
      */
-    public void decreaseItem(ItemsSlots[][] itemArr) {
-        int row, col, qnty, origQuantity;
+    @Override
+    public void decreaseItem(String label, int decrease) {
+        int row, col, origQuantity;
         String slotLabel;
         ItemsSlots item;
 
@@ -360,16 +589,25 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         row = slotLabel.charAt(0) - 'A';
         col = Integer.parseInt(slotLabel.substring(1)) - 1;
         
-        origQuantity = itemArr[row][col].getQuantity();
+        origQuantity = this.vendoItem[row][col].getQuantity();
 
-        if (row >= 0 && row < itemArr.length && col >= 0 && col < itemArr[row].length) {
-        
+        if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
+            item = this.vendoItem[row][col];
+
+            item.decreaseQuantity(decrease);
+            item.decreaseItemsFromSlot(this.vendoItem[row][col].getProductItem(), origQuantity);
+
+            if(item.getQuantity() == 0){// Essentially an item is removed from its slot
+                this.occupiedSlots--;
+                item.setPrice(0);
+            }
         } 
     }
 
     /**
      * This method collects the <code>Money</code> in the machine and saves them in a file
      */
+    @Override
     public void collectMoneyInMachine(){
         int i = 0, amount = 0;
         double sum = 0;
