@@ -36,8 +36,11 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * A method that scans a file for the <code>Items</code> made in the program
      */
+    @Override
     public void fileItemScan() {
-        int row = 0, col = 0;
+        int quantity, calories, row = 0, col = 0;
+        String name, itemType;
+        double price;
         try {
             File contentFile = new File("./Files/Items.txt");
             Scanner reader = new Scanner(contentFile);
@@ -48,7 +51,12 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 row = Integer.parseInt(reader.nextLine());
                 col = Integer.parseInt(reader.nextLine());
 
-                // Omit name, itemType, calories, quantity, and price variables
+                name = reader.nextLine();
+                itemType = reader.nextLine();
+                calories = Integer.parseInt(reader.nextLine());
+                quantity = Integer.parseInt(reader.nextLine());
+                price = Double.parseDouble(reader.nextLine());
+
 
                 this.vendoItem[row][col].getProductItem()[0] = new Items();
                 this.vendoItem[row][col].setQuantity(0);
@@ -63,10 +71,10 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-
     /**
      * A method that creates/overwrite a file for the <code>Items</code> in the program
      */
+    @Override
     public void fileItemWrite() {
         int i, j;
         try {
@@ -94,10 +102,10 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-
     /**
      * A method that scans a file for the <code>Money</code> made in the program
      */
+    @Override
     public void fileMoneyScan() {
         double value;
         int amount, index;
@@ -110,7 +118,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 value = Double.parseDouble(reader.nextLine());
                 amount = Integer.parseInt(reader.nextLine());
 
-                this.storedMoney[index] = new Money();
+                this.storedMoney[index] = new Money(value, amount);
 
                 reader.nextLine();
             }
@@ -123,6 +131,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * A method that creates/overwrite a file for the <code>Transactions</code> made in the program
      */
+    @Override
     public void fileMoneyWrite() {
         int i;
         try {
@@ -145,6 +154,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * A method that scans a file for the <code>Transactions</code> made in the program
      */
+    @Override
     public void fileTransactionScan() {
         int number;
         double total, payment, change;
@@ -181,6 +191,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * A method that creates/overwrite a file for the <code>Transactions</code> made in the program
      */
+    @Override
     public void fileTransactionWrite() {
         try {
             File contentFile = new File("./Files/Transactions.txt");
@@ -209,6 +220,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * Initializes all <code>ItemSlots</code> instances in the array
      * @param vendoItems ItemsSlots array
      */
+    @Override
     public void initialization(ItemsSlots[][] vendoItems) {
         int i, j;
         int itemCount = 0;
@@ -232,6 +244,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * Initializes all <code>Money</code> instances in the array
      * @param moneys Money array
      */
+    @Override
      public void initialization(Money[] moneys){
         int i;
         for ( i = 0; i < moneys.length; i++) {
@@ -270,6 +283,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method collects the money of the user and add it in the machines userMoney array
      * @param userMoney User's money in the machine
      */
+    @Override
     public boolean collectMoney(double price) {
         boolean exists = false, success = false;
         int i = 0;
@@ -295,6 +309,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * @param userMoneys User's Money
      * @return true or false
      */
+    @Override
     public boolean buyItem(String input) {
         boolean success = true;
         int i = 0, origQuantity;
@@ -471,6 +486,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method dispenses the change of the user
      * @param userMoney User's Money
      */
+    @Override
     public void dispenseChange() {
         for (int i = 0; i < this.userMoney.length; i++) {
             if (this.userMoney[i].getValue() > 0) {
@@ -487,6 +503,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * @param moneys Money array
      * @return Sum
      */
+    @Override
     public double total(Money[] moneys){
         int i;
         double sum = 0.0;
@@ -499,6 +516,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * This method inputs the denomination of money
      */
+    @Override
     public void inputDenomenations(double price){
         int i = 0;
         boolean exists = false;
@@ -520,6 +538,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * This method inputs <code>Items</code> objects into the <code>ItemsSlots</code> array
      */
+    @Override
     public void inputItems(String name, String type, double price, int quantity, int calories){
         boolean found = false;
         int row = 0, col = 0, i = 0, j = 0;

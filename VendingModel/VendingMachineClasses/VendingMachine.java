@@ -56,9 +56,9 @@ interface InterfaceVendingMachineSpecial {
     public double total(Money[] moneys);
 
     public void inputDenomenations(double price);
-    public void inputItems();
-    public void changePrice();
-    public void decreaseItem(ItemsSlots[][] itemArr);
+    public void inputItems(String name, String type, double price, int quantity, int calories);
+    public void changePrice(double newPrice);
+    public void decreaseItem(String label, int decrease);
     public void collectMoneyInMachine();
 
 }
@@ -71,8 +71,8 @@ interface VendingDisplays{
 }
 
 abstract class VendingMachine{
-    protected static final int MAXROW = 4;
-    protected static final int MAXCOL = 6;
+    protected static final int MAXROW = 6;
+    protected static final int MAXCOL = 5;
     protected static final int DENOMINATIONS = 9;
     protected static final int MAXITEMS = 20;
     protected static Scanner sc = new Scanner(System.in);

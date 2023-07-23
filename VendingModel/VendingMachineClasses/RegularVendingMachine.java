@@ -678,6 +678,9 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     public void inputItems(){
         boolean finish = false, found = false;
         char input;
+        String name, type;
+        int calories, quantity;
+        double price;
         int row = 0, col = 0, i = 0, j = 0;
 
         //looks for an empty slot within the occupied range
@@ -698,49 +701,58 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             System.out.println("Empty slot found! Add an item into this slot\n");
 
             System.out.print("\nInput item name: ");
-            this.vendoItem[row][col].getProductItem()[0].setName(sc.next());
+            name = sc.next();
 
             System.out.print("\nInput item price: ");
-            this.vendoItem[row][col].setPrice(sc.nextDouble());
+            price = sc.nextDouble();
 
             System.out.print("\nInput item type: ");
-            this.vendoItem[row][col].getProductItem()[0].setItemType(sc.next());
+            type = sc.next();
 
             do {
                 System.out.print("\nInput item quantity: ");
-                this.vendoItem[row][col].setQuantity(sc.nextInt());
+                quantity = sc.nextInt();
             } while (this.vendoItem[row][col].getQuantity() > MAXITEMS);
+
+            System.out.print("Input item calories: ");
+            calories = sc.nextInt();
+
+            this.vendoItem[row][col].getProductItem()[0] = new Items(name, calories, type);
+
+            this.vendoItem[row][col].setPrice(price);
+            this.vendoItem[row][col].setQuantity(quantity);
 
             this.vendoItem[row][col].setProductItems(this.vendoItem[row][col].getProductItem()[0]);
 
-            System.out.print("Input item calories: ");
-            this.vendoItem[row][col].getProductItem()[0].setCalories(sc.nextInt());
+            
         }
         else{
             while (!finish && this.occupiedRow < MAXROW){
 
                 System.out.print("\nInput item name: ");
-                this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getProductItem()[0].setName(sc.next());
-        
+                name = sc.next();    
+
                 System.out.print("\nInput item price: ");
-                this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].setPrice(sc.nextDouble());
+                price = sc.nextDouble();
         
                 System.out.print("\nInput item type: ");
-                this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getProductItem()[0].setItemType(sc.next());
+                type = sc.next();
         
                 do {
                     System.out.print("\nInput item quantity: ");
-                    this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].setQuantity(sc.nextInt());
+                    quantity = sc.nextInt();
                 } while (this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getQuantity() > MAXITEMS);
         
                 System.out.print("\nInput item calories: ");
-                this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getProductItem()[0].setCalories(sc.nextInt());
+                calories = sc.nextInt();
+
+                this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getProductItem()[0] = new Items(name, calories, type);
         
                 this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].setProductItems(this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getProductItem()[0]);
         
                 this.occupiedSlots++;
         
-                if(this.occupiedSlots > 0 && this.occupiedSlots % 5 == 0){
+                if(this.occupiedSlots > 0 && this.occupiedSlots % MAXCOL == 0){
                     this.occupiedRow++;
                 }
                 
