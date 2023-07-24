@@ -54,10 +54,15 @@ public class Driver {
                         break;
 
                 case 3: MaininUse = false;
-                        regularMachine.fileItemWrite();
-                        regularMachine.fileMoneyWrite();
-                        regularMachine.fileTransactionWrite();
-                        sc.close();
+                        if(regularMachine != null){
+                            regularMachine.fileItemWrite();
+                            regularMachine.fileMoneyWrite();
+                            regularMachine.fileTransactionWrite();
+                        } else if(specialMachine != null){
+                            specialMachine.fileItemWrite();
+                            specialMachine.fileMoneyWrite();
+                            specialMachine.fileTransactionWrite();
+                        }
                         break;
             }
         }
@@ -81,6 +86,10 @@ public class Driver {
 
     static SpecialVendingMachine createSpecialVendingMachine(){
         SpecialVendingMachine machine = new SpecialVendingMachine();
+
+        machine.initialization(machine.getStoredMoney());
+        machine.initialization(machine.getUserMoney());
+        machine.initialization(machine.getVendoItem());
 
         machine.fileItemScan();
         machine.fileMoneyScan();
@@ -147,7 +156,7 @@ public class Driver {
     }
 
     static void testVendingMachine(SpecialVendingMachine machine){
-        VendingMachineUI ui = new VendingMachineUI();
+        VendingMachineUI ui = new VendingMachineUI(machine);
         VendingMachineController controller = new VendingMachineController(machine, ui);
     }
 

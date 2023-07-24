@@ -49,7 +49,7 @@ interface InterfaceVendingMachineSpecial {
 
     // Operating methods
     public boolean addItem(String label);
-    public boolean createProduct();
+    public boolean createProductFromItems(ArrayList<ItemsSlots> purchasedItems, String productName);
     public boolean collectMoney(double price);
     public boolean buyItem(String input);
     public void dispenseChange();

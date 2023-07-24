@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.IOException;
+import java.awt.List;
 
 import VendingModel.ItemsClass.Items; 
 import VendingModel.ItemsSlotsClass.ItemsSlots;
@@ -19,17 +20,15 @@ import VendingModel.TransactionsClass.Transactions;
 
 public class SpecialVendingMachine extends VendingMachine implements InterfaceVendingMachineSpecial{
     private ArrayList<ItemsSlots> itemList;
-    private Dictionary<ArrayList<ItemsSlots>, Items> products;
     private int storedMoneyAmount;
 
     public SpecialVendingMachine(){
         super();
         this.itemList = new ArrayList<ItemsSlots>();
-        this.products = new Hashtable();
         this.storedMoneyAmount = 0;
     }
 
-    public void initializeProducts(){
+    public void initializeProductsRequirement(){
         
     }
 
@@ -273,109 +272,110 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
-   public boolean createProductFromItems(List<Item> purchasedItems, String productName) {
+   public boolean createProductFromItems(ArrayList<ItemsSlots> purchasedItems, String productName) {
     // Define the required ingredients for the specified product
-     List<Items> requiredIngredients = new ArrayList<>();
-   switch (productName) {
-        case "Strawberry smoothie":
-        requiredIngredients.add("Strawberry", 3);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Sugar", 1);
-        break;
-    case "Mango smoothie":
-        requiredIngredients.add("Mango", 3);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Sugar", 1);
-        break;
-    case "Mixed Berry Smoothie":
-        requiredIngredients.add("MixedBerries", 2);
-        requiredIngredients.add("Strawberry", 1);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Sugar", 1);
-        break;
-    case "Strawberry banana smoothie":
-        requiredIngredients.add("Strawberry", 2);
-        requiredIngredients.add("Banana", 1);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Sugar", 1);
-        break;
-    case "Mango Graham Smoothie":
-        requiredIngredients.add("Mango", 3);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Graham", 1);
-        requiredIngredients.add("Sugar", 1);
-        break;
-    case "Spring smoothie":
-        requiredIngredients.add("Mango", 1);
-        requiredIngredients.add("Orange", 1);
-        requiredIngredients.add("Carrot", 1);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Honey", 1);
-        break;
-    case "Tropical Dragon Smoothie":
-        requiredIngredients.add("DragonFruit", 2);
-        requiredIngredients.add("MixedBerries", 1);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Oats", 1);
-        break;
-    case "Watermelon Smoothie":
-        requiredIngredients.add("Watermelon", 2);
-        requiredIngredients.add("Grapes", 1);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Honey", 1);
-        break;
-    case "Peach Smoothie":
-        requiredIngredients.add("Peach", 2);
-        requiredIngredients.add("Orange", 1);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Wafer", 1);
-        break;
-    case "Oreo Banana Smoohie":
-        requiredIngredients.add("Banana", 3);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Oreo", 1);
-        break;
-    case "PB Banana Smoothie":
-        requiredIngredients.add("Banana", 3);
-        requiredIngredients.add("Milk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("PeanutButter", 1);
-        break;
-    case "Health smoothie":
-        requiredIngredients.add("Apple", 2);
-        requiredIngredients.add("Spinach", 1);
-        requiredIngredients.add("AlmondMilk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("SpirulinaPowder", 1);
-        break;
-    case "Forest Smoothie":
-        requiredIngredients.add("Mango", 1);
-        requiredIngredients.add("Orange", 1);
-        requiredIngredients.add("Kale", 1);
-        requiredIngredients.add("OatMilk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Honey", 1);
-        break;
-    case "Protein smoothie":
-        requiredIngredients.add("Banana", 3);
-        requiredIngredients.add("OatMilk", 1);
-        requiredIngredients.add("Ice", 1);
-        requiredIngredients.add("Protein powder", 1);
-        break;
-        default:
-            return false; // The specified product is not supported
-    }
-        return false;
+     Hashtable<String, Integer> requiredIngredients = new Hashtable<String, Integer>();
+     boolean success = false;
+        switch (productName) {
+            case "strawberry smoothie":
+                requiredIngredients.put("Strawberry", 3);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Sugar", 1);
+            break;
+            case "mango smoothie":
+                requiredIngredients.put("Mango", 3);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Sugar", 1);
+            break;
+            case "mixed berry smoothie":
+                requiredIngredients.put("MixedBerries", 2);
+                requiredIngredients.put("Strawberry", 1);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Sugar", 1);
+            break;
+            case "strawberry banana smoothie":
+                requiredIngredients.put("Strawberry", 2);
+                requiredIngredients.put("Banana", 1);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Sugar", 1);
+                break;
+            case "mango graham smoothie":
+                requiredIngredients.put("Mango", 3);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Graham", 1);
+                requiredIngredients.put("Sugar", 1);
+            break;
+            case "spring smoothie":
+                requiredIngredients.put("Mango", 1);
+                requiredIngredients.put("Orange", 1);
+                requiredIngredients.put("Carrot", 1);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Honey", 1);
+            break;
+            case "tropical dragon smoothie":
+                requiredIngredients.put("DragonFruit", 2);
+                requiredIngredients.put("MixedBerries", 1);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Oats", 1);
+            break;
+            case "watermelon smoothie":
+                requiredIngredients.put("Watermelon", 2);
+                requiredIngredients.put("Grapes", 1);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Honey", 1);
+            break;
+            case "peach smoothie":
+                requiredIngredients.put("Peach", 2);
+                requiredIngredients.put("Orange", 1);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Wafer", 1);
+            break;
+            case "oreo banana smoothie":
+                requiredIngredients.put("Banana", 3);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Oreo", 1);
+            break;
+            case "pb banana smoothie":
+                requiredIngredients.put("Banana", 3);
+                requiredIngredients.put("Milk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("PeanutButter", 1);
+            break;
+            case "health smoothie":
+                requiredIngredients.put("Apple", 2);
+                requiredIngredients.put("Spinach", 1);
+                requiredIngredients.put("AlmondMilk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("SpirulinaPowder", 1);
+            break;
+            case "forest Smoothie":
+                requiredIngredients.put("Mango", 1);
+                requiredIngredients.put("Orange", 1);
+                requiredIngredients.put("Kale", 1);
+                requiredIngredients.put("OatMilk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Honey", 1);
+            break;
+            case "protein smoothie":
+                requiredIngredients.put("Banana", 3);
+                requiredIngredients.put("OatMilk", 1);
+                requiredIngredients.put("Ice", 1);
+                requiredIngredients.put("Protein powder", 1);
+            break;
+            default:
+                return success; // The specified product is not supported
+        }
+        return success;
        // check if item is enough to create a product
        // Decrease the quantities of purchased items from the itemList
     }
