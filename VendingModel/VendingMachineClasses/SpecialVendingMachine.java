@@ -381,20 +381,20 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         String requiredItemName = entry.getKey();
         int requiredQuantity = entry.getValue();
         int purchasedQuantity = 0;
-
         ItemsSlots item;
-
-        for (int j = 0; j < item.getQuantity(); j++) {
-            item = purchasedItems.get(j);
-            if (item.purchasedItems[j].getName().equalsIgnoreCase(requiredItemName)) {
+      
+            if (item.findSlotLabel(requiredItemName) != null) {
                 purchasedQuantity += item.getQuantity();
             }
-        }
         
         if (purchasedQuantity < requiredQuantity) {
             success = false; // Insufficient quantity of a required ingredient
         }
     }   
+       
+    if (!success) {
+            return success;
+        }
        
        // Decrease the quantities of purchased items from the itemList
     }
