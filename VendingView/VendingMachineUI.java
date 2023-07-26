@@ -53,6 +53,7 @@ public class VendingMachineUI {
     private JButton itemBtn1, itemBtn2, itemBtn3, itemBtn4, itemBtn5, itemBtnA, itemBtnB, itemBtnC, itemBtnD, itemBtnE, itemBtnF, itemBtnCon, itemBtnCan;// Buttons for Item inputs
     private JButton createBuyBtn, buyBtn, cancelBtn;//Buttons for transactions
     private JPanel addItems, inputMoneyPanel, transactionsPanel, collectMoney;//Back Portion
+    private JButton addCBtn1, addCBtn2, addCBtn3, addCBtn4, addCBtn5, addCBtn6, addCBtn7, addCBtn8, addCBtn9;
 
     public VendingMachineUI(SpecialVendingMachine machine){
         this.pathNames = setPathNames();
@@ -70,7 +71,7 @@ public class VendingMachineUI {
         }
 
         //Icon of the program
-        this.icon = new ImageIcon(new ImageIcon("VendingView/Images/mainIcon.jpg").getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        this.icon = new ImageIcon("VendingView/Images/mainIcon.jpg");
         
         //Mainframe settings on start up
         this.mainFrame = new JFrame("Smoothie Machine");
@@ -555,6 +556,7 @@ public class VendingMachineUI {
         //----------------------------------------------------------------------------------------------------------------
         //Maintenance Menu UI
 
+        this.addItems = new JPanel();
     }
 
     public String[] setPathNames(){
@@ -628,6 +630,22 @@ public class VendingMachineUI {
             itemsCon.gridx = 0;
         }
         return panel;
+    }
+    
+    public void setItemBtn1Listener(ActionListener Actn) {
+        this.itemBtn1.addActionListener(Actn);
+    }
+    
+    public void setItemBtn2Listener(ActionListener Actn) {
+        this.itemBtn2.addActionListener(Actn);
+    }
+
+    public void setItemsFieldText(String text) {
+        this.itemsField.setText(text);
+    }
+
+    public String getItemsFieldText() {
+        return this.itemsField.getText();
     }
 
     public static void main(String[] args){
