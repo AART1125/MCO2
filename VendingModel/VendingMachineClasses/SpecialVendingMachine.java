@@ -377,6 +377,25 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
         return success;
        // check if item is enough to create a product
+          for (Map.Entry<String, Integer> entry : requiredIngredients.entrySet()) {
+        String requiredItemName = entry.getKey();
+        int requiredQuantity = entry.getValue();
+        int purchasedQuantity = 0;
+        ItemsSlots item;
+      
+            if (item.findSlotLabel(requiredItemName) != null) {
+                purchasedQuantity += item.getQuantity();
+            }
+        
+        if (purchasedQuantity < requiredQuantity) {
+            success = false; // Insufficient quantity of a required ingredient
+        }
+    }   
+       
+    if (!success) {
+            return success;
+        }
+       
        // Decrease the quantities of purchased items from the itemList
     }
 
