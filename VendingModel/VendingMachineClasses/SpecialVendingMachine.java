@@ -273,13 +273,45 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
+    
+/**
+ * This method returns true if the purchased items are enough to buy the inputted product
+ * @param input Product name being passed
+ */
+    public boolean buyProduct(String input) {
+        boolean success = false;
+        int i = 0;
+        String productName;
+        
+        Hashtable<String, Integer> requiredIngredients = findProd(productName);
+        Hashtable<String, Integer> itemCounts = new Hashtable<>();
+
+        // Count the occurrences of each item in the cart
+        for (ItemsSlots cartItem : itemList) {
+            String itemName = cartItem.getProductItem()[0].getName().toLowerCase(); // Assuming item names are in lowercase
+            itemCounts.put(itemName, itemCounts.getOrDefault(itemName, 0) + 1);
+        }
+
+        // Check if the cart has the required items and quantities from the Hashtable
+        for (String itemName : requiredIngredients.keySet()) {
+            int requiredQuantity = requiredIngredients.get(itemName);
+            int cartQuantity = itemCounts.getOrDefault(itemName, 0);
+
+            if (cartQuantity < requiredQuantity) {
+                success = false;
+                return success; // The cart does not have enough of this item
+            }
+        }
+        success = true;
+        
+        return success; // All items in the Hashtable have enough quantity in the cart
+    }
 
 /**
  * This method returns the quantity and itemNames of each product
  * @param productName Product name being passed
  */
-@Override
-public static Hashtable<String, Integer> findProd(String productName) {
+ public static Hashtable<String, Integer> findProd(String productName) {
 
         Hashtable<String, Integer> requiredIngredients = new Hashtable<String, Integer>();
         if ("strawberry smoothie".equals(productName)) {
