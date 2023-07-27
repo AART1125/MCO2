@@ -250,6 +250,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    @Override
     public boolean addItemToCart(String label){
         int row, col;
         boolean success = false;
@@ -392,10 +393,136 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }   
        
         return success;
-       
+    } 
        // Decrease the quantities of purchased items from the itemList
+    
+/**
+ * This method returns true if the purchased items are enough to buy the inputted product
+ * @param input Product name being passed
+ */
+    public boolean buyProduct(String input) {
+        boolean success = false;
+        int i = 0;
+        String productName;
+        
+        Hashtable<String, Integer> requiredIngredients = findProd(productName);
+        Hashtable<String, Integer> itemCounts = new Hashtable<>();
+
+        // Count the occurrences of each item in the cart
+        for (ItemsSlots cartItem : itemList) {
+            String itemName = cartItem.getProductItem()[0].getName().toLowerCase(); // Assuming item names are in lowercase
+            itemCounts.put(itemName, itemCounts.getOrDefault(itemName, 0) + 1);
+        }
+
+        // Check if the cart has the required items and quantities from the Hashtable
+        for (String itemName : requiredIngredients.keySet()) {
+            int requiredQuantity = requiredIngredients.get(itemName);
+            int cartQuantity = itemCounts.getOrDefault(itemName, 0);
+
+            if (cartQuantity < requiredQuantity) {
+                success = false;
+                return success; // The cart does not have enough of this item
+            }
+        }
+        success = true;
+        
+        return success; // All items in the Hashtable have enough quantity in the cart
     }
 
+/**
+ * This method returns the quantity and itemNames of each product
+ * @param productName Product name being passed
+ */
+ public static Hashtable<String, Integer> findProd(String productName) {
+
+        Hashtable<String, Integer> requiredIngredients = new Hashtable<String, Integer>();
+        if ("strawberry smoothie".equals(productName)) {
+            requiredIngredients.put("strawberry", 3);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("sugar", 1);
+        } else if ("mango smoothie".equals(productName)) {
+            requiredIngredients.put("mango", 3);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("sugar", 1);
+        } else if ("mixed berry smoothie".equals(productName)) {
+            requiredIngredients.put("mixedberries", 2);
+            requiredIngredients.put("strawberry", 1);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("sugar", 1);
+        } else if ("strawberry banana smoothie".equals(productName)) {
+            requiredIngredients.put("strawberry", 2);
+            requiredIngredients.put("banana", 1);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("sugar", 1);
+        } else if ("mango graham smoothie".equals(productName)) {
+            requiredIngredients.put("mango", 3);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("graham", 1);
+            requiredIngredients.put("sugar", 1);
+        } else if ("spring smoothie".equals(productName)) {
+            requiredIngredients.put("mango", 1);
+            requiredIngredients.put("orange", 1);
+            requiredIngredients.put("carrot", 1);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("honey", 1);
+        } else if ("tropical dragon smoothie".equals(productName)) {
+            requiredIngredients.put("dragonfruit", 2);
+            requiredIngredients.put("mixedberries", 1);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("oats", 1);
+        } else if ("watermelon smoothie".equals(productName)) {
+            requiredIngredients.put("watermelon", 2);
+            requiredIngredients.put("grapes", 1);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("honey", 1);
+        } else if ("peach smoothie".equals(productName)) {
+            requiredIngredients.put("peach", 2);
+            requiredIngredients.put("orange", 1);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("wafer", 1);
+        } else if ("oreo banana smoothie".equals(productName)) {
+            requiredIngredients.put("banana", 3);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("oreo", 1);
+        } else if ("pb banana smoothie".equals(productName)) {
+            requiredIngredients.put("banana", 3);
+            requiredIngredients.put("milk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("peanutbutter", 1);
+        } else if ("health smoothie".equals(productName)) {
+            requiredIngredients.put("apple", 2);
+            requiredIngredients.put("spinach", 1);
+            requiredIngredients.put("almondmilk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("spirulinapowder", 1);
+        } else if ("forest smoothie".equals(productName)) {
+            requiredIngredients.put("mango", 1);
+            requiredIngredients.put("orange", 1);
+            requiredIngredients.put("kale", 1);
+            requiredIngredients.put("oatmilk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("honey", 1);
+        } else if ("protein smoothie".equals(productName)) {
+            requiredIngredients.put("banana", 3);
+            requiredIngredients.put("oatmilk", 1);
+            requiredIngredients.put("ice", 1);
+            requiredIngredients.put("protein powder", 1);
+        }
+        
+        return requiredIngredients;
+    }
+
+    
     /**
      * This method collects the money of the user and add it in the machines userMoney array
      * @param userMoney User's money in the machine
