@@ -21,12 +21,10 @@ import VendingModel.TransactionsClass.Transactions;
 
 public class SpecialVendingMachine extends VendingMachine implements InterfaceVendingMachineSpecial{
     private ArrayList<ItemsSlots> itemList;
-    private int storedMoneyAmount;
 
     public SpecialVendingMachine(){
         super();
         this.itemList = new ArrayList<ItemsSlots>();
-        this.storedMoneyAmount = 0;
     }
 
     public void initializeProductsRequirement(){
@@ -252,7 +250,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    public boolean addItem(String label){
+    public boolean addItemToCart(String label){
         int row, col;
         boolean success = false;
         ItemsSlots slot;
@@ -378,24 +376,22 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
         return success;
        // check if item is enough to create a product
-          for (Map.Entry<String, Integer> entry : requiredIngredients.entrySet()) {
-        String requiredItemName = entry.getKey();
-        int requiredQuantity = entry.getValue();
-        int purchasedQuantity = 0;
-        ItemsSlots item;
+        for (Map.Entry<String, Integer> entry : requiredIngredients.entrySet()) {
+            String requiredItemName = entry.getKey();
+            int requiredQuantity = entry.getValue();
+            int purchasedQuantity = 0;
+            ItemsSlots item;
       
-            if (item.findSlotLabel(requiredItemName) != null) {
-                purchasedQuantity += item.getQuantity();
+                if (item.findSlotLabel(requiredItemName) != null) {
+                    purchasedQuantity += item.getQuantity();
+                }
+            
+            if (purchasedQuantity < requiredQuantity) {
+                success = false; // Insufficient quantity of a required ingredient
             }
-        
-        if (purchasedQuantity < requiredQuantity) {
-            success = false; // Insufficient quantity of a required ingredient
-        }
-    }   
+        }   
        
-    if (!success) {
-            return success;
-        }
+        return success;
        
        // Decrease the quantities of purchased items from the itemList
     }
@@ -410,15 +406,15 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         int i = 0;
         
         while (i < this.currentMon && !exists) {
-            if (this.storedMoney[i].getValue() == price) {
+            if (this.userMoney[i].getValue() == price) {
                 exists = true;
-                this.storedMoney[i] = new Money(price, this.storedMoney[i].getAmount()+1);
+                this.userMoney[i] = new Money(price, this.storedMoney[i].getAmount()+1);
             }
             i++;
         }
 
         if (!exists) {
-            this.storedMoney[this.currentMon] = new Money(price, 1);
+            this.userMoney[this.currentMon] = new Money(price, 1);
             this.currentMon++;
         }
         
@@ -447,6 +443,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                     this.transactionList.add(new Transactions(price, total(storedMoney), change, this.itemList.get(i).getProductItem()[0], transactionAmount+1));
                     this.itemList.get(i).decreaseQuantity(origQuantity);
                     this.itemList.get(i).decreaseItemsFromSlot(this.itemList.get(i).getProductItem(), origQuantity);
+                    this.itemList.remove(i);
 
                 } else {
                     success = false;
@@ -506,6 +503,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
         return change;
     }
+    
     /**
      * This method removes the denominations of <code>Money</code> objects in an array. It is used in the buyItems method
      * @param value Value of the money
@@ -608,15 +606,22 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * @param userMoney User's Money
      */
     @Override
-    public void dispenseChange() {
-        for (int i = 0; i < this.userMoney.length; i++) {
-            if (this.userMoney[i].getValue() > 0) {
-                System.out.println("\nDispensing change: P" + this.userMoney[i].getValue() + "| Amount : " + this.userMoney[i].getAmount());
-                this.currentMon--;
+    public String dispenseChange() {
+        StringBuilder builder = new StringBuilder();
+        int i;
+
+        if(total(this.userMoney) > 0){
+            for(i = 0; i < this.currentMon; i++){
+                if(this.userMoney[i].getValue() > 0){
+                    builder.append("\nDispensing change: P" + this.userMoney[i].getValue() + "| Amount : " + this.userMoney[i].getAmount() + "\n");
+                    this.currentMon--;
+                }
+                this.userMoney[i] = new Money();
             }
-            
-            this.userMoney[i] = new Money();
+        } else {
+            builder.append("Exact Amount Given\n");
         }
+        return builder.toString();
     }
 
     /**

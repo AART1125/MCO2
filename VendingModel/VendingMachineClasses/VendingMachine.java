@@ -21,15 +21,15 @@ interface InterfaceVendingMachineRegular {
     public void initialization(Money[] moneys);
 
     // Operating methods
-    public boolean collectMoney(Money[] userMoneys);
-    public boolean buyItem(Money[] userMoneys);
-    public void dispenseChange(Money[] userMoneys);
+    public boolean collectMoney(double price);
+    public boolean buyItem(String input);
+    public String dispenseChange();
     public double total(Money[] moneys);
 
-    public void inputDenomenations();
-    public void inputItems();
-    public void changePrice();
-    public void decreaseItem(ItemsSlots[][] itemArr);
+    public void inputDenomenations(double price);
+    public void inputItems(String name, String type, double price, int quantity, int calories);
+    public void changePrice(double newPrice);
+    public void decreaseItem(String label, int decrease);
     public void collectMoneyInMachine();
 
 }
@@ -48,11 +48,11 @@ interface InterfaceVendingMachineSpecial {
     public void initialization(Money[] moneys);
 
     // Operating methods
-    public boolean addItem(String label);
+    public boolean addItemToCart(String label);
     public boolean createProductFromItems(ArrayList<ItemsSlots> purchasedItems, String productName);
     public boolean collectMoney(double price);
     public boolean buyItem(String input);
-    public void dispenseChange();
+    public String dispenseChange();
     public double total(Money[] moneys);
 
     public void inputDenomenations(double price);
@@ -65,9 +65,9 @@ interface InterfaceVendingMachineSpecial {
 
 interface VendingDisplays{
     public String display();
-    public void showTransactions();
-    public void showNewTransactions();
-    public void checkDenom();
+    public String showTransactions();
+    public String showNewTransactions();
+    public String checkDenom();
 }
 
 abstract class VendingMachine{
@@ -77,7 +77,7 @@ abstract class VendingMachine{
     protected static final int MAXITEMS = 20;
     protected static Scanner sc = new Scanner(System.in);
 
-    protected int occupiedRow, occupiedSlots, currentMon, transactionAmount;
+    protected int occupiedRow, occupiedSlots, storedMoneyAmount, currentMon, transactionAmount;
     protected boolean salesWasDone;
     protected Money[] storedMoney;
     protected Money[] userMoney;
@@ -87,6 +87,7 @@ abstract class VendingMachine{
     protected VendingMachine(){
         this.occupiedRow = 0;
         this.occupiedSlots = 0;
+        this.storedMoneyAmount = 0;
         this.currentMon = 0;
         this.transactionAmount = 0;
         this.salesWasDone = false;
