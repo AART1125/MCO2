@@ -14,10 +14,11 @@ public class VendingMachineController {
     public VendingMachineController(SpecialVendingMachine vendingMachine, VendingMachineUI ui){
         this.vendingMachine = vendingMachine;
         this.ui = ui;
+        String currentText = ui.getItemsFieldText() ;
 
         this.ui.setItemBtn1Listener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                if(ui.getItemsFieldText() == "Input Item Label"){
+                if(ui.getItemsFieldText().equals("Input Item Label")){
                     ui.setItemsFieldText("1");
                 } else {
                     ui.setItemsFieldText(ui.getItemsFieldText()+1);
@@ -33,7 +34,7 @@ public class VendingMachineController {
                 if (ui.getItemsFieldText().equals("Input Item Label")) {
                     ui.setItemsFieldText("2");
                 } else {
-                    String currentText = ui.getItemsFieldText();
+                    ui.setItemsFieldText(ui.getItemsFieldText()+2);
                     int currentValue = Integer.parseInt(currentText);
                     int newValue = currentValue + 2;
                     ui.setItemsFieldText(String.valueOf(newValue));
@@ -46,7 +47,7 @@ public class VendingMachineController {
                 if (ui.getItemsFieldText().equals("Input Item Label")) {
                     ui.setItemsFieldText("3");
                 } else {
-                    String currentText = ui.getItemsFieldText();
+                    ui.setItemsFieldText(ui.getItemsFieldText()+3);
                     int currentValue = Integer.parseInt(currentText);
                     int newValue = currentValue + 3;
                     ui.setItemsFieldText(String.valueOf(newValue));
@@ -59,7 +60,7 @@ public class VendingMachineController {
                 if (ui.getItemsFieldText().equals("Input Item Label")) {
                     ui.setItemsFieldText("4");
                 } else {
-                    String currentText = ui.getItemsFieldText();
+                    ui.setItemsFieldText(ui.getItemsFieldText()+4);
                     int currentValue = Integer.parseInt(currentText);
                     int newValue = currentValue + 4;
                     ui.setItemsFieldText(String.valueOf(newValue));
@@ -72,7 +73,7 @@ public class VendingMachineController {
                 if (ui.getItemsFieldText().equals("Input Item Label")) {
                     ui.setItemsFieldText("5");
                 } else {
-                    String currentText = ui.getItemsFieldText();
+                    ui.setItemsFieldText(ui.getItemsFieldText()+5);
                     int currentValue = Integer.parseInt(currentText);
                     int newValue = currentValue + 5;
                     ui.setItemsFieldText(String.valueOf(newValue));
@@ -80,5 +81,82 @@ public class VendingMachineController {
             }
         });
 
-    }
+        this.ui.setItemBtnAListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                if (ui.getItemsFieldText().equals("Input Item Label")) {
+                    ui.setItemsFieldText("A");
+                } else {
+                    ui.setItemsFieldText(ui.getItemsFieldText()+"A");
+                    int currentValue = Integer.parseInt(currentText);
+                    String newValue = currentValue + "A";
+                    ui.setItemsFieldText(String.valueOf(newValue));
+                }
+            }
+        });
+
+        this.ui.setItemBtnBListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                if (ui.getItemsFieldText().equals("Input Item Label")) {
+                    ui.setItemsFieldText("B");
+                } else {
+                    ui.setItemsFieldText(ui.getItemsFieldText()+"B");
+                    int currentValue = Integer.parseInt(currentText);
+                    String newValue = currentValue + "B";
+                    ui.setItemsFieldText(String.valueOf(newValue));
+                }
+            }
+        });
+
+        this.ui.setItemBtnCListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                if (ui.getItemsFieldText().equals("Input Item Label")) {
+                    ui.setItemsFieldText("C");
+                } else {
+                    ui.setItemsFieldText(ui.getItemsFieldText()+"C");
+                    int currentValue = Integer.parseInt(currentText);
+                    String newValue = currentValue + "C";
+                    ui.setItemsFieldText(String.valueOf(newValue));
+                }
+            }
+        });
+
+        this.ui.setItemBtnDListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                if (ui.getItemsFieldText().equals("Input Item Label")) {
+                    ui.setItemsFieldText("D");
+                } else {
+                    ui.setItemsFieldText(ui.getItemsFieldText()+"D");
+                    int currentValue = Integer.parseInt(currentText);
+                    String newValue = currentValue + "D";
+                    ui.setItemsFieldText(String.valueOf(newValue));
+                }
+            }
+        });
+
+        this.ui.setItemBtnEListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                if (ui.getItemsFieldText().equals("Input Item Label")) {
+                    ui.setItemsFieldText("E");
+                } else {
+                    ui.setItemsFieldText(ui.getItemsFieldText()+"E");
+                    int currentValue = Integer.parseInt(currentText);
+                    String newValue = currentValue + "E";
+                    ui.setItemsFieldText(String.valueOf(newValue));
+                }
+            }
+        });
+
+        this.ui.setItemBtnFListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                if (ui.getItemsFieldText().equals("Input Item Label")) {
+                    ui.setItemsFieldText("F");
+                } else {
+                    ui.setItemsFieldText(ui.getItemsFieldText()+"F");
+                    int currentValue = Integer.parseInt(currentText);
+                    String newValue = currentValue + "F";
+                    ui.setItemsFieldText(String.valueOf(newValue));
+                }
+            }
+        });
+
 }
