@@ -809,8 +809,16 @@ public class SpecialVendingMachineUI {
         this.itemBtnF.addActionListener(actn);
     }
 
+    public void setItemBtnConListener(ActionListener actn) {
+        this.itemBtnCon.addActionListener(actn);
+    }
+
     public void setItemBtnCanListener(ActionListener actn) {
         this.itemBtnCan.addActionListener(actn);
+    }
+
+    public void setbuyBtnListener(ActionListener actn){
+        this.buyBtn.addActionListener(actn);
     }
 
     public void setItemsFieldText(String text) {
