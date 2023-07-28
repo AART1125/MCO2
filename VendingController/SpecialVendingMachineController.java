@@ -217,6 +217,21 @@ public class SpecialVendingMachineController {
             }
         });
 
+        this.ui.setItemBtnConListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                String label = ui.getItemsFieldText();
+                boolean success = machine.addItemToCart(label);
+
+                if (success) {
+                    ui.getMainFrame().revalidate();
+                    ui.clearItemsField();
+                }else{
+                    ui.clearItemsField();
+                }
+            }
+        });
+
+
         this.ui.setItemBtnCanListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 ui.clearItemsField();
