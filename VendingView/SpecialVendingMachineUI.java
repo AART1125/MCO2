@@ -846,7 +846,7 @@ public class SpecialVendingMachineUI {
     }
 
     public String getCashFieldText() {
-        return this.cashField.getText()
+        return this.cashField.getText().substring(2);
     }
 
     public static void main(String[] args){

@@ -49,7 +49,6 @@ interface InterfaceVendingMachineSpecial {
 
     // Operating methods
     public boolean addItemToCart(String label);
-    public boolean createProductFromItems(ArrayList<ItemsSlots> purchasedItems, String productName);
     public boolean collectMoney(double price);
     public boolean buyItem(String input);
     public String dispenseChange();
