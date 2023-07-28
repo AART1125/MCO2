@@ -3,7 +3,6 @@ package VendingModel.VendingMachineClasses;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Scanner;
 import java.io.PrintWriter;
@@ -403,7 +402,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public boolean buyProduct(String input) {
         boolean success = false;
         int i = 0;
-        String productName;
+        String productName = null;
         
         Hashtable<String, Integer> requiredIngredients = findProd(productName);
         Hashtable<String, Integer> itemCounts = new Hashtable<>();
@@ -421,7 +420,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
             if (cartQuantity < requiredQuantity) {
                 success = false;
-                return success; // The cart does not have enough of this item
+                // The cart does not have enough of this item
             }
         }
         success = true;
@@ -535,7 +534,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         while (i < this.currentMon && !exists) {
             if (this.userMoney[i].getValue() == price) {
                 exists = true;
-                this.userMoney[i] = new Money(price, this.storedMoney[i].getAmount()+1);
+                this.userMoney[i] = new Money(price, this.userMoney[i].getAmount()+1);
             }
             i++;
         }

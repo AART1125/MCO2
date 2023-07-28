@@ -53,7 +53,9 @@ public class RegularVendingMachineUI {
     private JButton cashBtn1, cashBtn2, cashBtn3, cashBtn4, cashBtn5, cashBtn6, cashBtn7, cashBtn8, cashBtn9;// Buttons for Cash Inputs
     private JButton itemBtn1, itemBtn2, itemBtn3, itemBtn4, itemBtn5, itemBtnA, itemBtnB, itemBtnC, itemBtnD, itemBtnE, itemBtnF, itemBtnCon, itemBtnCan;// Buttons for Item inputs
     private JButton createBuyBtn, buyBtn, cancelBtn;//Buttons for transactions
-    private JPanel addItems, inputMoneyPanel, transactionsPanel, collectMoney;//Back Portion
+    private JPanel addItemsPanel, inputMoneyPanel, transactionsPanel, collectMoney;//Back Portion
+    private JLabel nameLabel, typeLabel, priceLabel, quantityLable, caloriesLabel;
+    private JTextField nameField, typeField, priceField, quantityField, caloriesField;
     private JButton addCBtn1, addCBtn2, addCBtn3, addCBtn4, addCBtn5, addCBtn6, addCBtn7, addCBtn8, addCBtn9;
 
     public RegularVendingMachineUI(RegularVendingMachine machine){
@@ -84,15 +86,6 @@ public class RegularVendingMachineUI {
         this.mainFrame.setLocationRelativeTo(null);
         this.mainFrame.setResizable(false);
 
-        //Maintenance frame settings on start up
-        this.maintenanceFrame = new JFrame("Maintence");
-        this.maintenanceFrame.setIconImage(this.icon.getImage());
-        this.maintenanceFrame.setLayout(new GridBagLayout());
-        this.maintenanceFrame.setSize(750, 1010);
-        this.maintenanceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.maintenanceFrame.setLocationRelativeTo(null);
-        this.maintenanceFrame.setVisible(false);
-
         //Menu bars for both frames
         this.menu = new JMenuBar();
         this.maintenanceMenu = new JMenuBar();
@@ -104,30 +97,14 @@ public class RegularVendingMachineUI {
         //Menu items for both frames
         this.openM = new JMenuItem("Open Maintenance");
         this.openV = new JMenuItem("Go to Vending Machine");
+        this.exitM = new JMenuItem("Exit Program");
+        this.exitV = new JMenuItem("Exit Program");
 
         //Mainframe menu bar setup
         this.maintenanceMItem.add(this.openM);
+        this.maintenanceMItem.add(this.exitM);
         this.menu.add(this.maintenanceMItem);
         this.mainFrame.setJMenuBar(this.menu);
-        this.openM.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                mainFrame.setVisible(false);
-                maintenanceFrame.setVisible(true);
-            }
-        });
-
-        //Maintenance menu bar setup
-        this.vendingMItem.add(this.openV);
-        this.maintenanceMenu.add(this.vendingMItem);
-        this.maintenanceFrame.setJMenuBar(this.maintenanceMenu);
-        this.openV.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e){
-                mainFrame.setVisible(true);
-                maintenanceFrame.setVisible(false);
-            }
-        });
 
         //Main Menu UI
         //Panel for items view
@@ -153,23 +130,23 @@ public class RegularVendingMachineUI {
 
         //Label for cart
         this.displayLabel = new JLabel("Display cart: ", SwingConstants.CENTER);
-        this.displayLabel.setFont(this.digitalFont.deriveFont(21f));
+        this.displayLabel.setFont(digitalFont.deriveFont(21f));
         this.displayLabel.setForeground(Color.GREEN);
 
         //Label for receipt
         this.receiptLabel = new JLabel("Receipt", SwingConstants.CENTER);
-        this.receiptLabel.setFont(this.digitalFont.deriveFont(21f));
+        this.receiptLabel.setFont(digitalFont.deriveFont(21f));
         this.receiptLabel.setForeground(Color.green);
 
         //Label for product
-        this.productLabel = new JLabel(this.icon);
+        this.productLabel = new JLabel(icon);
         this.productLabel.setMinimumSize(new Dimension(200, 180));
 
         //Text field for cash
         this.cashField = new JTextField("Cash Amount", 20);
         this.cashField.setBackground(Color.BLACK);
         this.cashField.setForeground(Color.GREEN);
-        this.cashField.setFont(this.digitalFont.deriveFont(21f));
+        this.cashField.setFont(digitalFont.deriveFont(21f));
         this.cashField.setHorizontalAlignment(SwingConstants.CENTER);
         this.cashField.setMinimumSize(new Dimension(200, 25));
         this.cashField.setEditable(false);
@@ -178,7 +155,7 @@ public class RegularVendingMachineUI {
         this.itemsField = new JTextField("Input Item Label", 20);
         this.itemsField.setBackground(Color.BLACK);
         this.itemsField.setForeground(Color.GREEN);
-        this.itemsField.setFont(this.digitalFont.deriveFont(21f));
+        this.itemsField.setFont(digitalFont.deriveFont(21f));
         this.itemsField.setHorizontalAlignment(SwingConstants.CENTER);
         this.itemsField.setMinimumSize(new Dimension(200, 25));
         this.itemsField.setEditable(false);
@@ -188,7 +165,7 @@ public class RegularVendingMachineUI {
         this.productNameField.setBackground(Color.BLACK);
         this.productNameField.setForeground(Color.GREEN);
         this.productNameField.setCaretColor(Color.green);
-        this.productNameField.setFont(this.digitalFont.deriveFont(21f));
+        this.productNameField.setFont(digitalFont.deriveFont(21f));
         this.productNameField.setHorizontalAlignment(SwingConstants.CENTER);
         this.productNameField.setMinimumSize(new Dimension(200, 25));
 
@@ -196,7 +173,7 @@ public class RegularVendingMachineUI {
         this.cartArea = new JTextArea("", 4, 20);
         this.cartArea.setEditable(false);
         this.cartArea.setLineWrap(true);
-        this.cartPane = new JScrollPane(this.cartArea);
+        this.cartPane = new JScrollPane(cartArea);
         this.cartPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.cartPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.cartPane.setMinimumSize(new Dimension(200, 100));
@@ -205,14 +182,14 @@ public class RegularVendingMachineUI {
         this.receiptArea = new JTextArea("", 5, 20);
         this.receiptArea.setEditable(false);
         this.receiptArea.setLineWrap(true);
-        this.receiptPane = new JScrollPane(this.receiptArea);
+        this.receiptPane = new JScrollPane(receiptArea);
         this.receiptPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.receiptPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         this.receiptPane.setMinimumSize(new Dimension(200, 180));
 
         //Text area for the process
         this.processArea = new JTextArea("", 5, 20);
-        this.processArea.setFont(this.digitalFont.deriveFont(24f));
+        this.processArea.setFont(digitalFont.deriveFont(24f));
         this.processArea.setBackground(Color.black);
         this.processArea.setForeground(Color.green);
         this.processArea.setCaretColor(Color.green);
@@ -222,31 +199,31 @@ public class RegularVendingMachineUI {
 
         //Input cash buttons
         this.cashBtn1 = new JButton("1");
-        this.cashBtn1.setFont(this.digitalFont.deriveFont(15f));
+        this.cashBtn1.setFont(digitalFont.deriveFont(15f));
         this.cashBtn1.setPreferredSize(new Dimension(55, 55));
         this.cashBtn2 = new JButton("5");
-        this.cashBtn2.setFont(this.digitalFont.deriveFont(15f));
+        this.cashBtn2.setFont(digitalFont.deriveFont(15f));
         this.cashBtn2.setPreferredSize(new Dimension(55, 55));
         this.cashBtn3 = new JButton("10");
-        this.cashBtn3.setFont(this.digitalFont.deriveFont(15f));
+        this.cashBtn3.setFont(digitalFont.deriveFont(15f));
         this.cashBtn3.setPreferredSize(new Dimension(55, 55));
         this.cashBtn4 = new JButton("20");
-        this.cashBtn4.setFont(this.digitalFont.deriveFont(15f));
+        this.cashBtn4.setFont(digitalFont.deriveFont(15f));
         this.cashBtn4.setPreferredSize(new Dimension(55, 55));
         this.cashBtn5 = new JButton("50");
-        this.cashBtn5.setFont(this.digitalFont.deriveFont(15f));
+        this.cashBtn5.setFont(digitalFont.deriveFont(15f));
         this.cashBtn5.setPreferredSize(new Dimension(55, 55));
         this.cashBtn6 = new JButton("100");
-        this.cashBtn6.setFont(this.digitalFont.deriveFont(15f));
+        this.cashBtn6.setFont(digitalFont.deriveFont(15f));
         this.cashBtn6.setPreferredSize(new Dimension(55, 55));
         this.cashBtn7 = new JButton("200");
-        this.cashBtn7.setFont(this.digitalFont.deriveFont(15f));
+        this.cashBtn7.setFont(digitalFont.deriveFont(15f));
         this.cashBtn7.setPreferredSize(new Dimension(55, 55));
         this.cashBtn8 = new JButton("500");
-        this.cashBtn8.setFont(this.digitalFont.deriveFont(15f));
+        this.cashBtn8.setFont(digitalFont.deriveFont(15f));
         this.cashBtn8.setPreferredSize(new Dimension(55, 55));
         this.cashBtn9 = new JButton("1k");
-        this.cashBtn9.setFont(this.digitalFont.deriveFont(15f));
+        this.cashBtn9.setFont(digitalFont.deriveFont(15f));
         this.cashBtn9.setPreferredSize(new Dimension(55, 55));
 
         //Item input buttons
@@ -303,7 +280,7 @@ public class RegularVendingMachineUI {
         this.cancelBtn = new JButton("x");
         this.cancelBtn.setBackground(Color.RED);
         this.cancelBtn.setForeground(Color.white);
-        this.cancelBtn.setFont(this.digitalFont.deriveFont(9f));
+        this.cancelBtn.setFont(digitalFont.deriveFont(9f));
         this.cancelBtn.setMargin(new Insets(5, 7, 5, 7));
         
         //Panel for the items
@@ -316,8 +293,8 @@ public class RegularVendingMachineUI {
         panel.setBackground(Color.darkGray);
         panel.setPreferredSize(new Dimension(485, 220));
         panel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.gray, Color.gray));
-        panel.add(this.processArea);
-        panel.add(this.productLabel);
+        panel.add(processArea);
+        panel.add(productLabel);
 
         this.productPanel.add(panel);
 
@@ -557,7 +534,107 @@ public class RegularVendingMachineUI {
         //----------------------------------------------------------------------------------------------------------------
         //Maintenance Menu UI
 
-        this.addItems = new JPanel();
+        //Maintenance frame settings on start up
+        this.maintenanceFrame = new JFrame("Maintence");
+        this.maintenanceFrame.setIconImage(this.icon.getImage());
+        this.maintenanceFrame.setLayout(new GridBagLayout());
+        this.maintenanceFrame.setSize(750, 1010);
+        this.maintenanceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.maintenanceFrame.setLocationRelativeTo(null);
+        this.maintenanceFrame.setResizable(false);
+
+         //Maintenance menu bar setup
+        this.vendingMItem.add(this.openV);
+        this.vendingMItem.add(this.exitV);
+        this.maintenanceMenu.add(this.vendingMItem);
+        this.maintenanceFrame.setJMenuBar(this.maintenanceMenu);
+
+        this.nameLabel = new JLabel("Name: ", SwingConstants.RIGHT);
+        this.nameLabel.setFont(digitalFont.deriveFont(21f));
+        this.nameLabel.setForeground(Color.green);
+
+        this.quantityLable = new JLabel("Quantity: ", SwingConstants.RIGHT);
+        this.quantityLable.setFont(digitalFont.deriveFont(21f));
+        this.quantityLable.setForeground(Color.green);
+
+        this.priceLabel = new JLabel("Price: ", SwingConstants.RIGHT);
+        this.priceLabel.setFont(digitalFont.deriveFont(21f));
+        this.priceLabel.setForeground(Color.green);
+
+        this.caloriesLabel = new JLabel("Calories: ", SwingConstants.RIGHT);
+        this.caloriesLabel.setFont(digitalFont.deriveFont(21f));
+        this.caloriesLabel.setForeground(Color.green);
+
+        this.typeLabel = new JLabel("Type: ", SwingConstants.RIGHT);
+        this.typeLabel.setFont(digitalFont.deriveFont(21f));
+        this.typeLabel.setForeground(Color.green);
+
+        this.nameField = new JTextField("Input New Item's Name", 20);
+        this.nameField.setBackground(Color.BLACK);
+        this.nameField.setForeground(Color.GREEN);
+        this.nameField.setFont(digitalFont.deriveFont(21f));
+        this.nameField.setHorizontalAlignment(SwingConstants.CENTER);
+        this.nameField.setMinimumSize(new Dimension(200, 25));
+
+        this.quantityField = new JTextField("Input New Item's Quantity", 20);
+        this.quantityField.setBackground(Color.BLACK);
+        this.quantityField.setForeground(Color.GREEN);
+        this.quantityField.setFont(digitalFont.deriveFont(21f));
+        this.quantityField.setHorizontalAlignment(SwingConstants.CENTER);
+        this.quantityField.setMinimumSize(new Dimension(200, 25));
+
+        this.priceField = new JTextField("Input New Item's Price", 20);
+        this.priceField.setBackground(Color.BLACK);
+        this.priceField.setForeground(Color.GREEN);
+        this.priceField.setFont(digitalFont.deriveFont(21f));
+        this.priceField.setHorizontalAlignment(SwingConstants.CENTER);
+        this.priceField.setMinimumSize(new Dimension(200, 25));
+
+        this.caloriesField = new JTextField("Input New Item's Calories", 20);
+        this.caloriesField.setBackground(Color.BLACK);
+        this.caloriesField.setForeground(Color.GREEN);
+        this.caloriesField.setFont(digitalFont.deriveFont(21f));
+        this.caloriesField.setHorizontalAlignment(SwingConstants.CENTER);
+        this.caloriesField.setMinimumSize(new Dimension(200, 25));
+
+        this.typeField = new JTextField("Input New Item's type", 20);
+        this.typeField.setBackground(Color.BLACK);
+        this.typeField.setForeground(Color.GREEN);
+        this.typeField.setFont(digitalFont.deriveFont(21f));
+        this.typeField.setHorizontalAlignment(SwingConstants.CENTER);
+        this.typeField.setMinimumSize(new Dimension(200, 25));
+
+        this.addItemsPanel = new JPanel(new GridLayout(5, 5));
+        this.addItemsPanel.setBackground(Color.black);
+        this.addItemsPanel.setPreferredSize(new Dimension(500, 720));
+        this.addItemsPanel.setMinimumSize(new Dimension(500, 720));
+        this.addItemsPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.gray, Color.gray));
+
+        this.addItemsPanel.add(nameLabel);
+        this.addItemsPanel.add(nameField);
+        this.addItemsPanel.add(quantityLable);
+        this.addItemsPanel.add(quantityField);
+        this.addItemsPanel.add(priceLabel);
+        this.addItemsPanel.add(priceField);
+        this.addItemsPanel.add(caloriesLabel);
+        this.addItemsPanel.add(caloriesField);
+        this.addItemsPanel.add(typeLabel);
+        this.addItemsPanel.add(typeField);
+        
+        
+        GridBagConstraints c2 = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 0;
+        c.insets = new Insets(3,3,3,3);
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.anchor = GridBagConstraints.NORTHEAST;
+        this.maintenanceFrame.add(addItemsPanel, c2);
+
+        this.maintenanceFrame.setVisible(false);
+        this.maintenanceFrame.revalidate();
     }
 
     public String[] setPathNames(){
@@ -632,13 +709,57 @@ public class RegularVendingMachineUI {
         }
         return panel;
     }
-    
-    public void setItemBtn1Listener(ActionListener Actn) {
-        this.itemBtn1.addActionListener(Actn);
+
+    public void clearItemsField(){
+        this.itemsField.setText("Input Item Label");
     }
     
-    public void setItemBtn2Listener(ActionListener Actn) {
-        this.itemBtn2.addActionListener(Actn);
+    public void setItemBtn1Listener(ActionListener actn) {
+        this.itemBtn1.addActionListener(actn);
+    }
+    
+    public void setItemBtn2Listener(ActionListener actn) {
+        this.itemBtn2.addActionListener(actn);
+    }
+
+    public void setItemBtn3Listener(ActionListener actn) {
+        this.itemBtn3.addActionListener(actn);
+    }
+
+    public void setItemBtn4Listener(ActionListener actn) {
+        this.itemBtn4.addActionListener(actn);
+    }
+
+    public void setItemBtn5Listener(ActionListener actn) {
+        this.itemBtn5.addActionListener(actn);
+    }
+
+    public void setItemBtnAListener(ActionListener actn) {
+        this.itemBtnA.addActionListener(actn);
+    }
+
+    public void setItemBtnBListener(ActionListener actn) {
+        this.itemBtnB.addActionListener(actn);
+    }
+
+    public void setItemBtnCListener(ActionListener actn) {
+        this.itemBtnC.addActionListener(actn);
+    }
+
+    public void setItemBtnDListener(ActionListener actn) {
+        this.itemBtnD.addActionListener(actn);
+    }
+
+    public void setItemBtnEListener(ActionListener actn) {
+        this.itemBtnE.addActionListener(actn);
+    }
+
+    public void setItemBtnFListener(ActionListener actn) {
+        this.itemBtnF.addActionListener(actn);
+    }
+
+    public void setItemBtnCanListener(ActionListener actn) {
+        this.itemBtnCan.addActionListener(actn);
     }
 
     public void setItemsFieldText(String text) {
@@ -651,6 +772,14 @@ public class RegularVendingMachineUI {
 
     public void setOpenVListener(ActionListener actn) {
         this.openV.addActionListener(actn);
+    }
+
+    public void setExitMListerner(ActionListener actn){
+        this.exitM.addActionListener(actn);
+    }
+
+    public void setExitVListerner(ActionListener actn){
+        this.exitV.addActionListener(actn);
     }
 
     public JFrame getMainFrame() {

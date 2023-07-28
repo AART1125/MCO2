@@ -139,11 +139,11 @@ public class MenuUi {
        this.exitBtn.addActionListener(actn);
    }
 
-   public void setregBtnListener(ActionListener actn) {
+   public void setRegBtnListener(ActionListener actn) {
        this.regBtn.addActionListener(actn);
    }
 
-   public void setspcBtnListener(ActionListener actn) {
+   public void setSpcBtnListener(ActionListener actn) {
        this.spcBtn.addActionListener(actn);
    }
 

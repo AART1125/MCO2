@@ -2,9 +2,6 @@ package VendingController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowListener;
-
-import javax.swing.Action;
 
 import VendingModel.VendingMachineClasses.RegularVendingMachine;
 import VendingModel.VendingMachineClasses.SpecialVendingMachine;
@@ -12,7 +9,7 @@ import VendingView.MenuUi;
 import VendingView.RegularVendingMachineUI;
 import VendingView.SpecialVendingMachineUI;
 
-public class mainController {
+public class MenuController {
     private MenuUi ui;
 
     private SpecialVendingMachine spcMachine;
@@ -23,10 +20,10 @@ public class mainController {
     private RegularVendingMachineUI regUi;
     private RegularVendingMachineController regController;
 
-    public mainController(MenuUi ui){
+    public MenuController(MenuUi ui){
         this.ui = ui;
 
-        this.ui.setregBtnListener(new ActionListener() {
+        this.ui.setRegBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 if (spcMachine != null) {
                     spcMachine = null;
@@ -40,7 +37,7 @@ public class mainController {
             }
         });
 
-        this.ui.setspcBtnListener(new ActionListener() {
+        this.ui.setSpcBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 if (regMachine != null) {
                     regMachine = null;
@@ -71,7 +68,7 @@ public class mainController {
                     
                 } else if (regMachine != null && spcMachine == null){
                     regUi = new RegularVendingMachineUI(regMachine);
-                    regController = new RegularVendingMachineController(regMachine, regUi);
+                    regController = new RegularVendingMachineController(regMachine, regUi, ui);
                     ui.getMainFrame().setVisible(false);
                 }
             }
