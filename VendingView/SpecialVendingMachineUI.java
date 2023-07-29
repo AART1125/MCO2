@@ -816,6 +816,21 @@ public class SpecialVendingMachineUI {
     public void setItemBtnCanListener(ActionListener actn) {
         this.itemBtnCan.addActionListener(actn);
     }
+    public void setbuyBtnListener(ActionListener actn) {
+        this.buyBtn.addActionListener(actn);
+    }
+
+    public void setcreateBuyBtnListener(ActionListener actn) {
+        this.createBuyBtn.addActionListener(actn);
+    }
+
+    public void setcancelBtnListener(ActionListener actn) {
+        this.cancelBtn.addActionListener(actn);
+    }
+
+    public void setCartAreaFieldText(String text) {
+        this.cartArea.setText(text);
+    }
 
     public void setbuyBtnListener(ActionListener actn){
         this.buyBtn.addActionListener(actn);
