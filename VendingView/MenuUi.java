@@ -90,7 +90,7 @@ public class MenuUi {
       temp.add(exitBtn);
       mainPanel.add(temp);
 
-      this.creatorLabel = new JLabel("Made by Aaron Ace R. Toledo & Juan Carlo Benardo", SwingConstants.CENTER);
+      this.creatorLabel = new JLabel("Made by Aaron Ace R. Toledo & Juan Pablo Benardo", SwingConstants.CENTER);
       this.creatorLabel.setFont(digitalFont.deriveFont(25f));
       mainPanel.add(creatorLabel);
 

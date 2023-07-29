@@ -27,10 +27,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -622,6 +619,9 @@ public class SpecialVendingMachineUI {
         this.addItemsPanel.setMinimumSize(new Dimension(500, 720));
         this.addItemsPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.gray, Color.gray));
         this.addItemsPanel.add(nameLabel);
+        
+        JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panel2.setMinimumSize(new Dimension(230, 120));
         this.addItemsPanel.add(nameField);
         this.addItemsPanel.add(quantityLable);
         this.addItemsPanel.add(quantityField);
@@ -704,14 +704,16 @@ public class SpecialVendingMachineUI {
         for (i = 0; i < 6; i++) {
                 for (j = 0; j < 5; j++) {
                 image = new ImageIcon(new ImageIcon(this.pathNames[k]).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-                nameLabel = new JLabel("Smoothie " + (char)('A'+i)+""+(j+1), image, SwingConstants.CENTER);
+                nameLabel = new JLabel((char)('A'+i)+""+(j+1) + "| P:" + machine.getVendoItem()[i][j].getPrice(), image, SwingConstants.CENTER);
+                nameLabel.setPreferredSize(new Dimension(75, 63));
+                nameLabel.setMinimumSize(new Dimension(75, 63));
                 nameLabel.setHorizontalTextPosition(JLabel.CENTER);
                 nameLabel.setVerticalTextPosition(JLabel.BOTTOM);
                 nameLabel.setForeground(Color.BLACK);
                 nameLabel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
                 panel.add(nameLabel, itemsCon);
                 itemsCon.gridx++;
-                if (k < 26) {
+                if (k < this.pathNames.length - 1) {
                     k++;
                 }
             }

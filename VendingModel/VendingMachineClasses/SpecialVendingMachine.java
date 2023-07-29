@@ -9,8 +9,6 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.IOException;
-import java.awt.List;
-import java.util.Map;
 
 import VendingModel.ItemsClass.Items; 
 import VendingModel.ItemsSlotsClass.ItemsSlots;
@@ -18,12 +16,12 @@ import VendingModel.MoneyClass.Money;
 import VendingModel.TransactionsClass.Transactions;   
 
 
-public class SpecialVendingMachine extends VendingMachine implements InterfaceVendingMachineSpecial{
-    private ArrayList<ItemsSlots> itemList;
+public class SpecialVendingMachine extends VendingMachine implements InterfaceVendingMachine{
+    private ArrayList<ItemsSlots> userCart;
 
     public SpecialVendingMachine(){
         super();
-        this.itemList = new ArrayList<ItemsSlots>();
+        this.userCart = new ArrayList<ItemsSlots>();
     }
 
     public void initializeProductsRequirement(){
@@ -55,9 +53,9 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 price = Double.parseDouble(reader.nextLine());
 
 
-                this.vendoItem[row][col].getProductItem()[0] = new Items();
-                this.vendoItem[row][col].setQuantity(0);
-                this.vendoItem[row][col].setPrice(0.0);
+                this.vendoItem[row][col].getProductItem()[0] = new Items(name, calories, itemType);
+                this.vendoItem[row][col].setQuantity(quantity);
+                this.vendoItem[row][col].setPrice(price);
                 this.vendoItem[row][col].setProductItems(this.vendoItem[row][col].getProductItem()[0]);
 
                 reader.nextLine();
@@ -71,8 +69,11 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * A method that creates/overwrite a file for the <code>Items</code> in the program
      */
+    /**
+     * A method that creates/overwrite a file for the <code>Items</code> in the program
+     */
     @Override
-    public void fileItemWrite() {
+    public void fileItemWrite(){
         int i, j;
         try {
             File contentFile = new File("./Files/Items.txt");
@@ -80,14 +81,17 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             mainWriter.println(this.occupiedRow);
             mainWriter.println(this.occupiedSlots);
             mainWriter.print("\n");
-            for (i = 0; i < MAXROW; i++) {
-                for (j = 0; j < MAXCOL; j++) {// write to file
-                    if (this.vendoItem[i][j].getProductItem()[0] != null && this.vendoItem[i][j].getProductItem()[0].getName() != null) {
+            for(i = 0; i < MAXROW; i++){
+                for(j = 0; j < MAXCOL; j++){// write to file
+                    if(this.vendoItem[i][j].getProductItem()[0] != null && this.vendoItem[i][j].getProductItem()[0].getName() != null){
                         mainWriter.println(i);
                         mainWriter.println(j);
 
-                        // Omitting the name, itemType, calories, quantity, and price output
-
+                        mainWriter.println(this.vendoItem[i][j].getProductItem()[0].getName());
+                        mainWriter.println(this.vendoItem[i][j].getProductItem()[0].getItemType());
+                        mainWriter.println(this.vendoItem[i][j].getProductItem()[0].getCalories());
+                        mainWriter.println(this.vendoItem[i][j].getQuantity());
+                        mainWriter.println(Double.toString(this.vendoItem[i][j].getPrice()));
                         mainWriter.print("\n");
                     }
                 }
@@ -95,7 +99,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             mainWriter.close();
 
         } catch (IOException e) {
-            //cathces error
+            System.out.println("\nAn error occurred.");
         }
     }
 
@@ -249,19 +253,49 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * Displays the available items in the <code>ItemsSlots</code> array of the machine
+     * @return Display of items
+     */
     @Override
+    public String display(){
+        int i, j;
+        StringBuilder build = new StringBuilder();
+        build.append("------------------------------------------------------------------\n");
+        build.append("| Slot |         Name       |   Price  |  Quantity  |  Calories  |\n");
+        build.append("------------------------------------------------------------------\n");
+        for(i = 0; i < MAXROW; i++)
+            for(j = 0; j < MAXCOL; j++){
+                if(this.vendoItem[i][j].getProductItem()[0] != null && this.vendoItem[i][j].getProductItem()[0].getName() != null){
+                    build.append(String.format("|%-6s|", this.vendoItem[i][j].getLabel()));
+                    build.append(String.format("%-20s|", this.vendoItem[i][j].getProductItem()[0].getName()));
+                    build.append(String.format("P%9.2f|", this.vendoItem[i][j].getPrice()));
+                    build.append(String.format("%12d|", this.vendoItem[i][j].getQuantity()));
+                    build.append(String.format("%10d g|\n", this.vendoItem[i][j].getProductItem()[0].getCalories()));
+                }
+            }
+        build.append("------------------------------------------------------------------\n");
+
+        return build.toString();
+    }
+
+    /**
+     * a method that inputs an itemslot into the user cart
+     * @param label label of the slot in the machine
+     * @return true or false
+     */
     public boolean addItemToCart(String label){
         int row, col;
         boolean success = false;
         ItemsSlots slot;
 
         row = label.toUpperCase().charAt(0) - 'A';
-        col = Integer.parseInt(label.substring(1));
+        col = Integer.parseInt(label.substring(1)) - 1;
 
         try {
             slot = this.vendoItem[row][col];
             if (slot != null) {
-                this.itemList.add(slot);
+                this.userCart.add(slot);
                 success = true;
             }
         } catch (NullPointerException e) {
@@ -271,10 +305,10 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
     
-/**
- * This method returns true if the purchased items are enough to buy the inputted product
- * @param input Product name being passed
- */
+    /**
+     * This method returns true if the purchased items are enough to buy the inputted product
+     * @param input Product name being passed
+     */
     public boolean buyProduct(String input) {
         boolean success = false;
         int i = 0;
@@ -284,15 +318,15 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         Hashtable<String, Integer> itemCounts = new Hashtable<>();
 
         // Count the occurrences of each item in the cart
-        for (ItemsSlots cartItem : itemList) {
+        for (ItemsSlots cartItem : userCart) {
             String itemName = cartItem.getProductItem()[0].getName().toLowerCase(); // Assuming item names are in lowercase
             itemCounts.put(itemName, itemCounts.getOrDefault(itemName, 0) + 1);
         }
 
         // Check if the cart has the required items and quantities from the Hashtable
-        while (i < this.itemList.size() && success) {
-            int requiredQuantity = requiredIngredients.get(this.itemList.get(i).getProductItem()[0].getName());
-            int cartQuantity = itemCounts.getOrDefault(this.itemList.get(i).getProductItem()[0].getName(), 0);
+        while (i < this.userCart.size() && success) {
+            int requiredQuantity = requiredIngredients.get(this.userCart.get(i).getProductItem()[0].getName());
+            int cartQuantity = itemCounts.getOrDefault(this.userCart.get(i).getProductItem()[0].getName(), 0);
 
             if (cartQuantity < requiredQuantity) {
                 success = false;
@@ -304,99 +338,98 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success; // All items in the Hashtable have enough quantity in the cart
     }
 
-/**
- * This method returns the quantity and itemNames of each product
- * @param productName Product name being passed
- */
- public static Hashtable<String, Integer> findProd(String productName) {
+    /**
+     * This method returns the quantity and itemNames of each product
+     * @param productName Product name being passed
+     */
+    public static Hashtable<String, Integer> findProd(String productName) {
 
-        Hashtable<String, Integer> requiredIngredients = new Hashtable<String, Integer>();
-        if ("strawberry smoothie".equals(productName)) {
-            requiredIngredients.put("strawberry", 3);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("sugar", 1);
-        } else if ("mango smoothie".equals(productName)) {
-            requiredIngredients.put("mango", 3);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("sugar", 1);
-        } else if ("mixed berry smoothie".equals(productName)) {
-            requiredIngredients.put("mixedberries", 2);
-            requiredIngredients.put("strawberry", 1);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("sugar", 1);
-        } else if ("strawberry banana smoothie".equals(productName)) {
-            requiredIngredients.put("strawberry", 2);
-            requiredIngredients.put("banana", 1);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("sugar", 1);
-        } else if ("mango graham smoothie".equals(productName)) {
-            requiredIngredients.put("mango", 3);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("graham", 1);
-            requiredIngredients.put("sugar", 1);
-        } else if ("spring smoothie".equals(productName)) {
-            requiredIngredients.put("mango", 1);
-            requiredIngredients.put("orange", 1);
-            requiredIngredients.put("carrot", 1);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("honey", 1);
-        } else if ("tropical dragon smoothie".equals(productName)) {
-            requiredIngredients.put("dragonfruit", 2);
-            requiredIngredients.put("mixedberries", 1);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("oats", 1);
-        } else if ("watermelon smoothie".equals(productName)) {
-            requiredIngredients.put("watermelon", 2);
-            requiredIngredients.put("grapes", 1);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("honey", 1);
-        } else if ("peach smoothie".equals(productName)) {
-            requiredIngredients.put("peach", 2);
-            requiredIngredients.put("orange", 1);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("wafer", 1);
-        } else if ("oreo banana smoothie".equals(productName)) {
-            requiredIngredients.put("banana", 3);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("oreo", 1);
-        } else if ("pb banana smoothie".equals(productName)) {
-            requiredIngredients.put("banana", 3);
-            requiredIngredients.put("milk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("peanutbutter", 1);
-        } else if ("health smoothie".equals(productName)) {
-            requiredIngredients.put("apple", 2);
-            requiredIngredients.put("spinach", 1);
-            requiredIngredients.put("almondmilk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("spirulinapowder", 1);
-        } else if ("forest smoothie".equals(productName)) {
-            requiredIngredients.put("mango", 1);
-            requiredIngredients.put("orange", 1);
-            requiredIngredients.put("kale", 1);
-            requiredIngredients.put("oatmilk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("honey", 1);
-        } else if ("protein smoothie".equals(productName)) {
-            requiredIngredients.put("banana", 3);
-            requiredIngredients.put("oatmilk", 1);
-            requiredIngredients.put("ice", 1);
-            requiredIngredients.put("protein powder", 1);
+            Hashtable<String, Integer> requiredIngredients = new Hashtable<String, Integer>();
+            if ("strawberry smoothie".equals(productName)) {
+                requiredIngredients.put("strawberry", 3);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("sugar", 1);
+            } else if ("mango smoothie".equals(productName)) {
+                requiredIngredients.put("mango", 3);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("sugar", 1);
+            } else if ("mixed berry smoothie".equals(productName)) {
+                requiredIngredients.put("mixedberries", 2);
+                requiredIngredients.put("strawberry", 1);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("sugar", 1);
+            } else if ("strawberry banana smoothie".equals(productName)) {
+                requiredIngredients.put("strawberry", 2);
+                requiredIngredients.put("banana", 1);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("sugar", 1);
+            } else if ("mango graham smoothie".equals(productName)) {
+                requiredIngredients.put("mango", 3);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("graham", 1);
+                requiredIngredients.put("sugar", 1);
+            } else if ("spring smoothie".equals(productName)) {
+                requiredIngredients.put("mango", 1);
+                requiredIngredients.put("orange", 1);
+                requiredIngredients.put("carrot", 1);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("honey", 1);
+            } else if ("tropical dragon smoothie".equals(productName)) {
+                requiredIngredients.put("dragonfruit", 2);
+                requiredIngredients.put("mixedberries", 1);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("oats", 1);
+            } else if ("watermelon smoothie".equals(productName)) {
+                requiredIngredients.put("watermelon", 2);
+                requiredIngredients.put("grapes", 1);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("honey", 1);
+            } else if ("peach smoothie".equals(productName)) {
+                requiredIngredients.put("peach", 2);
+                requiredIngredients.put("orange", 1);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("wafer", 1);
+            } else if ("oreo banana smoothie".equals(productName)) {
+                requiredIngredients.put("banana", 3);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("oreo", 1);
+            } else if ("pb banana smoothie".equals(productName)) {
+                requiredIngredients.put("banana", 3);
+                requiredIngredients.put("milk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("peanutbutter", 1);
+            } else if ("health smoothie".equals(productName)) {
+                requiredIngredients.put("apple", 2);
+                requiredIngredients.put("spinach", 1);
+                requiredIngredients.put("almondmilk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("spirulinapowder", 1);
+            } else if ("forest smoothie".equals(productName)) {
+                requiredIngredients.put("mango", 1);
+                requiredIngredients.put("orange", 1);
+                requiredIngredients.put("kale", 1);
+                requiredIngredients.put("oatmilk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("honey", 1);
+            } else if ("protein smoothie".equals(productName)) {
+                requiredIngredients.put("banana", 3);
+                requiredIngredients.put("oatmilk", 1);
+                requiredIngredients.put("ice", 1);
+                requiredIngredients.put("protein powder", 1);
+            }
+            
+            return requiredIngredients;
         }
-        
-        return requiredIngredients;
-    }
-
     
     /**
      * This method collects the money of the user and add it in the machines userMoney array
@@ -430,22 +463,22 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      */
     @Override
     public boolean buyItem(String input) {
-        boolean success = true;
+        boolean success = false;
         int i = 0, origQuantity;
         double price = 0, change;
 
-        while (i < this.itemList.size() && success) {
-            if(isItemSellable(this.itemList.get(i).getProductItem()[0]) && (total(userMoney) >= this.itemList.get(i).getPrice())){
+        while (i < this.userCart.size() && success) {
+            if(isItemSellable(this.userCart.get(i).getProductItem()[0]) && (total(userMoney) >= this.userCart.get(i).getPrice())){
                 success = true;
-                origQuantity = this.itemList.get(i).getQuantity();
-                price = this.itemList.get(i).getPrice();
+                origQuantity = this.userCart.get(i).getQuantity();
+                price = this.userCart.get(i).getPrice();
                 
                 if (origQuantity > 0){
                     change = produceChange(userMoney, price);
-                    this.transactionList.add(new Transactions(price, total(storedMoney), change, this.itemList.get(i).getProductItem()[0], transactionAmount+1));
-                    this.itemList.get(i).decreaseQuantity(origQuantity);
-                    this.itemList.get(i).decreaseItemsFromSlot(this.itemList.get(i).getProductItem(), origQuantity);
-                    this.itemList.remove(i);
+                    this.transactionList.add(new Transactions(price, total(storedMoney), change, this.userCart.get(i).getProductItem()[0], transactionAmount+1));
+                    this.userCart.get(i).decreaseQuantity(origQuantity);
+                    this.userCart.get(i).decreaseItemsFromSlot(this.userCart.get(i).getProductItem(), origQuantity);
+                    this.userCart.remove(i);
 
                 } else {
                     success = false;
@@ -456,6 +489,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             }
             i++;
         }
+
+        System.out.println(success);
 
         return success;
     }
@@ -707,8 +742,9 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method changes the price of <code>Items</code>
      */
     @Override
-    public void changePrice(double newPrice){
+    public boolean changePrice(double newPrice){
         int row, col;
+        boolean success = false;
         String slotLabel;
         
         slotLabel = sc.next().toUpperCase();
@@ -718,15 +754,39 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
         if(this.vendoItem[row][col] != null && this.vendoItem[row][col].getProductItem()[0].getName() != null){
             this.vendoItem[row][col].setPrice(newPrice);
+            success = true;
         }
+
+        return success;
     } 
+
+    public void increaseItem(String label){
+        int row, col, origQuantity;
+        String slotLabel;
+        ItemsSlots item;
+
+        slotLabel = sc.next().toUpperCase();
+       
+        row = slotLabel.charAt(0) - 'A';
+        col = Integer.parseInt(slotLabel.substring(1)) - 1;
+
+        origQuantity = this.vendoItem[row][col].getQuantity();
+
+        if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
+            item = this.vendoItem[row][col];
+
+            item.increaseQuantity(1);
+            item.increaseItemsFromSlot(this.vendoItem[row][col].getProductItem(), origQuantity);
+
+        } 
+    }
 
     /**
      * This method decreases the <code>Items</code> in a <code>ItemsSlots</code> array
      * @param itemArr Item Slot
      */
     @Override
-    public void decreaseItem(String label, int decrease) {
+    public void decreaseItem(String label) {
         int row, col, origQuantity;
         String slotLabel;
         ItemsSlots item;
@@ -741,7 +801,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
             item = this.vendoItem[row][col];
 
-            item.decreaseQuantity(decrease);
+            item.decreaseQuantity(1);
             item.decreaseItemsFromSlot(this.vendoItem[row][col].getProductItem(), origQuantity);
 
             if(item.getQuantity() == 0){// Essentially an item is removed from its slot
@@ -755,10 +815,10 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method collects the <code>Money</code> in the machine and saves them in a file
      */
     @Override
-    public void collectMoneyInMachine(){
+    public boolean collectMoneyInMachine(){
         int i = 0, amount = 0;
         double sum = 0;
-        boolean reachedTotal = false;
+        boolean reachedTotal = false, success = false;
         String check = null;
         File contentFile = new File("./Files/Collections.txt");
 
@@ -778,7 +838,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             }
             reader.close();
             } catch (IOException e) {
-                //
+                
             }
 
             try {//print collection money and total to file
@@ -796,11 +856,12 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 mainWriter.println("Total: ");
                 mainWriter.println(sum);
                 mainWriter.close();
-                
+                success = true;
             } catch (IOException e) {
                 
             }
         } 
+        return success;
     }
        
 }

@@ -17,7 +17,7 @@ public class Transactions {
     private int number;
     private boolean check;
     private Items item;
-    private ArrayList<ItemsSlots> itemArr = new ArrayList<ItemsSlots>();
+    private ArrayList<ItemsSlots> itemArr;
     private LocalDate date;
 
     /**
@@ -54,6 +54,7 @@ public class Transactions {
         this.payment = payment;
         this.change = change;
         this.check = false;
+        this.item = null;
     }
 
     /**

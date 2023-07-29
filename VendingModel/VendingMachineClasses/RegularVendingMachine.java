@@ -16,7 +16,7 @@ import java.util.Scanner;
  * amount of money of the user, amount of transactions, a boolean of whether or not a sale was done, 
  * money stored in the vending machine, user's money, a list of the transactions, and the item slots.
  */
-public class RegularVendingMachine extends VendingMachine implements InterfaceVendingMachineRegular, VendingDisplays{
+public class RegularVendingMachine extends VendingMachine implements InterfaceVendingMachine{
 
     /**
      * A <code>RegularVendingMachine</code> constructor that calls on the contructor of the parent class
@@ -628,8 +628,9 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * @param newPrice new price of an item
      */
     @Override
-    public void changePrice(double newPrice){
+    public boolean changePrice(double newPrice){
         int row, col;
+        boolean success = false;
         String slotLabel;
         
         slotLabel = sc.next().toUpperCase();
@@ -639,16 +640,42 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
 
         if(this.vendoItem[row][col] != null && this.vendoItem[row][col].getProductItem()[0].getName() != null){
             this.vendoItem[row][col].setPrice(newPrice);
+            success = true;
         }
+        
+        return success;
     } 
 
     /**
+     * 
+     */
+    public void increaseItem(String label){
+        int row, col, origQuantity;
+        String slotLabel;
+        ItemsSlots item;
+
+        slotLabel = sc.next().toUpperCase();
+       
+        row = slotLabel.charAt(0) - 'A';
+        col = Integer.parseInt(slotLabel.substring(1)) - 1;
+
+        origQuantity = this.vendoItem[row][col].getQuantity();
+
+        if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
+            item = this.vendoItem[row][col];
+
+            item.increaseQuantity(1);
+            item.increaseItemsFromSlot(this.vendoItem[row][col].getProductItem(), origQuantity);
+
+        } 
+    }
+
+    /**
      * This method decreases the <code>Items</code> in a <code>ItemsSlots</code> array
-     * @param label Label of the slot
-     * @param decrease Amount to be decreased
+     * @param itemArr Item Slot
      */
     @Override
-    public void decreaseItem(String label, int decrease) {
+    public void decreaseItem(String label) {
         int row, col, origQuantity;
         String slotLabel;
         ItemsSlots item;
@@ -663,7 +690,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
             item = this.vendoItem[row][col];
 
-            item.decreaseQuantity(decrease);
+            item.decreaseQuantity(1);
             item.decreaseItemsFromSlot(this.vendoItem[row][col].getProductItem(), origQuantity);
 
             if(item.getQuantity() == 0){// Essentially an item is removed from its slot
@@ -677,10 +704,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * This method collects the <code>Money</code> in the machine and saves them in a file
      */
     @Override
-    public void collectMoneyInMachine(){
+    public boolean collectMoneyInMachine(){
         int i = 0, amount = 0;
         double sum = 0;
-        boolean reachedTotal = false;
+        boolean reachedTotal = false, success = false;
         String check = null;
         File contentFile = new File("./Files/Collections.txt");
 
@@ -700,7 +727,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             }
             reader.close();
             } catch (IOException e) {
-                System.out.println("File can't be read....");
+                
             }
 
             try {//print collection money and total to file
@@ -718,16 +745,12 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                 mainWriter.println("Total: ");
                 mainWriter.println(sum);
                 mainWriter.close();
-                if(contentFile.exists())
-                    System.out.println("\nCollection is done!");
-                else
-                    System.out.println("\nCollection is done!");
+                success = true;
             } catch (IOException e) {
-                System.out.println("An error occured....");
+                
             }
-        } else {
-            System.out.println("No money to collect");
-        }
+        } 
+        return success;
     }
 
     /**
@@ -771,20 +794,33 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     public String showTransactions(){
         StringBuilder builder = new StringBuilder();
         double sum = 0;
+        int i = 0, j = 0, curQuantity = 0;
+        boolean found = false;
         if(this.transactionList != null && this.transactionAmount != 0){
-            builder.append("------------------------------------------------------------------------------\n");
-            builder.append("|  TR#  |         Name       |   Total  |  Payment |  Change  |     Date     |\n");
-            builder.append("------------------------------------------------------------------------------\n");
+            builder.append("----------------------------------------------------------------------------------------------------------\n");
+            builder.append("|  TR#  |         Name       |  Quantity  |  in Machine  |   Total  |  Payment |  Change  |     Date     |\n");
+            builder.append("----------------------------------------------------------------------------------------------------------\n");
             for (Transactions transaction : this.transactionList) {
                 sum += transaction.getTotal();
 
+                while(i < this.occupiedRow && !found){
+                    while (j < this.occupiedSlots % 5 && !found) {
+                        if (this.vendoItem[i][j].getProductItem()[0].getName().equals(transaction.getItem().getName())) {
+                            curQuantity = this.vendoItem[i][j].getQuantity();
+                            found = true;
+                        }
+                    }
+                }
+
                 builder.append(String.format("|%7d|", transaction.getNumber()));
                 builder.append(String.format("%20s|", transaction.getItem().getName()));
+                builder.append(String.format("%12d|", 1));
+                builder.append(String.format("%7d - %6d|", curQuantity, 1+curQuantity));
                 builder.append(String.format("P%9.2f|", transaction.getTotal()));
                 builder.append(String.format("P%9.2f|", transaction.getPayment()));
                 builder.append(String.format("P%9.2f|", transaction.getChange()));
-                builder.append(String.format("%14s|\n", transaction.toString()));
-                builder.append("------------------------------------------------------------------------------\n");
+                builder.append(String.format("%14s|", transaction.toString()));
+                builder.append("----------------------------------------------------------------------------------------------------------\n");
             }
             builder.append("Total: " + sum + "\n");
         } else {

@@ -50,8 +50,36 @@ public class ItemsSlots{
         int i;
         Items[] newArr = new Items[MAXITEMS];
 
-        for(i = 0; i < this.quantity; i++){
-            newArr[i] = new Items(itemArr[i].getName(), itemArr[i].getCalories(), itemArr[i].getItemType());
+        if (origQuantity > 0) {
+            for(i = 0; i < this.quantity; i++){
+                newArr[i] = new Items(itemArr[i].getName(), itemArr[i].getCalories(), itemArr[i].getItemType());
+            }
+
+            this.setProductItems(newArr);
+        }
+    }
+
+    /**
+     * Decreases the quantity of items in the slot
+     * @param decrease quantity to decreast
+     */
+    public void increaseQuantity(int increase){
+        this.quantity += increase;
+    }
+
+    /**
+     * Removes a certain amount of items in the given slot
+     * @param itemArr Array of items
+     * @param origQuantity Original quantity of the items
+     */
+    public void increaseItemsFromSlot(Items[] itemArr, int origQuantity){
+        int i;
+        Items[] newArr = new Items[MAXITEMS];
+
+        if (origQuantity < MAXITEMS) {
+            for(i = 0; i < this.quantity; i++){
+                newArr[i] = new Items(itemArr[i].getName(), itemArr[i].getCalories(), itemArr[i].getItemType());
+            }
         }
 
         this.setProductItems(newArr);
