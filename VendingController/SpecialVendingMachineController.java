@@ -217,14 +217,18 @@ public class SpecialVendingMachineController {
             }
         });
 
-        this.ui.setItemBtnConListener(new ActionListener() {
+            this.ui.setItemBtnConListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 String label = ui.getItemsFieldText();
                 boolean success = machine.addItemToCart(label);
 
+                int i = 0;
                 if (success) {
-                    ui.getMainFrame().revalidate();
-                    ui.clearItemsField();
+                cartItemsBuilder.append(label).append("\n");
+                ui.setCartAreaFieldText(cartItemsBuilder.toString());
+                ui.clearItemsField();
+                ui.getMainFrame().revalidate();
+                    
                 }else{
                     ui.clearItemsField();
                 }
@@ -237,6 +241,41 @@ public class SpecialVendingMachineController {
                 ui.clearItemsField();
             }
         });
+
+        
+        this.ui.setbuyBtnListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                String label = ui.getItemsFieldText();
+                boolean success = machine.buyItem(label);
+
+                if (success) {
+                    ui.getMainFrame().revalidate();
+                    ui.setItemsFieldText("Trueeeee");
+                    ui.clearItemsField();
+                }else{
+                    ui.setItemsFieldText("Falseeeee");
+                    ui.clearItemsField();
+                }
+            }
+        });
+
+  
+        this.ui.setcreateBuyBtnListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                String label = ui.getItemsFieldText();
+                boolean success = machine.buyProduct(label);
+                
+            }   
+        });
+
+        this.ui.setcancelBtnListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                
+
+            }
+        });
+        
+
 
         this.ui.setOpenMListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
