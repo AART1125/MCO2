@@ -310,7 +310,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      */
     public boolean buyProduct(String input) {
         boolean success = false;
-        int i = 0;
+        int i = 0, j = 0;
+        boolean found = false;
         double price= 0.0, change = 0.0, payment = 0.0;
         String productName = input;
         
@@ -324,8 +325,14 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
 
         while (i < this.userCart.size() && success) {
-            int requiredQuantity = requiredIngredients.get(this.userCart.get(i).getProductItem()[0].getName());
-            int cartQuantity = itemCounts.getOrDefault(this.userCart.get(i).getProductItem()[0].getName(), 0);
+            int requiredQuantity = 0;
+            int cartQuantity = 0;
+            for (String key : requiredIngredients.keySet()) {
+                if (key.contains(this.userCart.get(i).getProductItem()[0].getName().toLowerCase())){
+                    requiredQuantity = requiredIngredients.get(key);
+                    cartQuantity = itemCounts.getOrDefault(key, 0);
+                }
+            }
 
             if (cartQuantity < requiredQuantity) {
                 success = false;
@@ -755,8 +762,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method inputs <code>Items</code> objects into the <code>ItemsSlots</code> array
      */
     @Override
-    public void inputItems(String name, String type, double price, int quantity, int calories){
-        boolean found = false;
+    public boolean inputItems(String name, String type, double price, int quantity, int calories){
+        boolean found = false, success = false;
         int row = 0, col = 0, i = 0, j = 0;
 
         //looks for an empty slot within the occupied range
@@ -773,11 +780,13 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
 
         if (found){
+            success = true;
             this.vendoItem[row][col].setPrice(price);
             this.vendoItem[row][col].setQuantity(quantity);
             this.vendoItem[row][col].getProductItem()[0] = new Items(name, calories, type);
             this.vendoItem[row][col].setProductItems(this.vendoItem[row][col].getProductItem()[0]);
         } else {
+            success = true;
             this.vendoItem[this.occupiedRow][this.occupiedSlots].setPrice(price);
             this.vendoItem[this.occupiedRow][this.occupiedSlots].setQuantity(quantity);
             this.vendoItem[this.occupiedRow][this.occupiedSlots].getProductItem()[0] = new Items(name, calories, type);
@@ -789,13 +798,15 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 this.occupiedRow++;
             }
         } 
+
+        return success;
     }
 
     /**
      * This method changes the price of <code>Items</code>
      */
     @Override
-    public boolean changePrice(double newPrice){
+    public boolean changePrice(double newPrice, String label){
         int row, col;
         boolean success = false;
         String slotLabel;
@@ -924,26 +935,38 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public String showNewTransactions(){
         StringBuilder builder = new StringBuilder();
         double sum = 0;
+        int i = 0, j = 0, curQuantity = 0;
+        boolean found = false;
 
         if(this.transactionList != null && this.transactionAmount != 0){
-            builder.append("------------------------------------------------------------------------------\n");
-            builder.append("|  TR#  |         Name       |   Total  |  Payment |  Change  |     Date     |\n");
-            builder.append("------------------------------------------------------------------------------\n");
+           builder.append("----------------------------------------------------------------------------------------------------------\n");
+            builder.append("|  TR#  |         Name       |  Quantity  |  in Machine  |   Total  |  Payment |  Change  |     Date     |\n");
+            builder.append("----------------------------------------------------------------------------------------------------------\n");
             for (Transactions transaction : this.transactionList) {
                 if(!transaction.getCheck()){
-                    sum += transaction.getTotal();
+                        sum += transaction.getTotal();
+
+                    while(i < this.occupiedRow && !found){
+                        while (j < this.occupiedSlots % 5 && !found) {
+                            if (this.vendoItem[i][j].getProductItem()[0].getName().equals(transaction.getItem().getName())) {
+                                curQuantity = this.vendoItem[i][j].getQuantity();
+                                found = true;
+                            }
+                        }
+                    }
 
                     builder.append(String.format("|%7d|", transaction.getNumber()));
                     builder.append(String.format("%20s|", transaction.getItem().getName()));
+                    builder.append(String.format("%12d|", 1));
+                    builder.append(String.format("%7d - %6d|", curQuantity, 1+curQuantity));
                     builder.append(String.format("P%9.2f|", transaction.getTotal()));
                     builder.append(String.format("P%9.2f|", transaction.getPayment()));
                     builder.append(String.format("P%9.2f|", transaction.getChange()));
-                    builder.append(String.format("%14s|\n", transaction.toString()));
-                    builder.append("------------------------------------------------------------------------------\n");
-                    transaction.setCheck(true);
+                    builder.append(String.format("%14s|", transaction.toString()));
+                    builder.append("----------------------------------------------------------------------------------------------------------\n");
                 }
             }
-            builder.append("Total: " + sum + "\n\n");
+            builder.append("Total: " + sum + "\n");
         } else {
             builder.append("There are no transactions available to check");
         }
@@ -995,6 +1018,10 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
     public ArrayList<ItemsSlots> getUserCart() {
         return this.userCart;
+    }
+
+    public int getTransactionsMade() {
+        return this.transactionsMade;
     }
        
 }

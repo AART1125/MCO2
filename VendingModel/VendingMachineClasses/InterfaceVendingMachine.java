@@ -28,8 +28,8 @@ interface InterfaceVendingMachine {
     public double total(Money[] moneys);
 
     public void inputDenomenations(double price);
-    public void inputItems(String name, String type, double price, int quantity, int calories);
-    public boolean changePrice(double newPrice);
+    public boolean inputItems(String name, String type, double price, int quantity, int calories);
+    public boolean changePrice(double newPrice, String label);
     public void increaseItem(String label);
     public void decreaseItem(String label);
     public boolean collectMoneyInMachine();

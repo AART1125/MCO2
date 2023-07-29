@@ -561,8 +561,8 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * @param calories Calories of the Item
      */
     @Override
-    public void inputItems(String name, String type, double price, int quantity, int calories){
-        boolean found = false;
+    public boolean inputItems(String name, String type, double price, int quantity, int calories){
+        boolean found = false, success = false;
         int row = 0, col = 0, i = 0, j = 0;
 
         //looks for an empty slot within the occupied range
@@ -579,11 +579,13 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
 
         if (found){
+            success = true;
             this.vendoItem[row][col].setPrice(price);
             this.vendoItem[row][col].setQuantity(quantity);
             this.vendoItem[row][col].getProductItem()[0] = new Items(name, calories, type);
             this.vendoItem[row][col].setProductItems(this.vendoItem[row][col].getProductItem()[0]);
         } else {
+            success = true;
             this.vendoItem[this.occupiedRow][this.occupiedSlots].setPrice(price);
             this.vendoItem[this.occupiedRow][this.occupiedSlots].setQuantity(quantity);
             this.vendoItem[this.occupiedRow][this.occupiedSlots].getProductItem()[0] = new Items(name, calories, type);
@@ -595,6 +597,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                 this.occupiedRow++;
             }
         } 
+        return success;
     }
 
     /**
