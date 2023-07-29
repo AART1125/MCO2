@@ -46,17 +46,15 @@ public class ItemsSlots{
      * @param itemArr Array of items
      * @param origQuantity Original quantity of the items
      */
-    public void decreaseItemsFromSlot(Items[] itemArr, int origQuantity){
+    public void decreaseItemsFromSlot(Items[] itemArr){
         int i;
         Items[] newArr = new Items[MAXITEMS];
 
-        if (origQuantity > 0) {
-            for(i = 0; i < this.quantity; i++){
-                newArr[i] = new Items(itemArr[i].getName(), itemArr[i].getCalories(), itemArr[i].getItemType());
-            }
-
-            this.setProductItems(newArr);
+        for(i = 0; i < this.quantity; i++){
+            newArr[i] = new Items(itemArr[i].getName(), itemArr[i].getCalories(), itemArr[i].getItemType());
         }
+
+        this.setProductItems(newArr);
     }
 
     /**

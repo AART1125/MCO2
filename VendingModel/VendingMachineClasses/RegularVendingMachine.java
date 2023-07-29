@@ -254,24 +254,28 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      */
     @Override
     public String display(){
-        int i, j;
-        StringBuilder build = new StringBuilder();
-        build.append("------------------------------------------------------------------\n");
-        build.append("| Slot |         Name       |   Price  |  Quantity  |  Calories  |\n");
-        build.append("------------------------------------------------------------------\n");
-        for(i = 0; i < MAXROW; i++)
-            for(j = 0; j < MAXCOL; j++){
-                if(this.vendoItem[i][j].getProductItem()[0] != null && this.vendoItem[i][j].getProductItem()[0].getName() != null){
-                    build.append(String.format("|%-6s|", this.vendoItem[i][j].getLabel()));
-                    build.append(String.format("%-20s|", this.vendoItem[i][j].getProductItem()[0].getName()));
-                    build.append(String.format("P%9.2f|", this.vendoItem[i][j].getPrice()));
-                    build.append(String.format("%12d|", this.vendoItem[i][j].getQuantity()));
-                    build.append(String.format("%10d g|\n", this.vendoItem[i][j].getProductItem()[0].getCalories()));
-                }
-            }
-        build.append("------------------------------------------------------------------\n");
+        StringBuilder builder = new StringBuilder();
+        double change = this.transactionList.get(this.transactionAmount).getPayment() - this.transactionList.get(this.transactionAmount).getTotal();
 
-        return build.toString();
+        if(this.transactionList.get(this.transactionAmount) != null){
+
+            builder.append("\n\nTransaction #" + this.transactionList.get(this.transactionAmount).getNumber());
+            builder.append("----------------------------------------------");
+            builder.append("|         Name       |  Calories  |   Total  |");
+            builder.append("----------------------------------------------");
+
+            builder.append(String.format("|%-20s|", this.transactionList.get(this.transactionAmount).getItem().getName()));
+            builder.append(String.format("%10d g|", this.transactionList.get(this.transactionAmount).getItem().getCalories()));
+            builder.append(String.format("P%9.2f|\n", this.transactionList.get(this.transactionAmount).getTotal()));
+            builder.append("----------------------------------------------\n");
+            builder.append(String.format("Total  : P%9.2f", this.transactionList.get(this.transactionAmount).getTotal()));
+            builder.append(String.format("Payment: P%9.2f", this.transactionList.get(this.transactionAmount).getPayment()));
+            builder.append(String.format("Change : P%9.2f", change));
+            builder.append("----------------------------------------------\n");
+            
+            this.transactionAmount++;
+        }
+        return builder.toString();
     }
 
     /**
@@ -305,12 +309,13 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * @param userMoneys User's Money
      * @return true or false
      */
-    @Override
     public boolean buyItem(String input) {
         boolean success = false;
         int row, col, origQuantity;
         double change, price, payment = total(userMoney);
         ItemsSlots slot;
+        
+
         
         row = input.charAt(0) - 'A';
         col = Integer.parseInt(input.substring(1)) - 1;
@@ -326,12 +331,14 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                         if(change >= 0 && total(this.storedMoney) > 0){
                             success = true;
                             //create transaction
-                            generateTransactions(slot.getProductItem()[0], slot.getPrice(), payment, change);
+                            this.transactionList.add(new Transactions(slot.getPrice(), payment, change, slot.getProductItem()[0], this.transactionAmount + 1));
 
                             //decrease item from slot
                             origQuantity = slot.getQuantity();
-                            slot.decreaseQuantity(1);
-                            slot.decreaseItemsFromSlot(slot.getProductItem(), origQuantity);
+                            if (origQuantity > 0) {
+                                slot.decreaseQuantity(1);
+                                slot.decreaseItemsFromSlot(slot.getProductItem());
+                            }
                     
                             this.salesWasDone = true;
                         }
@@ -394,7 +401,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         Money[] tempMoney = new Money[DENOMINATIONS];
 
         if(change < 0){
-           System.out.println("Insufficient funds");
+            
         } else {
             //puts the denominations of user in temp in case of lacking denominations in machine
             for (Money money : userMoneys) {
@@ -425,39 +432,6 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
 
         }
         return change;
-    }
-
-    /**
-     * This method generates the transaction of the sale. It is used in the buyItems method
-     * @param item Items being bought
-     * @param total Total price
-     * @param payment Payment for item
-     * @param change Change from payment
-     */
-    private void generateTransactions(Items item, double total, double payment, double change){
-
-        Transactions transactions = new Transactions(total, payment, change, item, this.transactionAmount + 1);
-
-        this.transactionList.add(transactions);
-
-        if(this.transactionList.get(this.transactionAmount) != null){
-
-            System.out.println("\n\nTransaction #" + this.transactionList.get(this.transactionAmount).getNumber());
-            System.out.println("----------------------------------------------");
-            System.out.println("|         Name       |  Calories  |   Total  |");
-            System.out.println("----------------------------------------------");
-
-            System.out.print(String.format("|%-20s|", this.transactionList.get(this.transactionAmount).getItem().getName()));
-            System.out.print(String.format("%10d g|", this.transactionList.get(this.transactionAmount).getItem().getCalories()));
-            System.out.print(String.format("P%9.2f|\n", this.transactionList.get(this.transactionAmount).getTotal()));
-            System.out.println("----------------------------------------------\n");
-            System.out.println(String.format("Total  : P%9.2f", this.transactionList.get(this.transactionAmount).getTotal()));
-            System.out.println(String.format("Payment: P%9.2f", this.transactionList.get(this.transactionAmount).getPayment()));
-            System.out.println(String.format("Change : P%9.2f", change));
-            System.out.println("----------------------------------------------\n");
-            
-            this.transactionAmount++;
-        }
     }
 
     /**
@@ -691,7 +665,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             item = this.vendoItem[row][col];
 
             item.decreaseQuantity(1);
-            item.decreaseItemsFromSlot(this.vendoItem[row][col].getProductItem(), origQuantity);
+            item.decreaseItemsFromSlot(this.vendoItem[row][col].getProductItem());
 
             if(item.getQuantity() == 0){// Essentially an item is removed from its slot
                 this.occupiedSlots--;
@@ -760,40 +734,6 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     public String showNewTransactions(){
         StringBuilder builder = new StringBuilder();
         double sum = 0;
-
-        if(this.transactionList != null && this.transactionAmount != 0){
-            builder.append("------------------------------------------------------------------------------\n");
-            builder.append("|  TR#  |         Name       |   Total  |  Payment |  Change  |     Date     |\n");
-            builder.append("------------------------------------------------------------------------------\n");
-            for (Transactions transaction : this.transactionList) {
-                if(!transaction.getCheck()){
-                    sum += transaction.getTotal();
-
-                    builder.append(String.format("|%7d|", transaction.getNumber()));
-                    builder.append(String.format("%20s|", transaction.getItem().getName()));
-                    builder.append(String.format("P%9.2f|", transaction.getTotal()));
-                    builder.append(String.format("P%9.2f|", transaction.getPayment()));
-                    builder.append(String.format("P%9.2f|", transaction.getChange()));
-                    builder.append(String.format("%14s|\n", transaction.toString()));
-                    builder.append("------------------------------------------------------------------------------\n");
-                    transaction.setCheck(true);
-                }
-            }
-            builder.append("Total: " + sum + "\n\n");
-        } else {
-            builder.append("There are no transactions available to check");
-        }
-
-        return builder.toString();
-    }
-
-    /**
-     * This method shows the all the <code>Transactions</code> made
-     */
-    @Override
-    public String showTransactions(){
-        StringBuilder builder = new StringBuilder();
-        double sum = 0;
         int i = 0, j = 0, curQuantity = 0;
         boolean found = false;
         if(this.transactionList != null && this.transactionAmount != 0){
@@ -826,6 +766,41 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         } else {
             builder.append("There are no transactions available to check\n");
         }
+        
+
+        return builder.toString();
+    }
+
+    /**
+     * This method shows the all the <code>Transactions</code> made
+     */
+    @Override
+    public String showTransactions(){
+        StringBuilder builder = new StringBuilder();
+        double sum = 0;
+        if(this.transactionList != null && this.transactionAmount != 0){
+            builder.append("------------------------------------------------------------------------------\n");
+            builder.append("|  TR#  |         Name       |   Total  |  Payment |  Change  |     Date     |\n");
+            builder.append("------------------------------------------------------------------------------\n");
+            for (Transactions transaction : this.transactionList) {
+                if(!transaction.getCheck()){
+                    sum += transaction.getTotal();
+
+                    builder.append(String.format("|%7d|", transaction.getNumber()));
+                    builder.append(String.format("%20s|", transaction.getItem().getName()));
+                    builder.append(String.format("P%9.2f|", transaction.getTotal()));
+                    builder.append(String.format("P%9.2f|", transaction.getPayment()));
+                    builder.append(String.format("P%9.2f|", transaction.getChange()));
+                    builder.append(String.format("%14s|\n", transaction.toString()));
+                    builder.append("------------------------------------------------------------------------------\n");
+                    transaction.setCheck(true);
+                }
+            }
+            builder.append("Total: " + sum + "\n\n");
+        } else {
+            builder.append("There are no transactions available to check");
+        }
+
         return builder.toString();
     }
 

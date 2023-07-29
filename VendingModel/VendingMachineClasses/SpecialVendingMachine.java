@@ -18,10 +18,12 @@ import VendingModel.TransactionsClass.Transactions;
 
 public class SpecialVendingMachine extends VendingMachine implements InterfaceVendingMachine{
     private ArrayList<ItemsSlots> userCart;
+    private int transactionsMade;
 
     public SpecialVendingMachine(){
         super();
         this.userCart = new ArrayList<ItemsSlots>();
+        this.transactionsMade = 0;
     }
 
     public void initializeProductsRequirement(){
@@ -259,22 +261,19 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      */
     @Override
     public String display(){
-        int i, j;
+        int i;
         StringBuilder build = new StringBuilder();
-        build.append("------------------------------------------------------------------\n");
+        build.append("------------------------------------------------------------------------\n");
         build.append("| Slot |         Name       |   Price  |  Quantity  |  Calories  |\n");
-        build.append("------------------------------------------------------------------\n");
-        for(i = 0; i < MAXROW; i++)
-            for(j = 0; j < MAXCOL; j++){
-                if(this.vendoItem[i][j].getProductItem()[0] != null && this.vendoItem[i][j].getProductItem()[0].getName() != null){
-                    build.append(String.format("|%-6s|", this.vendoItem[i][j].getLabel()));
-                    build.append(String.format("%-20s|", this.vendoItem[i][j].getProductItem()[0].getName()));
-                    build.append(String.format("P%9.2f|", this.vendoItem[i][j].getPrice()));
-                    build.append(String.format("%12d|", this.vendoItem[i][j].getQuantity()));
-                    build.append(String.format("%10d g|\n", this.vendoItem[i][j].getProductItem()[0].getCalories()));
-                }
-            }
-        build.append("------------------------------------------------------------------\n");
+        build.append("------------------------------------------------------------------------\n");
+        for(i = 0; i < this.userCart.size(); i++){
+            build.append(String.format("|%-6s|", this.userCart.get(i).getLabel()));
+            build.append(String.format("%-25s|", this.userCart.get(i).getProductItem()[0].getName()));
+            build.append(String.format("P%7.2f|", this.userCart.get(i).getPrice()));
+            build.append(String.format("%12d|", this.userCart.get(i).getQuantity()));
+            build.append(String.format("%10d g|\n", this.userCart.get(i).getProductItem()[0].getCalories()));    
+        }
+        build.append("------------------------------------------------------------------------\n");
 
         return build.toString();
     }
@@ -312,6 +311,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public boolean buyProduct(String input) {
         boolean success = false;
         int i = 0;
+        double price= 0.0, change = 0.0, payment = 0.0;
         String productName = input;
         
         Hashtable<String, Integer> requiredIngredients = findProd(productName);
@@ -319,23 +319,36 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
         // Count the occurrences of each item in the cart
         for (ItemsSlots cartItem : userCart) {
-            String itemName = cartItem.getProductItem()[0].getName().toLowerCase(); // Assuming item names are in lowercase
+            String itemName = cartItem.getProductItem()[0].getName().toLowerCase(); 
             itemCounts.put(itemName, itemCounts.getOrDefault(itemName, 0) + 1);
         }
 
-        // Check if the cart has the required items and quantities from the Hashtable
         while (i < this.userCart.size() && success) {
             int requiredQuantity = requiredIngredients.get(this.userCart.get(i).getProductItem()[0].getName());
             int cartQuantity = itemCounts.getOrDefault(this.userCart.get(i).getProductItem()[0].getName(), 0);
 
             if (cartQuantity < requiredQuantity) {
                 success = false;
-                // The cart does not have enough of this item
             }
             i++;
         }
         
-        return success; // All items in the Hashtable have enough quantity in the cart
+        if (success){
+            while (i < this.userCart.size()) {
+                price += this.userCart.get(i).getPrice();
+                i++;
+            }
+
+            price *= 2;
+            payment = total(userMoney);
+            change = produceChange(userMoney, price);
+
+            for (i = 0; i < this.userCart.size(); i++){
+                this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], transactionAmount+1));
+            }
+            this.userCart.clear();
+        }
+        return success; 
     }
 
     /**
@@ -458,15 +471,14 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
     /**
      * This method is where the buying of an item will be done
-     * @param userMoneys User's Money
+     * @param input
      * @return true or false
      */
-    @Override
-    public boolean buyItem(String input) {
+    public boolean buyItem() {
         boolean success = false;
         int i = 0, origQuantity;
-        double price = 0, change;
-
+        double price = 0, change, payment = total(userMoney);
+    
         while (i < this.userCart.size() && success) {
             if(isItemSellable(this.userCart.get(i).getProductItem()[0]) && (total(userMoney) >= this.userCart.get(i).getPrice())){
                 success = true;
@@ -475,11 +487,10 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 
                 if (origQuantity > 0){
                     change = produceChange(userMoney, price);
-                    this.transactionList.add(new Transactions(price, total(storedMoney), change, this.userCart.get(i).getProductItem()[0], transactionAmount+1));
+                    this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], this.transactionAmount+1));
+                    this.transactionsMade++;
                     this.userCart.get(i).decreaseQuantity(origQuantity);
-                    this.userCart.get(i).decreaseItemsFromSlot(this.userCart.get(i).getProductItem(), origQuantity);
-                    this.userCart.remove(i);
-
+                    this.userCart.get(i).decreaseItemsFromSlot(this.userCart.get(i).getProductItem());
                 } else {
                     success = false;
                 }
@@ -488,6 +499,9 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 success = false;
             }
             i++;
+        }
+        if (success) {
+            this.userCart.clear();
         }
 
         System.out.println(success);
@@ -511,11 +525,11 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         if(change < 0){
            
         } else {
-            for (Money money : userMoneys) {
+            for (Money money : userMoney) {
                 tempMoney[j] = new Money(money.getValue(), money.getAmount());
                 j++;
             }
-            addPaymentToMachine(userMoneys);
+            addPaymentToMachine(userMoney);
             while(i >= 0){
                 numBills = (int)temp/(int)this.storedMoney[i].getValue();
                 if(numBills > 0){
@@ -580,7 +594,9 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
         if(item.getItemType() != null){
             if(item.getItemType().equalsIgnoreCase("Add-ons") ||
-               item.getItemType().equalsIgnoreCase("Addons")){
+               item.getItemType().equalsIgnoreCase("Addons")  ||
+               item.getItemType().equalsIgnoreCase("Add-on")  ||
+               item.getItemType().equalsIgnoreCase("Addon"))  {
                    sellable = false;
                }
         }
@@ -610,30 +626,42 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
     /**
      * This method generates the transaction of the sale. It is used in the buyItems method
-     * @param item Items being bought
-     * @param total Total price
-     * @param payment Payment for item
      * @param change Change from payment
+     * @return String of the transactions
      */
-    public String createTransactions(Items item, double total, double payment, double change){
+    public String createTransactions(int num){
         StringBuilder builder = new StringBuilder();
+        int i, transactionNum, calories;
+        double price, total = 0, change = 0, payment = this.transactionList.get(this.transactionAmount).getPayment();
+        String name;
+        for (i = 0; i < num; i++) {
 
-        builder.append("\n\nTransaction #" + this.transactionList.get(this.transactionAmount).getNumber() + "\n");
-        builder.append("----------------------------------------------\n");
-        builder.append("|         Name       |  Calories  |   Total  |\n");
-        builder.append("----------------------------------------------\n");
+            transactionNum =  this.transactionList.get(this.transactionAmount + i).getNumber();
+            name =  this.transactionList.get(this.transactionAmount + i).getItem().getName();
+            calories =  this.transactionList.get(this.transactionAmount + i).getItem().getCalories();
+            price = this.transactionList.get(this.transactionAmount + i).getTotal();
+            total += this.transactionList.get(this.transactionAmount + i).getTotal();
+            
+            builder.append("\n\nTransaction #" + transactionNum + "\n");
+            builder.append("----------------------------------------------\n");
+            builder.append("|         Name       |  Calories  |   Total  |\n");
+            builder.append("----------------------------------------------\n");
 
-        for (ItemsSlots items : this.transactionList.get(this.transactionAmount).getItemArr()) {
-            builder.append(String.format("|%-20s|",items.getProductItem()[0].getName()));
-            builder.append(String.format("%10d g|",items.getProductItem()[0].getCalories()));
-            builder.append(String.format("P%9.2f|",items.getPrice()));
+            builder.append(String.format("|%-20s|", name));
+            builder.append(String.format("%10d g|", calories));
+            builder.append(String.format("P%9.2f|\n", price));
+            builder.append("----------------------------------------------\n");   
         }
 
+        change = payment - total;
+
         builder.append("----------------------------------------------\n\n");
-        builder.append(String.format("Total  : P%9.2f\n", this.transactionList.get(this.transactionAmount).getTotal()));
-        builder.append(String.format("Payment: P%9.2f\n", this.transactionList.get(this.transactionAmount).getPayment()));
+        builder.append(String.format("Total  : P%9.2f\n", total));
+        builder.append(String.format("Payment: P%9.2f\n", change));
         builder.append(String.format("Change : P%9.2f\n", change));
         builder.append("----------------------------------------------\n\n");
+        
+        this.transactionsMade = 0;
         
         return builder.toString();
     }
@@ -647,7 +675,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         StringBuilder builder = new StringBuilder();
         int i;
 
-        if(total(this.userMoney) > 0){
+        if(total(this.userMoney) >= 0){
             for(i = 0; i < this.currentMon; i++){
                 if(this.userMoney[i].getValue() > 0){
                     builder.append("\nDispensing change: P" + this.userMoney[i].getValue() + "| Amount : " + this.userMoney[i].getAmount() + "\n");
@@ -674,6 +702,31 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             sum += moneys[i].getTotal();
         }
         return sum;
+    }
+
+    /**
+     * This method checks the amount of every denomination left in the machine
+     * @return String of denominations
+     */
+    @Override
+    public String checkDenom(){
+        StringBuilder builder = new StringBuilder();
+        if(total(this.storedMoney) > 0){
+            builder.append("\n----------------------\n");
+            builder.append("|    Value    | Amount |\n");
+            builder.append("------------------------\n");
+            for (Money money : this.storedMoney) {
+                if (money.getValue() > 0) {
+                    builder.append(String.format("|P%12.2f|", money.getValue()));
+                    builder.append(String.format("%8d|\n", money.getAmount()));
+                    builder.append("------------------------\n");
+                }
+            }
+        } else {
+            builder.append("\nThere is no money available in the machine");    
+        }
+
+        return builder.toString();
     }
 
     /**
@@ -802,7 +855,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             item = this.vendoItem[row][col];
 
             item.decreaseQuantity(1);
-            item.decreaseItemsFromSlot(this.vendoItem[row][col].getProductItem(), origQuantity);
+            item.decreaseItemsFromSlot(this.vendoItem[row][col].getProductItem());
 
             if(item.getQuantity() == 0){// Essentially an item is removed from its slot
                 this.occupiedSlots--;
@@ -862,6 +915,86 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             }
         } 
         return success;
+    }
+
+    /**
+     * This method shows the newest <code>Transactions</code> that the maintenance hasn't seen yet
+     */
+    @Override
+    public String showNewTransactions(){
+        StringBuilder builder = new StringBuilder();
+        double sum = 0;
+
+        if(this.transactionList != null && this.transactionAmount != 0){
+            builder.append("------------------------------------------------------------------------------\n");
+            builder.append("|  TR#  |         Name       |   Total  |  Payment |  Change  |     Date     |\n");
+            builder.append("------------------------------------------------------------------------------\n");
+            for (Transactions transaction : this.transactionList) {
+                if(!transaction.getCheck()){
+                    sum += transaction.getTotal();
+
+                    builder.append(String.format("|%7d|", transaction.getNumber()));
+                    builder.append(String.format("%20s|", transaction.getItem().getName()));
+                    builder.append(String.format("P%9.2f|", transaction.getTotal()));
+                    builder.append(String.format("P%9.2f|", transaction.getPayment()));
+                    builder.append(String.format("P%9.2f|", transaction.getChange()));
+                    builder.append(String.format("%14s|\n", transaction.toString()));
+                    builder.append("------------------------------------------------------------------------------\n");
+                    transaction.setCheck(true);
+                }
+            }
+            builder.append("Total: " + sum + "\n\n");
+        } else {
+            builder.append("There are no transactions available to check");
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * This method shows the all the <code>Transactions</code> made
+     */
+    @Override
+    public String showTransactions(){
+        StringBuilder builder = new StringBuilder();
+        double sum = 0;
+        int i = 0, j = 0, curQuantity = 0;
+        boolean found = false;
+        if(this.transactionList != null && this.transactionAmount != 0){
+            builder.append("----------------------------------------------------------------------------------------------------------\n");
+            builder.append("|  TR#  |         Name       |  Quantity  |  in Machine  |   Total  |  Payment |  Change  |     Date     |\n");
+            builder.append("----------------------------------------------------------------------------------------------------------\n");
+            for (Transactions transaction : this.transactionList) {
+                sum += transaction.getTotal();
+
+                while(i < this.occupiedRow && !found){
+                    while (j < this.occupiedSlots % 5 && !found) {
+                        if (this.vendoItem[i][j].getProductItem()[0].getName().equals(transaction.getItem().getName())) {
+                            curQuantity = this.vendoItem[i][j].getQuantity();
+                            found = true;
+                        }
+                    }
+                }
+
+                builder.append(String.format("|%7d|", transaction.getNumber()));
+                builder.append(String.format("%20s|", transaction.getItem().getName()));
+                builder.append(String.format("%12d|", 1));
+                builder.append(String.format("%7d - %6d|", curQuantity, 1+curQuantity));
+                builder.append(String.format("P%9.2f|", transaction.getTotal()));
+                builder.append(String.format("P%9.2f|", transaction.getPayment()));
+                builder.append(String.format("P%9.2f|", transaction.getChange()));
+                builder.append(String.format("%14s|", transaction.toString()));
+                builder.append("----------------------------------------------------------------------------------------------------------\n");
+            }
+            builder.append("Total: " + sum + "\n");
+        } else {
+            builder.append("There are no transactions available to check\n");
+        }
+        return builder.toString();
+    }
+
+    public ArrayList<ItemsSlots> getUserCart() {
+        return this.userCart;
     }
        
 }

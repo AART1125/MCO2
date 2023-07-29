@@ -17,7 +17,6 @@ public class Transactions {
     private int number;
     private boolean check;
     private Items item;
-    private ArrayList<ItemsSlots> itemArr;
     private LocalDate date;
 
     /**
@@ -36,25 +35,6 @@ public class Transactions {
         this.payment = payment;
         this.change = change;
         this.check = false;
-    }
-
-    /**
-     * Constructor class for a new <code>Transactions</code> object
-     * @param total Total of the transaction
-     * @param payment Payment of user in transaction
-     * @param change Change produced in transaction
-     * @param item Item bought in transaction
-     * @param number Transaction number
-     */
-    public Transactions(double total, double payment, double change, ArrayList<ItemsSlots> item, int number){
-        this.total = total;
-        this.itemArr = item;
-        this.number = number;
-        this.date = LocalDate.now();
-        this.payment = payment;
-        this.change = change;
-        this.check = false;
-        this.item = null;
     }
 
     /**
@@ -117,10 +97,6 @@ public class Transactions {
      */
     public Items getItem(){
         return this.item;
-    }
-
-    public ArrayList<ItemsSlots> getItemArr() {
-        return this.itemArr;
     }
 
     /**

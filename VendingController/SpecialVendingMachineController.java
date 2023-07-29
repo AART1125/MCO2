@@ -13,6 +13,7 @@ public class SpecialVendingMachineController {
     private MenuUi menu;    
     private SpecialVendingMachine machine;
     private SpecialVendingMachineUI ui;
+    private StringBuilder cartItemsBuilder = new StringBuilder();
 
     public SpecialVendingMachineController(SpecialVendingMachine machine, SpecialVendingMachineUI ui, MenuUi menu){
         this.machine = machine;
@@ -222,10 +223,9 @@ public class SpecialVendingMachineController {
                 String label = ui.getItemsFieldText();
                 boolean success = machine.addItemToCart(label);
 
-                int i = 0;
                 if (success) {
                 cartItemsBuilder.append(label).append("\n");
-                ui.setCartAreaFieldText(cartItemsBuilder.toString());
+                ui.setCartAreaFieldText(machine.display());
                 ui.clearItemsField();
                 ui.getMainFrame().revalidate();
                     
@@ -246,21 +246,20 @@ public class SpecialVendingMachineController {
         this.ui.setbuyBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 String label = ui.getItemsFieldText();
-                boolean success = machine.buyItem(label);
+                
+                boolean success = machine.buyItem();
 
                 if (success) {
                     ui.getMainFrame().revalidate();
-                    ui.setItemsFieldText("Trueeeee");
                     ui.clearItemsField();
                 }else{
-                    ui.setItemsFieldText("Falseeeee");
                     ui.clearItemsField();
                 }
             }
         });
 
   
-        this.ui.setcreateBuyBtnListener(new ActionListener() {
+        this.ui.setCreateBuyBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 String label = ui.getItemsFieldText();
                 boolean success = machine.buyProduct(label);
@@ -268,10 +267,10 @@ public class SpecialVendingMachineController {
             }   
         });
 
-        this.ui.setcancelBtnListener(new ActionListener() {
+        this.ui.setCancelBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                
-
+                machine.getUserCart().clear();
+                ui.clearCartAreaField();
             }
         });
         

@@ -260,7 +260,7 @@ public class RegularVendingMachineUI {
         this.itemBtnF = new JButton("F");
         this.itemBtnF.setFont(digitalFont.deriveFont(12.2f));
         this.itemBtnF.setMargin(new Insets(10, 12, 10, 12));
-        this.itemBtnCon = new JButton("✓");
+        this.itemBtnCon = new JButton("$");
         this.itemBtnCon.setBackground(Color.green);
         this.itemBtnCon.setForeground(Color.white);
         this.itemBtnCon.setMargin(new Insets(10, 12, 10, 12));
@@ -714,6 +714,45 @@ public class RegularVendingMachineUI {
         this.itemsField.setText("Input Item Label");
     }
     
+    public void setCashBtn1Listener(ActionListener actn) {
+        this.cashBtn1.addActionListener(actn);
+    }
+
+    public void setCashBtn2Listener(ActionListener actn) {
+        this.cashBtn2.addActionListener(actn);
+    }
+
+    public void setCashBtn3Listener(ActionListener actn) {
+        this.cashBtn3.addActionListener(actn);
+    }
+
+    public void setCashBtn4Listener(ActionListener actn) {
+        this.cashBtn4.addActionListener(actn);
+    }
+
+    public void setCashBtn5Listener(ActionListener actn) {
+        this.cashBtn5.addActionListener(actn);
+    }
+
+    public void setCashBtn6Listener(ActionListener actn) {
+        this.cashBtn6.addActionListener(actn);
+    }
+
+    public void setCashBtn7Listener(ActionListener actn) {
+        this.cashBtn7.addActionListener(actn);
+    }
+
+    public void setCashBtn8Listener(ActionListener actn) {
+        this.cashBtn8.addActionListener(actn);
+    }
+
+    public void setCashBtn9Listener(ActionListener actn) {
+        this.cashBtn9.addActionListener(actn);
+    }
+
+    public void setCashFieldText(String text){
+        this.cashField.setText(text);
+    }
     public void setItemBtn1Listener(ActionListener actn) {
         this.itemBtn1.addActionListener(actn);
     }
@@ -758,8 +797,32 @@ public class RegularVendingMachineUI {
         this.itemBtnF.addActionListener(actn);
     }
 
+    public void setItemBtnConListener(ActionListener actn) {
+        this.itemBtnCon.addActionListener(actn);
+    }
+
     public void setItemBtnCanListener(ActionListener actn) {
         this.itemBtnCan.addActionListener(actn);
+    }
+
+    public void setReceiptText(String text){
+        this.receiptArea.setText(text);
+    }
+
+    public void setbuyBtnListener(ActionListener actn) {
+        this.buyBtn.addActionListener(actn);
+    }
+
+    public void setcreateBuyBtnListener(ActionListener actn) {
+        this.createBuyBtn.addActionListener(actn);
+    }
+
+    public void setcancelBtnListener(ActionListener actn) {
+        this.cancelBtn.addActionListener(actn);
+    }
+
+    public void setCartAreaFieldText(String text) {
+        this.cartArea.setText(text);
     }
 
     public void setItemsFieldText(String text) {
