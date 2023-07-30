@@ -3,8 +3,6 @@ package VendingController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Action;
-
 import VendingModel.VendingMachineClasses.SpecialVendingMachine;
 import VendingView.MenuUi;
 import VendingView.SpecialVendingMachineUI;
@@ -246,14 +244,25 @@ public class SpecialVendingMachineController {
         
         this.ui.setbuyBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                String label = ui.getItemsFieldText();
                 
                 boolean success = machine.buyItem();
 
                 if (success) {
-                    ui.getMainFrame().revalidate();
+                    ui.setReceiptText(machine.createTransactions(machine.getTransactionsMade()) + machine.dispenseChange());
+                    ui.setInputMoneyFieldText("P " + machine.total(machine.getStoredMoney()));
+                    ui.clearCartAreaField();
+                    ui.clearCashField();
                     ui.clearItemsField();
-                }else{
+                    ui.setMDisplayText(machine.showNewTransactions());
+                    for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
+                        for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
+                            String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();
+                            ui.setItemsText(i, j, items);
+                        }
+                    }
+                    ui.getMainFrame().revalidate();
+                    ui.getMaintenanceFrame().revalidate();
+                } else {
                     ui.clearItemsField();
                 }
             }
@@ -265,6 +274,7 @@ public class SpecialVendingMachineController {
                 String label = ui.getItemsFieldText();
                 boolean success = machine.buyProduct(label);
                 
+
             }   
         });
 
@@ -279,6 +289,7 @@ public class SpecialVendingMachineController {
             public void actionPerformed(ActionEvent e){
                 ui.getMainFrame().setVisible(false);
                 ui.getMaintenanceFrame().setVisible(true);
+                ui.clearReceiptArea();
             }
         });
 
@@ -544,7 +555,7 @@ public class SpecialVendingMachineController {
 
         this.ui.setMPriceBtn1Listener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                if(ui.getLabelFieldText().equals("ITEM")){
+                if(ui.getLabelFieldText().equals("Item")){
                     ui.setLabelFieldText("1");
                 } else {
                     ui.setLabelFieldText(ui.getLabelFieldText()+1);
@@ -554,7 +565,7 @@ public class SpecialVendingMachineController {
 
         this.ui.setMPriceBtn2Listener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM")) {
+                if (ui.getLabelFieldText().equals("Item")) {
                     ui.setLabelFieldText("2");
                 } else {
                     ui.setLabelFieldText(ui.getLabelFieldText()+2);
@@ -564,7 +575,7 @@ public class SpecialVendingMachineController {
 
         this.ui.setMPriceBtn3Listener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM")) {
+                if (ui.getLabelFieldText().equals("Item")) {
                     ui.setLabelFieldText("3");
                 } else {
                     ui.setLabelFieldText(ui.getLabelFieldText()+3);
@@ -572,85 +583,85 @@ public class SpecialVendingMachineController {
             }
         });
 
-    this.ui.setMPriceBtn4Listener(new ActionListener() {
-        public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM")) {
-                    ui.setLabelFieldText("4");
-                } else {
-                    ui.setLabelFieldText(ui.getLabelFieldText()+4);
+        this.ui.setMPriceBtn4Listener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                    if (ui.getLabelFieldText().equals("Item")) {
+                        ui.setLabelFieldText("4");
+                    } else {
+                        ui.setLabelFieldText(ui.getLabelFieldText()+4);
+                    }
                 }
-            }
-        });
+            });
 
-    this.ui.setMPriceBtn5Listener(new ActionListener() {
-        public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM")) {
-                    ui.setLabelFieldText("5");
-                } else {
-                    ui.setLabelFieldText(ui.getLabelFieldText()+5);
+        this.ui.setMPriceBtn5Listener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                    if (ui.getLabelFieldText().equals("Item")) {
+                        ui.setLabelFieldText("5");
+                    } else {
+                        ui.setLabelFieldText(ui.getLabelFieldText()+5);
+                    }
                 }
-            }
-        });
+            });
 
-    this.ui.setMPriceBtnAListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM")) {
-                    ui.setLabelFieldText("A");
-                } else {
-                    ui.setLabelFieldText(ui.getLabelFieldText()+"A");
+        this.ui.setMPriceBtnAListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                    if (ui.getLabelFieldText().equals("Item")) {
+                        ui.setLabelFieldText("A");
+                    } else {
+                        ui.setLabelFieldText(ui.getLabelFieldText()+"A");
+                    }
                 }
-            }
-        });
+            });
 
-    this.ui.setMPriceBtnBListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM")) {
-                    ui.setLabelFieldText("B");
-                } else {
-                    ui.setLabelFieldText(ui.getLabelFieldText()+"B");
+        this.ui.setMPriceBtnBListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                    if (ui.getLabelFieldText().equals("Item")) {
+                        ui.setLabelFieldText("B");
+                    } else {
+                        ui.setLabelFieldText(ui.getLabelFieldText()+"B");
+                    }
                 }
-            }
-        });
+            });
 
-    this.ui.setMPriceBtnCListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM")) {
-                    ui.setLabelFieldText("C");
-                } else {
-                    ui.setLabelFieldText(ui.getLabelFieldText()+"C");
+        this.ui.setMPriceBtnCListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                    if (ui.getLabelFieldText().equals("Item")) {
+                        ui.setLabelFieldText("C");
+                    } else {
+                        ui.setLabelFieldText(ui.getLabelFieldText()+"C");
+                    }
                 }
-            }
-        });
+            });
 
-    this.ui.setMPriceBtnDListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM")) {
-                    ui.setLabelFieldText("D");
-                } else {
-                    ui.setLabelFieldText(ui.getLabelFieldText()+"D");
+        this.ui.setMPriceBtnDListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                    if (ui.getLabelFieldText().equals("Item")) {
+                        ui.setLabelFieldText("D");
+                    } else {
+                        ui.setLabelFieldText(ui.getLabelFieldText()+"D");
+                    }
                 }
-            }
-        });
+            });
 
-    this.ui.setMPriceBtnEListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM") ) {
-                    ui.setLabelFieldText("E");
-                } else {
-                    ui.setLabelFieldText(ui.getLabelFieldText()+"E");
+        this.ui.setMPriceBtnEListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                    if (ui.getLabelFieldText().equals("Item") ) {
+                        ui.setLabelFieldText("E");
+                    } else {
+                        ui.setLabelFieldText(ui.getLabelFieldText()+"E");
+                    }
                 }
-            }
-        });
+            });
 
-    this.ui.setMPriceBtnFListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e){
-                if (ui.getLabelFieldText().equals("ITEM")) {
-                    ui.setLabelFieldText("F");
-                } else {
-                    ui.setLabelFieldText(ui.getLabelFieldText()+"F");
+        this.ui.setMPriceBtnFListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                    if (ui.getLabelFieldText().equals("Item")) {
+                        ui.setLabelFieldText("F");
+                    } else {
+                        ui.setLabelFieldText(ui.getLabelFieldText()+"F");
+                    }
                 }
-            }
-        });
+            });
 
         this.ui.setMItemBtnClearListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
@@ -678,7 +689,7 @@ public class SpecialVendingMachineController {
                 }
             }
         });
- 
+
         this.ui.setMItemBtnAddListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 String label = ui.getIncDecFieldText();
@@ -711,7 +722,7 @@ public class SpecialVendingMachineController {
                     if (success){
                         ui.clearLabelField();
                         ui.clearNewPriceField();
-                        ui.setMDisplayText("Successfully Added!");
+                        ui.setMDisplayText("Successfully Changed!");
                         for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
                             for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
                                 String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();
@@ -736,35 +747,36 @@ public class SpecialVendingMachineController {
 
 
         this.ui.setCheckDenomBtnAddListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e){
-
-                        ui.clearMDisplayText();
-                        ui.setMDisplayText(machine.checkDenom());
-                    
-                    }
-                });
+            public void actionPerformed(ActionEvent e){
+                ui.clearMDisplayText();
+                ui.setMDisplayText(machine.checkDenom());
+            
+            }
+        });
 
         this.ui.setShowTransactionsBtnListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent e){
 
-                        ui.clearMDisplayText();
-                        ui.setMDisplayText(machine.showNewTransactions());
-                    }
-                });
+                ui.clearMDisplayText();
+                ui.setMDisplayText(machine.showTransactions());
+            }
+        });
                 
         this.ui.setCollectMoneyBtnListener(new ActionListener() {
 
-                    public void actionPerformed(ActionEvent e){
-                    String text = ui.getMDisplayText();
-                    double price = Double.parseDouble(text);
-                    ui.clearMDisplayText();
-                    machine.collectMoney(price);
-                    
-                    }
-                });  
+            public void actionPerformed(ActionEvent e){
+            boolean success = machine.collectMoneyInMachine();
+            
+            if (success) {
+                ui.clearInputMoneyField();
+                ui.setMDisplayText("Money Successfully Collected!");
+            } else {
+                ui.setMDisplayText("Error!!!");
+            }
+            
+            }
+        });  
                 
-
-    
     }
 }
 

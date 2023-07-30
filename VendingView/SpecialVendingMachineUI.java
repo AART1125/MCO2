@@ -173,6 +173,7 @@ public class SpecialVendingMachineUI {
         //Text area for the cart panel
         this.cartArea = new JTextArea("", 4, 25);
         this.cartArea.setEditable(false);
+        this.cartArea.setFont(digitalFont.deriveFont(15f));
         this.cartPane = new JScrollPane(cartArea);
         this.cartPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.cartPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -181,6 +182,7 @@ public class SpecialVendingMachineUI {
         //Text area for the receipt panel
         this.receiptArea = new JTextArea("", 5, 25);
         this.receiptArea.setEditable(false);
+        this.receiptArea.setFont(digitalFont.deriveFont(15f));
         this.receiptPane = new JScrollPane(receiptArea);
         this.receiptPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.receiptPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -193,7 +195,7 @@ public class SpecialVendingMachineUI {
         this.processArea.setForeground(Color.green);
         this.processArea.setCaretColor(Color.green);
         this.processArea.setEditable(true);
-        this.processArea.setMinimumSize(new Dimension(243, 200));
+        this.processArea.setMinimumSize(new Dimension(200, 200));
 
         //Input cash buttons
         this.cashBtn1 = new JButton("1");
@@ -676,11 +678,13 @@ public class SpecialVendingMachineUI {
 
         this.mDisplayArea = new JTextArea();
         this.mDisplayArea.setEditable(false);
+        this.mDisplayArea.setFont(digitalFont.deriveFont(17f));
+        this.mDisplayArea.setForeground(Color.RED);
         this.mDisplayPane = new JScrollPane(mDisplayArea);
-        this.mDisplayPane.setPreferredSize(new Dimension(480, 250));
-        this.mDisplayPane.setMinimumSize(new Dimension(480, 250));
+        this.mDisplayPane.setPreferredSize(new Dimension(480, 200));
+        this.mDisplayPane.setMinimumSize(new Dimension(480, 200));
         this.mDisplayPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.mDisplayPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.mDisplayPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         //Buttons for the add items
         this.addItemBtn = new JButton("Add");
@@ -1290,6 +1294,18 @@ public class SpecialVendingMachineUI {
         this.cartArea.setText("");
     }
 
+    public void clearReceiptArea() {
+        this.receiptArea.setText("");
+    }
+
+    public void clearCashField() {
+        this.cashField.setText("Cash Amount");
+    }
+
+    public void clearInputMoneyField() {
+        this.inputMoneyField.setText("Input Money");
+    }
+
     public void setCashBtn1Listener(ActionListener actn) {
         this.cashBtn1.addActionListener(actn);
     }
@@ -1449,31 +1465,31 @@ public class SpecialVendingMachineUI {
     // MAINTENANCE --------------------------
 
     public void clearNameField() {
-        this.nameField.setText("INPUT NEW ITEM'S NAME");
+        this.nameField.setText("Input New Item's Name");
     }
 
     public void clearQuantityLabelField() {
-        this.quantityField.setText("INPUT NEW ITEM'S QUANTITY");
+        this.quantityField.setText("Input New Item's Quantity");
     }
 
     public void clearPriceLabelField() {
-        this.priceField.setText("INPUT NEW ITEM'S PRICE");
+        this.priceField.setText("Input New Items's Price");
     }
     
     public void clearCaloriesLabelField() {
-        this.caloriesField.setText("INPUT NEW ITEM'S CALORIES");
+        this.caloriesField.setText("Input New Items's Calories");
     }
 
     public void clearTypeLabelField() {
-        this.typeField.setText("INPUT NEW ITEM'S TYPE");
+        this.typeField.setText("Input New Item's Type");
     }
     
     public void clearNewPriceField() {
-        this.newPriceField.setText("PRICE");
+        this.newPriceField.setText("Price");
     }
 
     public void clearLabelField() {
-        this.labelField.setText("ITEM");
+        this.labelField.setText("Item");
     }
 
     public void setIncDecFieldText(String text) {
@@ -1527,7 +1543,7 @@ public class SpecialVendingMachineUI {
         int quantity = Integer.parseInt(text);
 
         return quantity;
-    }
+    }   
 
     public void setPriceLabelFieldText(String text) {
         this.priceField.getText();

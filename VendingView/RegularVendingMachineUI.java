@@ -38,7 +38,7 @@ public class RegularVendingMachineUI {
     private RegularVendingMachine machine;
 
     private String[] pathNames;
-    private JFrame mainFrame, maintenanceFrame;
+    private JFrame mainFrame, maintenanceFrame, productsFrame;
     private JMenuBar menu, maintenanceMenu;
     private JMenu maintenanceMItem, vendingMItem;
     private JMenuItem openM, exitM, openV, exitV;
@@ -46,19 +46,19 @@ public class RegularVendingMachineUI {
     private ImageIcon icon;
     private JLabel displayLabel, receiptLabel, productLabel;
     private JPanel itemsPanel, productPanel, inputsPanel;// Front portion
+    private JLabel[][] items;
     private JTextField cashField, itemsField;
     private JTextArea receiptArea, processArea;
     private JScrollPane receiptPane;
     private JButton cashBtn1, cashBtn2, cashBtn3, cashBtn4, cashBtn5, cashBtn6, cashBtn7, cashBtn8, cashBtn9;// Buttons for Cash Inputs
     private JButton itemBtn1, itemBtn2, itemBtn3, itemBtn4, itemBtn5, itemBtnA, itemBtnB, itemBtnC, itemBtnD, itemBtnE, itemBtnF, itemBtnCon, itemBtnCan;// Buttons for Item inputs
-    private JButton createBuyBtn, buyBtn, cancelBtn;//Buttons for transactions
     private JPanel addItemsPanel, displayPanel, miscMaintenancePanel;//Back Portion
     private JLabel nameLabel, typeLabel, priceLabel, quantityLabel, caloriesLabel;
     private JTextField nameField, typeField, priceField, quantityField, caloriesField;
     private JButton addItemBtn, clearBtn;
     private JTextField inputMoneyField, incDecField;
     private JButton mCashBtn1, mCashBtn2, mCashBtn3, mCashBtn4, mCashBtn5, mCashBtn6, mCashBtn7, mCashBtn8, mCashBtn9;
-    private JButton mItemBtn1, mItemBtn2, mItemBtn3, mItemBtn4, mItemBtn5, mItemBtnA, mItemBtnB, mItemBtnC, mItemBtnD, mItemBtnE, mItemBtnF, mItemBtnAdd, mItemBtnDec;
+    private JButton mItemBtn1, mItemBtn2, mItemBtn3, mItemBtn4, mItemBtn5, mItemBtnA, mItemBtnB, mItemBtnC, mItemBtnD, mItemBtnE, mItemBtnF, mItemBtnAdd, mItemBtnDec, mItemBtnClear;
     private JTextField labelField, newPriceField;
     private JButton mPriceBtn1, mPriceBtn2, mPriceBtn3, mPriceBtn4, mPriceBtn5, mPriceBtnA, mPriceBtnB, mPriceBtnC, mPriceBtnD, mPriceBtnE, mPriceBtnF, mPriceBtnCon, mPriceBtnCan;
     private JButton checkDenomBtn, showTransactionsBtn, collectMoneyBtn;
@@ -135,11 +135,6 @@ public class RegularVendingMachineUI {
         this.inputsPanel.setMinimumSize(new Dimension(225, 960));
         this.inputsPanel.setBackground(Color.black);
         this.inputsPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.gray, Color.gray));
-
-        //Label for cart
-        this.displayLabel = new JLabel("Display cart: ", SwingConstants.CENTER);
-        this.displayLabel.setFont(digitalFont.deriveFont(21f));
-        this.displayLabel.setForeground(Color.GREEN);
 
         //Label for receipt
         this.receiptLabel = new JLabel("Receipt", SwingConstants.CENTER);
@@ -258,19 +253,6 @@ public class RegularVendingMachineUI {
         this.itemBtnCan.setForeground(Color.white);
         this.itemBtnCan.setMargin(new Insets(10, 12, 10, 12));
 
-        //Button for buying
-        this.createBuyBtn = new JButton("Create");
-        this.createBuyBtn.setBackground(Color.green);
-        this.createBuyBtn.setForeground(Color.white);
-        this.buyBtn = new JButton("Buy cart");
-        this.buyBtn.setBackground(Color.green);
-        this.buyBtn.setForeground(Color.white);
-        this.cancelBtn = new JButton("x");
-        this.cancelBtn.setBackground(Color.RED);
-        this.cancelBtn.setForeground(Color.white);
-        this.cancelBtn.setFont(digitalFont.deriveFont(9f));
-        this.cancelBtn.setMargin(new Insets(5, 7, 5, 7));
-        
         //Panel for the items
         JPanel panel = setItems();
 
@@ -705,6 +687,11 @@ public class RegularVendingMachineUI {
         this.mItemBtnDec.setBackground(Color.red);
         this.mItemBtnDec.setForeground(Color.white);
         this.mItemBtnDec.setMargin(new Insets(10, 12, 10, 12));
+        this.mItemBtnClear = new JButton("x");
+        this.mItemBtnClear.setFont(digitalFont.deriveFont(12.2f));
+        this.mItemBtnClear.setBackground(Color.red);
+        this.mItemBtnClear.setForeground(Color.white);
+        this.mItemBtnClear.setMargin(new Insets(10, 12, 10, 12));
 
         //Item input buttons
         this.mPriceBtn1 = new JButton("1");
@@ -967,6 +954,10 @@ public class RegularVendingMachineUI {
             panel2.add(mItemBtn5, mPanelCon);
 
             mPanelCon.gridx = 4;
+            mPanelCon.gridy = 1;
+            panel2.add(mItemBtnClear, mPanelCon);
+
+            mPanelCon.gridx = 4;
             mPanelCon.gridy = 2;
             panel2.add(mItemBtnAdd, mPanelCon);
 
@@ -1173,10 +1164,6 @@ public class RegularVendingMachineUI {
         this.itemsField.setText("Input Item Label");
     }
 
-    public void clearCartAreaField() {
-        this.cartArea.setText("");
-    }
-
     public void setCashBtn1Listener(ActionListener actn) {
         this.cashBtn1.addActionListener(actn);
     }
@@ -1213,7 +1200,7 @@ public class RegularVendingMachineUI {
         this.cashBtn9.addActionListener(actn);
     }
 
-    public void setCashFieldText(String text){
+    public void setCashFieldText(String text){ 
         this.cashField.setText(text);
     }
     
@@ -1273,25 +1260,10 @@ public class RegularVendingMachineUI {
         this.itemBtnCan.addActionListener(actn);
     }
 
-    public void setbuyBtnListener(ActionListener actn) {
-        this.buyBtn.addActionListener(actn);
-    }
-
     public void setReceiptText(String text){
         this.receiptArea.setText(text);
     }
 
-    public void setCreateBuyBtnListener(ActionListener actn) {
-        this.createBuyBtn.addActionListener(actn);
-    }
-
-    public void setCancelBtnListener(ActionListener actn) {
-        this.cancelBtn.addActionListener(actn);
-    }
-
-    public void setCartAreaFieldText(String text) {
-        this.cartArea.setText(text);
-    }
 
     public void setItemsFieldText(String text) {
         this.itemsField.setText(text);

@@ -18,6 +18,7 @@ interface InterfaceVendingMachine {
 
     // Display methods
     public String display();
+    public String displayProcess();
     public String showTransactions();
     public String showNewTransactions();
     public String checkDenom();

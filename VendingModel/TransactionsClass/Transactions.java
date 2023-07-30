@@ -1,6 +1,6 @@
 package VendingModel.TransactionsClass;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class Transactions {
     private int number;
     private boolean check;
     private Items item;
-    private LocalDate date;
+    private LocalDateTime date;
 
     /**
      * Constructor class for a new <code>Transactions</code> object
@@ -31,7 +31,7 @@ public class Transactions {
         this.total = total;
         this.item = item;
         this.number = number;
-        this.date = LocalDate.now();
+        this.date = LocalDateTime.now();
         this.payment = payment;
         this.change = change;
         this.check = false;
@@ -47,7 +47,7 @@ public class Transactions {
      * @param check Transaction was checked
      * @param date Date of the transaction
      */
-    public Transactions(double total, double payment, double change, Items item, int number, LocalDate date, boolean check){
+    public Transactions(double total, double payment, double change, Items item, int number, LocalDateTime date, boolean check){
         this.total = total;
         this.payment = payment;
         this.change = change;
@@ -111,7 +111,7 @@ public class Transactions {
      * Gets the date of the <code>Transactions</code> object
      * @return Date of Transaction
      */
-    public LocalDate getDate(){
+    public LocalDateTime getDate(){
         return this.date;
     }
 
