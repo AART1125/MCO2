@@ -337,7 +337,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                             origQuantity = slot.getQuantity();
                             if (origQuantity > 0) {
                                 slot.decreaseQuantity(1);
-                                slot.decreaseItemsFromSlot(slot.getProductItem());
+                                slot.updateItemsFromSlot(slot.getProductItem());
                             }
                     
                             this.salesWasDone = true;
@@ -605,15 +605,12 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * @param newPrice new price of an item
      */
     @Override
-    public boolean changePrice(double newPrice){
+    public boolean changePrice(double newPrice, String label){
         int row, col;
         boolean success = false;
-        String slotLabel;
-        
-        slotLabel = sc.next().toUpperCase();
 
-        row = slotLabel.charAt(0) - 'A';
-        col = Integer.parseInt(slotLabel.substring(1)) - 1;
+        row = label.charAt(0) - 'A';
+        col = Integer.parseInt(label.substring(1)) - 1;
 
         if(this.vendoItem[row][col] != null && this.vendoItem[row][col].getProductItem()[0].getName() != null){
             this.vendoItem[row][col].setPrice(newPrice);
@@ -626,15 +623,13 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * 
      */
-    public void increaseItem(String label){
+    public boolean increaseItem(String label){
         int row, col, origQuantity;
-        String slotLabel;
+        boolean success = false;
         ItemsSlots item;
-
-        slotLabel = sc.next().toUpperCase();
        
-        row = slotLabel.charAt(0) - 'A';
-        col = Integer.parseInt(slotLabel.substring(1)) - 1;
+        row = label.charAt(0) - 'A';
+        col = Integer.parseInt(label.substring(1)) - 1;
 
         origQuantity = this.vendoItem[row][col].getQuantity();
 
@@ -642,9 +637,11 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             item = this.vendoItem[row][col];
 
             item.increaseQuantity(1);
-            item.increaseItemsFromSlot(this.vendoItem[row][col].getProductItem(), origQuantity);
-
+            item.updateItemsFromSlot(this.vendoItem[row][col].getProductItem());
+            success = true;
         } 
+
+        return success;
     }
 
     /**
@@ -652,29 +649,27 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * @param itemArr Item Slot
      */
     @Override
-    public void decreaseItem(String label) {
-        int row, col, origQuantity;
-        String slotLabel;
+    public boolean decreaseItem(String label) {
+        int row, col;
+        boolean success = false;
         ItemsSlots item;
-
-        slotLabel = sc.next().toUpperCase();
        
-        row = slotLabel.charAt(0) - 'A';
-        col = Integer.parseInt(slotLabel.substring(1)) - 1;
-        
-        origQuantity = this.vendoItem[row][col].getQuantity();
+        row = label.charAt(0) - 'A';
+        col = Integer.parseInt(label.substring(1)) - 1;
 
         if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
             item = this.vendoItem[row][col];
-
             item.decreaseQuantity(1);
-            item.decreaseItemsFromSlot(this.vendoItem[row][col].getProductItem());
+            item.updateItemsFromSlot(this.vendoItem[row][col].getProductItem());
 
+            success = true;
             if(item.getQuantity() == 0){// Essentially an item is removed from its slot
                 this.occupiedSlots--;
                 item.setPrice(0);
             }
         } 
+        
+        return success;
     }
 
     /**

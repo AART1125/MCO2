@@ -1169,8 +1169,12 @@ public class RegularVendingMachineUI {
         return panel;
     }
 
-    public void clearItemsField(){
+     public void clearItemsField(){
         this.itemsField.setText("Input Item Label");
+    }
+
+    public void clearCartAreaField() {
+        this.cartArea.setText("");
     }
 
     public void setCashBtn1Listener(ActionListener actn) {
@@ -1213,7 +1217,9 @@ public class RegularVendingMachineUI {
         this.cashField.setText(text);
     }
     
-    
+    public void setItemsText(int row, int col, String text){
+        this.items[row][col].setText(text);
+    }
     
     public void setItemBtn1Listener(ActionListener actn) {
         this.itemBtn1.addActionListener(actn);
@@ -1283,6 +1289,10 @@ public class RegularVendingMachineUI {
         this.cancelBtn.addActionListener(actn);
     }
 
+    public void setCartAreaFieldText(String text) {
+        this.cartArea.setText(text);
+    }
+
     public void setItemsFieldText(String text) {
         this.itemsField.setText(text);
     }
@@ -1311,6 +1321,10 @@ public class RegularVendingMachineUI {
         return this.maintenanceFrame;
     }
 
+    public JFrame getProductsFrame() {
+        return this.productsFrame;
+    }
+
     public String getItemsFieldText() {
         return this.itemsField.getText();
     }
@@ -1321,6 +1335,34 @@ public class RegularVendingMachineUI {
     
     // MAINTENANCE --------------------------
 
+    public void clearNameField() {
+        this.nameField.setText("INPUT NEW ITEM'S NAME");
+    }
+
+    public void clearQuantityLabelField() {
+        this.quantityField.setText("INPUT NEW ITEM'S QUANTITY");
+    }
+
+    public void clearPriceLabelField() {
+        this.priceField.setText("INPUT NEW ITEM'S PRICE");
+    }
+    
+    public void clearCaloriesLabelField() {
+        this.caloriesField.setText("INPUT NEW ITEM'S CALORIES");
+    }
+
+    public void clearTypeLabelField() {
+        this.typeField.setText("INPUT NEW ITEM'S TYPE");
+    }
+    
+    public void clearNewPriceField() {
+        this.newPriceField.setText("PRICE");
+    }
+
+    public void clearLabelField() {
+        this.labelField.setText("ITEM");
+    }
+
     public void setIncDecFieldText(String text) {
         this.incDecField.setText(text);
     }
@@ -1328,7 +1370,23 @@ public class RegularVendingMachineUI {
     public String getIncDecFieldText() {
         return this.incDecField.getText();
     }
+
+    public void setLabelFieldText(String text) {
+        this.labelField.setText(text);
+    }
     
+    public String getLabelFieldText() {
+        return this.labelField.getText();
+    }
+
+    public void setNewPriceFieldText(String text) {
+        this.newPriceField.setText(text);
+    }
+    
+    public String getNewPriceFieldText() {
+        return this.newPriceField.getText();
+    }
+
     public void setInputMoneyFieldText(String text){
         this.inputMoneyField.setText(text);
     }
@@ -1337,44 +1395,53 @@ public class RegularVendingMachineUI {
         return this.inputMoneyField.getText();
     }
 
-    public String setNameFieldText() {
+    public void setNameFieldText(String text) {
+       this.nameField.getText();
+    }
+
+    public String getNameFieldText() {
         return this.nameField.getText();
     }
 
-    public String getNameFieldText(String text) {
-        return this.nameField.getText();
+   
+
+    public void setQuantityLabelFieldText(String text) {
+        this.quantityField.getText();
     }
 
-    public String setQuantityLabelFieldText() {
-        return this.quantityLabel.getText();
+    public int getQuantityLabelFieldText() {
+        String text = this.quantityField.getText();
+        int quantity = Integer.parseInt(text);
+
+        return quantity;
     }
 
-    public String getQuantityLabelFieldText(String text) {
-        return this.quantityLabel.getText();
+    public void setPriceLabelFieldText(String text) {
+        this.priceField.getText();
     }
 
-    public String setPriceLabelFieldText() {
-        return this.priceLabel.getText();
+    public double getPriceLabelFieldText() {
+        String text = this.priceField.getText();
+        double price = Double.parseDouble(text);
+        return price;
     }
 
-    public String getPriceLabelFieldText(String text) {
-        return this.priceLabel.getText();
+    public void setCaloriesLabelFieldText(String text) {
+        this.caloriesField.getText();
     }
 
-    public String setCaloriesLabelFieldText() {
-        return this.caloriesLabel.getText();
+    public int getCaloriesLabelFieldText() {
+        String text = this.caloriesField.getText();
+        int calories = Integer.parseInt(text);
+        return calories;
     }
 
-    public String getCaloriesLabelFieldText(String text) {
-        return this.caloriesLabel.getText();
+    public void setTypeLabelFieldText(String text) {
+        this.typeField.getText();
     }
 
-    public String setTypeLabelFieldText() {
-        return this.typeLabel.getText();
-    }
-
-    public String getTypeLabelFieldText(String text) {
-        return this.typeLabel.getText();
+    public String getTypeLabelFieldText() {
+        return this.typeField.getText();
     }
     
     public void setAddItemBtnListener(ActionListener actn) {
@@ -1465,6 +1532,59 @@ public class RegularVendingMachineUI {
         this.mItemBtnF.addActionListener(actn);
     }
     
+    public void setMPriceBtn1Listener(ActionListener actn) {
+    this.mPriceBtn1.addActionListener(actn);
+    }
+
+    public void setMPriceBtn2Listener(ActionListener actn) {
+        this.mPriceBtn2.addActionListener(actn);
+    }
+
+    public void setMPriceBtn3Listener(ActionListener actn) {
+        this.mPriceBtn3.addActionListener(actn);
+    }
+
+    public void setMPriceBtn4Listener(ActionListener actn) {
+        this.mPriceBtn4.addActionListener(actn);
+    }
+
+    public void setMPriceBtn5Listener(ActionListener actn) {
+        this.mPriceBtn5.addActionListener(actn);
+    }
+
+    public void setMPriceBtnAListener(ActionListener actn) {
+        this.mPriceBtnA.addActionListener(actn);
+    }
+
+    public void setMPriceBtnBListener(ActionListener actn) {
+        this.mPriceBtnB.addActionListener(actn);
+    }
+
+    public void setMPriceBtnCListener(ActionListener actn) {
+        this.mPriceBtnC.addActionListener(actn);
+    }
+
+    public void setMPriceBtnDListener(ActionListener actn) {
+        this.mPriceBtnD.addActionListener(actn);
+    }
+
+    public void setMPriceBtnEListener(ActionListener actn) {
+        this.mPriceBtnE.addActionListener(actn);
+    }
+
+    public void setMPriceBtnFListener(ActionListener actn) {
+        this.mPriceBtnF.addActionListener(actn);
+    }
+
+    
+    public void setmPriceBtnConListener(ActionListener actn) {
+        this.mPriceBtnCon.addActionListener(actn);
+    }
+
+    public void setmPriceBtnCanListener(ActionListener actn) {
+        this.mPriceBtnCan.addActionListener(actn);
+    }
+    
     public void setMItemBtnDecListener(ActionListener actn) {
         this.mItemBtnDec.addActionListener(actn);
     }
@@ -1472,14 +1592,35 @@ public class RegularVendingMachineUI {
     public void setMItemBtnAddListener(ActionListener actn) {
         this.mItemBtnAdd.addActionListener(actn);
     }
-    
 
-    public static void main(String[] args){
-        SpecialVendingMachine machine = new SpecialVendingMachine();
-        machine.initialization(machine.getStoredMoney());
-        machine.initialization(machine.getUserMoney());
-        machine.initialization(machine.getVendoItem());
-        SpecialVendingMachineUI ui = new SpecialVendingMachineUI(machine);
+    public void setMItemBtnClearListener(ActionListener actn) {
+        this.mItemBtnClear.addActionListener(actn);
+    }
+
+    public void setCheckDenomBtnAddListener(ActionListener actn) {
+        this.checkDenomBtn.addActionListener(actn);
+    }
+
+    public void setShowTransactionsBtnListener(ActionListener actn) {
+        this.showTransactionsBtn.addActionListener(actn);
+    }
+
+    public void setCollectMoneyBtnListener(ActionListener actn) {
+        this.collectMoneyBtn.addActionListener(actn);
+    }
+
+    public void clearIncDecFieldText() {
+        this.incDecField.setText("Input Item Label");
+    }
+
+    public void setMDisplayText(String text){
+        this.mDisplayArea.setText(text);
+    }
+    public String getMDisplayText(){
+        return this.mDisplayArea.getText();
+    }
+    public void clearMDisplayText(){
+        this.mDisplayArea.setText("");
     }
 }
 

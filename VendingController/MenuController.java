@@ -61,7 +61,7 @@ public class MenuController {
         this.ui.setTestBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e ){
                 if (spcMachine != null && regMachine == null) {
-                    spcUi = new SpecialVendingMachineUI(spcMachine);
+                    spcUi = new SpecialVendingMachineUI();
                     spcController = new SpecialVendingMachineController(spcMachine, spcUi, ui);
                     ui.getMainFrame().setVisible(false);
                     

@@ -5,14 +5,12 @@ import VendingModel.MoneyClass.Money;
 import VendingModel.TransactionsClass.Transactions;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 abstract class VendingMachine{
     protected static final int MAXROW = 6;
     protected static final int MAXCOL = 5;
     protected static final int DENOMINATIONS = 9;
     protected static final int MAXITEMS = 20;
-    protected static Scanner sc = new Scanner(System.in);
 
     protected int occupiedRow, occupiedSlots, storedMoneyAmount, currentMon, transactionAmount;
     protected boolean salesWasDone;
@@ -32,6 +30,14 @@ abstract class VendingMachine{
         this.userMoney = new Money[DENOMINATIONS];
         this.transactionList = new ArrayList<Transactions>();
         this.vendoItem = new ItemsSlots[MAXROW][MAXCOL];
+    }
+
+    public static int getMaxrow() {
+        return MAXROW;
+    }
+
+    public static int getMaxcol() {
+        return MAXCOL;
     }
 
     /**

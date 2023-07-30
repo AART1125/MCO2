@@ -46,12 +46,12 @@ public class ItemsSlots{
      * @param itemArr Array of items
      * @param origQuantity Original quantity of the items
      */
-    public void decreaseItemsFromSlot(Items[] itemArr){
+    public void updateItemsFromSlot(Items[] itemArr){
         int i;
         Items[] newArr = new Items[MAXITEMS];
 
         for(i = 0; i < this.quantity; i++){
-            newArr[i] = new Items(itemArr[i].getName(), itemArr[i].getCalories(), itemArr[i].getItemType());
+            newArr[i] = new Items(itemArr[0].getName(), itemArr[0].getCalories(), itemArr[0].getItemType());
         }
 
         this.setProductItems(newArr);
@@ -64,25 +64,7 @@ public class ItemsSlots{
     public void increaseQuantity(int increase){
         this.quantity += increase;
     }
-
-    /**
-     * Removes a certain amount of items in the given slot
-     * @param itemArr Array of items
-     * @param origQuantity Original quantity of the items
-     */
-    public void increaseItemsFromSlot(Items[] itemArr, int origQuantity){
-        int i;
-        Items[] newArr = new Items[MAXITEMS];
-
-        if (origQuantity < MAXITEMS) {
-            for(i = 0; i < this.quantity; i++){
-                newArr[i] = new Items(itemArr[i].getName(), itemArr[i].getCalories(), itemArr[i].getItemType());
-            }
-        }
-
-        this.setProductItems(newArr);
-    }
-
+    
     /**
      * Decreases the quantity of items in the slot
      * @param decrease quantity to decreast

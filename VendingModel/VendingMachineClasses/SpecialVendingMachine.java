@@ -497,7 +497,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                     this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], this.transactionAmount+1));
                     this.transactionsMade++;
                     this.userCart.get(i).decreaseQuantity(origQuantity);
-                    this.userCart.get(i).decreaseItemsFromSlot(this.userCart.get(i).getProductItem());
+                    this.userCart.get(i).updateItemsFromSlot(this.userCart.get(i).getProductItem());
                 } else {
                     success = false;
                 }
@@ -809,12 +809,9 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public boolean changePrice(double newPrice, String label){
         int row, col;
         boolean success = false;
-        String slotLabel;
-        
-        slotLabel = sc.next().toUpperCase();
 
-        row = slotLabel.charAt(0) - 'A';
-        col = Integer.parseInt(slotLabel.substring(1)) - 1;
+        row = label.charAt(0) - 'A';
+        col = Integer.parseInt(label.substring(1)) - 1;
 
         if(this.vendoItem[row][col] != null && this.vendoItem[row][col].getProductItem()[0].getName() != null){
             this.vendoItem[row][col].setPrice(newPrice);
@@ -824,25 +821,32 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     } 
 
-    public void increaseItem(String label){
+    /**
+     * This method increases the items in the item slots
+     */
+    public boolean increaseItem(String label){
         int row, col, origQuantity;
-        String slotLabel;
+        boolean success = false;
         ItemsSlots item;
-
-        slotLabel = sc.next().toUpperCase();
        
-        row = slotLabel.charAt(0) - 'A';
-        col = Integer.parseInt(slotLabel.substring(1)) - 1;
+        row = label.charAt(0) - 'A';
+        col = Integer.parseInt(label.substring(1)) - 1;
 
         origQuantity = this.vendoItem[row][col].getQuantity();
 
         if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
             item = this.vendoItem[row][col];
 
-            item.increaseQuantity(1);
-            item.increaseItemsFromSlot(this.vendoItem[row][col].getProductItem(), origQuantity);
-
+            if (origQuantity < MAXITEMS) {
+                item.increaseQuantity(1);
+                item.updateItemsFromSlot(this.vendoItem[row][col].getProductItem());
+                success = true;
+            } else {
+                success = false;
+            }
+            
         } 
+        return success;
     }
 
     /**
@@ -850,29 +854,34 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * @param itemArr Item Slot
      */
     @Override
-    public void decreaseItem(String label) {
+    public boolean decreaseItem(String label) {
         int row, col, origQuantity;
-        String slotLabel;
+        boolean success = false;
         ItemsSlots item;
-
-        slotLabel = sc.next().toUpperCase();
        
-        row = slotLabel.charAt(0) - 'A';
-        col = Integer.parseInt(slotLabel.substring(1)) - 1;
-        
+        row = label.charAt(0) - 'A';
+        col = Integer.parseInt(label.substring(1)) - 1;
+
         origQuantity = this.vendoItem[row][col].getQuantity();
 
         if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
             item = this.vendoItem[row][col];
 
-            item.decreaseQuantity(1);
-            item.decreaseItemsFromSlot(this.vendoItem[row][col].getProductItem());
+            if (origQuantity > 0) {
+                item.decreaseQuantity(1);
+                item.updateItemsFromSlot(this.vendoItem[row][col].getProductItem());
+                success = true;
+            } else {
+                success = false;
+            }
 
             if(item.getQuantity() == 0){// Essentially an item is removed from its slot
                 this.occupiedSlots--;
                 item.setPrice(0);
             }
         } 
+
+        return success;
     }
 
     /**

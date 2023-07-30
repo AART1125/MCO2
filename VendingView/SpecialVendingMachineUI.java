@@ -13,8 +13,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
-import VendingModel.VendingMachineClasses.SpecialVendingMachine;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,7 +31,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
 public class SpecialVendingMachineUI {
-    private SpecialVendingMachine machine;
 
     private String[] pathNames, productPaths;
     private JFrame mainFrame, maintenanceFrame, productsFrame;
@@ -57,7 +54,7 @@ public class SpecialVendingMachineUI {
     private JButton addItemBtn, clearBtn;
     private JTextField inputMoneyField, incDecField;
     private JButton mCashBtn1, mCashBtn2, mCashBtn3, mCashBtn4, mCashBtn5, mCashBtn6, mCashBtn7, mCashBtn8, mCashBtn9;
-    private JButton mItemBtn1, mItemBtn2, mItemBtn3, mItemBtn4, mItemBtn5, mItemBtnA, mItemBtnB, mItemBtnC, mItemBtnD, mItemBtnE, mItemBtnF, mItemBtnAdd, mItemBtnDec;
+    private JButton mItemBtn1, mItemBtn2, mItemBtn3, mItemBtn4, mItemBtn5, mItemBtnA, mItemBtnB, mItemBtnC, mItemBtnD, mItemBtnE, mItemBtnF, mItemBtnAdd, mItemBtnDec, mItemBtnClear;
     private JTextField labelField, newPriceField;
     private JButton mPriceBtn1, mPriceBtn2, mPriceBtn3, mPriceBtn4, mPriceBtn5, mPriceBtnA, mPriceBtnB, mPriceBtnC, mPriceBtnD, mPriceBtnE, mPriceBtnF, mPriceBtnCon, mPriceBtnCan;
     private JButton checkDenomBtn, showTransactionsBtn, collectMoneyBtn;
@@ -65,13 +62,9 @@ public class SpecialVendingMachineUI {
     private JTextArea mDisplayArea;
     private JScrollPane mDisplayPane;
 
-    public SpecialVendingMachineUI(SpecialVendingMachine machine){
+    public SpecialVendingMachineUI(){
         this.pathNames = setPathNames();
         this.items = new JLabel[6][5];
-
-        //get the values of the machine
-        //will be removed for controller
-        this.machine = machine;
 
         try {
             this.digitalFont = Font.createFont(Font.TRUETYPE_FONT, new File("VendingView/Images/neon_pixel-7.ttf")).deriveFont(Font.BOLD);
@@ -814,6 +807,10 @@ public class SpecialVendingMachineUI {
         this.mPriceBtnCan.setBackground(Color.red);
         this.mPriceBtnCan.setForeground(Color.white);
         this.mPriceBtnCan.setMargin(new Insets(10, 12, 10, 12));
+        this.mItemBtnClear = new JButton("x");
+        this.mItemBtnClear.setBackground(Color.red);
+        this.mItemBtnClear.setForeground(Color.white);
+        this.mItemBtnClear.setMargin(new Insets(10, 12, 10, 12));
 
         this.checkDenomBtn = new JButton("Check Money");
         this.checkDenomBtn.setFont(digitalFont.deriveFont(21f));
@@ -1038,6 +1035,10 @@ public class SpecialVendingMachineUI {
             mPanelCon.gridx = 4;
             mPanelCon.gridy = 3;
             panel2.add(mItemBtnDec, mPanelCon);
+
+            mPanelCon.gridx = 4;
+            mPanelCon.gridy = 1;
+            panel2.add(mItemBtnClear, mPanelCon);
 
             this.miscMaintenancePanel.add(panel2);
 
@@ -1329,12 +1330,8 @@ public class SpecialVendingMachineUI {
         this.cashField.setText(text);
     }
     
-    public void setItemsText(SpecialVendingMachine machine){
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                this.items[i][j].setText(machine.getVendoItem()[i][j].getLabel() + "|" + machine.getVendoItem()[i][j].getQuantity() + "|P " +  machine.getVendoItem()[i][j].getPrice());
-            }
-        }
+    public void setItemsText(int row, int col, String text){
+        this.items[row][col].setText(text);
     }
     
     public void setItemBtn1Listener(ActionListener actn) {
@@ -1519,8 +1516,10 @@ public class SpecialVendingMachineUI {
         return this.nameField.getText();
     }
 
+   
+
     public void setQuantityLabelFieldText(String text) {
-        this.quantityLabel.getText();
+        this.quantityField.getText();
     }
 
     public int getQuantityLabelFieldText() {
@@ -1531,7 +1530,7 @@ public class SpecialVendingMachineUI {
     }
 
     public void setPriceLabelFieldText(String text) {
-        this.priceLabel.getText();
+        this.priceField.getText();
     }
 
     public double getPriceLabelFieldText() {
@@ -1541,7 +1540,7 @@ public class SpecialVendingMachineUI {
     }
 
     public void setCaloriesLabelFieldText(String text) {
-        this.caloriesLabel.getText();
+        this.caloriesField.getText();
     }
 
     public int getCaloriesLabelFieldText() {
@@ -1551,11 +1550,11 @@ public class SpecialVendingMachineUI {
     }
 
     public void setTypeLabelFieldText(String text) {
-        this.typeLabel.getText();
+        this.typeField.getText();
     }
 
     public String getTypeLabelFieldText() {
-        return this.typeLabel.getText();
+        return this.typeField.getText();
     }
     
     public void setAddItemBtnListener(ActionListener actn) {
@@ -1707,15 +1706,34 @@ public class SpecialVendingMachineUI {
         this.mItemBtnAdd.addActionListener(actn);
     }
 
+    public void setMItemBtnClearListener(ActionListener actn) {
+        this.mItemBtnClear.addActionListener(actn);
+    }
+
+    public void setCheckDenomBtnAddListener(ActionListener actn) {
+        this.checkDenomBtn.addActionListener(actn);
+    }
+
+    public void setShowTransactionsBtnListener(ActionListener actn) {
+        this.showTransactionsBtn.addActionListener(actn);
+    }
+
+    public void setCollectMoneyBtnListener(ActionListener actn) {
+        this.collectMoneyBtn.addActionListener(actn);
+    }
+
+    public void clearIncDecFieldText() {
+        this.incDecField.setText("Input Item Label");
+    }
+
     public void setMDisplayText(String text){
         this.mDisplayArea.setText(text);
     }
-
-    public static void main(String[] args){
-        SpecialVendingMachine machine = new SpecialVendingMachine();
-        machine.initialization(machine.getStoredMoney());
-        machine.initialization(machine.getUserMoney());
-        machine.initialization(machine.getVendoItem());
-        SpecialVendingMachineUI ui = new SpecialVendingMachineUI(machine);
+    public String getMDisplayText(){
+        return this.mDisplayArea.getText();
     }
+    public void clearMDisplayText(){
+        this.mDisplayArea.setText("");
+    }
+
 }
