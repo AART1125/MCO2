@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
+import java.util.Set;
 import java.io.PrintWriter;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.IOException;
@@ -25,10 +25,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         super();
         this.userCart = new ArrayList<ItemsSlots>();
         this.transactionsMade = 0;
-    }
-
-    public void initializeProductsRequirement(){
-        
     }
 
     /**
@@ -262,13 +258,12 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         int i;
         StringBuilder build = new StringBuilder();
         for(i = 0; i < this.userCart.size(); i++){
-            build.append("Slot: \n" + this.userCart.get(i).getLabel() + "\n");
-            build.append("Name: \n" + this.userCart.get(i).getProductItem()[0].getName());
-            build.append("Price: \n" + this.userCart.get(i).getPrice());
-            build.append("Quantity: \n" + this.userCart.get(i).getQuantity());
-            build.append("Calories(g): \n" + this.userCart.get(i).getProductItem()[0].getCalories());    
+            build.append("Slot: " + this.userCart.get(i).getLabel() + "\n");
+            build.append("Name: " + this.userCart.get(i).getProductItem()[0].getName() + "\n");
+            build.append("Price: " + this.userCart.get(i).getPrice() + "\n");
+            build.append("Calories(g): " + this.userCart.get(i).getProductItem()[0].getCalories() + "\n");    
         }
-        build.append("------------------------------------------------------------------------\n");
+        build.append("\n------------------------------------------------------------------------\n");
 
         return build.toString();
     }
@@ -306,7 +301,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public boolean buyProduct(String input) {
         boolean success = false;
         int i = 0, j = 0;
-        boolean found = false;
         double price= 0.0, change = 0.0, payment = 0.0;
         String productName = input;
         
@@ -322,15 +316,15 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         while (i < this.userCart.size() && success) {
             int requiredQuantity = 0;
             int cartQuantity = 0;
+
             for (String key : requiredIngredients.keySet()) {
                 if (key.contains(this.userCart.get(i).getProductItem()[0].getName().toLowerCase())){
                     requiredQuantity = requiredIngredients.get(key);
                     cartQuantity = itemCounts.getOrDefault(key, 0);
+                    if (cartQuantity < requiredQuantity) {
+                        success = false;
+                    }
                 }
-            }
-
-            if (cartQuantity < requiredQuantity) {
-                success = false;
             }
             i++;
         }
@@ -360,83 +354,83 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public static Hashtable<String, Integer> findProd(String productName) {
 
             Hashtable<String, Integer> requiredIngredients = new Hashtable<String, Integer>();
-            if ("strawberry smoothie".equals(productName)) {
+            if ("strawberry smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("strawberry", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("mango smoothie".equals(productName)) {
+            } else if ("mango smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("mango", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("mixed berry smoothie".equals(productName)) {
+            } else if ("mixed berry smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("mixedberries", 2);
                 requiredIngredients.put("strawberry", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("strawberry banana smoothie".equals(productName)) {
+            } else if ("strawberry banana smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("strawberry", 2);
                 requiredIngredients.put("banana", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("mango graham smoothie".equals(productName)) {
+            } else if ("mango graham smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("mango", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("graham", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("spring smoothie".equals(productName)) {
+            } else if ("spring smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("mango", 1);
                 requiredIngredients.put("orange", 1);
                 requiredIngredients.put("carrot", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("honey", 1);
-            } else if ("tropical dragon smoothie".equals(productName)) {
+            } else if ("tropical dragon smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("dragonfruit", 2);
                 requiredIngredients.put("mixedberries", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("oats", 1);
-            } else if ("watermelon smoothie".equals(productName)) {
+            } else if ("watermelon smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("watermelon", 2);
                 requiredIngredients.put("grapes", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("honey", 1);
-            } else if ("peach smoothie".equals(productName)) {
+            } else if ("peach smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("peach", 2);
                 requiredIngredients.put("orange", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("wafer", 1);
-            } else if ("oreo banana smoothie".equals(productName)) {
+            } else if ("oreo banana smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("banana", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("oreo", 1);
-            } else if ("pb banana smoothie".equals(productName)) {
+            } else if ("pb banana smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("banana", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("peanutbutter", 1);
-            } else if ("health smoothie".equals(productName)) {
+            } else if ("health smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("apple", 2);
                 requiredIngredients.put("spinach", 1);
                 requiredIngredients.put("almondmilk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("spirulinapowder", 1);
-            } else if ("forest smoothie".equals(productName)) {
+            } else if ("forest smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("mango", 1);
                 requiredIngredients.put("orange", 1);
                 requiredIngredients.put("kale", 1);
                 requiredIngredients.put("oatmilk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("honey", 1);
-            } else if ("protein smoothie".equals(productName)) {
+            } else if ("protein smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("banana", 3);
                 requiredIngredients.put("oatmilk", 1);
                 requiredIngredients.put("ice", 1);
@@ -537,7 +531,11 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             }
             addPaymentToMachine(userMoney);
             while(i >= 0){
-                numBills = (int)temp/(int)this.storedMoney[i].getValue();
+                try {
+                    numBills = (int)temp/(int)this.storedMoney[i].getValue();
+                } catch (ArithmeticException e) {
+                    // TODO: handle exception
+                }
                 if(numBills > 0){
                     if(this.storedMoney[i].getAmount() >= numBills){
                         temp -= this.storedMoney[i].getValue()*numBills;
@@ -647,22 +645,22 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             price = this.transactionList.get(this.transactionAmount + i).getTotal();
             total += this.transactionList.get(this.transactionAmount + i).getTotal();
             
-            builder.append("\n\nTransaction #" + transactionNum + "\n");
+            builder.append("Transaction #" + transactionNum + "\n");
             builder.append("Name: " + name + "\n");
             builder.append("Calories: " + calories + "\n");
-            builder.append("Price: " + price + "\n");
+            builder.append("Price: " + price + "\n\n");
 
+            this.transactionsMade--;
         }
 
         change = payment - total;
 
         builder.append("----------------------------------------------\n");
-        builder.append("Total  : \n" + total + "\n");
-        builder.append("Payment: \n" + payment + "\n");
-        builder.append("Change : \n" + change + "\n");
+        builder.append("Total  : " + total + "\n");
+        builder.append("Payment: " + payment + "\n");
+        builder.append("Change : " + change + "\n");
         builder.append("----------------------------------------------\n\n");
         
-        this.transactionsMade = 0;
         this.transactionAmount++;
         
         return builder.toString();
@@ -677,7 +675,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         StringBuilder builder = new StringBuilder();
         int i;
 
-        if(total(this.userMoney) >= 0){
+        if(total(this.userMoney) > 0){
             for(i = 0; i < userMoney.length; i++){
                 if(this.userMoney[i].getValue() >= 20){
                     builder.append("\nDispensing change: P\n" + this.userMoney[i].getValue() + " bills | Amount : " + this.userMoney[i].getAmount() + "\n");
@@ -1037,7 +1035,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 builder.append("Change: " + transaction.getChange() + "\n");
                 builder.append("Date and Time: " + transaction.toString());
                 
-                builder.append("----------------------------------------------------------------------------------------------------------\n");
+                builder.append("\n----------------------------------------------------------------------------------------------------------\n");
             }
             builder.append("Total: " + sum + "\n");
         } else {

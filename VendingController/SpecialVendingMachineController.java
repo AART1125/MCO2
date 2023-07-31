@@ -17,11 +17,6 @@ public class SpecialVendingMachineController {
         this.machine = machine;
         this.ui = ui;
         this.menu = menu;
-        int newTransactions = machine.getTransactionsMade();
-
-        if (newTransactions > 0) {
-            ui.setMDisplayText(machine.showNewTransactions());
-        }
 
         for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
             for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
@@ -271,8 +266,14 @@ public class SpecialVendingMachineController {
   
         this.ui.setCreateBuyBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                String label = ui.getItemsFieldText();
-                boolean success = machine.buyProduct(label);
+                String name = ui.getProductNameField();
+                boolean success = machine.buyProduct(name);
+
+                if (success) {
+                    ui.setReceiptText("Success");
+                } else {
+                    ui.setReceiptText("Fail");
+                }
                 
 
             }   

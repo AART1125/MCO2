@@ -177,6 +177,7 @@ public class SpecialVendingMachineUI {
         this.cartPane = new JScrollPane(cartArea);
         this.cartPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.cartPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.cartPane.setPreferredSize(new Dimension(200, 200));
         this.cartPane.setMinimumSize(new Dimension(200, 100));
 
         //Text area for the receipt panel
@@ -186,6 +187,7 @@ public class SpecialVendingMachineUI {
         this.receiptPane = new JScrollPane(receiptArea);
         this.receiptPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.receiptPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.receiptPane.setPreferredSize(new Dimension(200, 180));
         this.receiptPane.setMinimumSize(new Dimension(200, 180));
 
         //Text area for the process
@@ -1460,6 +1462,10 @@ public class SpecialVendingMachineUI {
 
     public String getCashFieldText() {
         return this.cashField.getText();
+    }
+
+    public String getProductNameField() {
+        return this.productNameField.getText();
     }
     
     // MAINTENANCE --------------------------

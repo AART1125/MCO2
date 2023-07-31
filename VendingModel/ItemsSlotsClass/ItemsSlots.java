@@ -26,22 +26,6 @@ public class ItemsSlots{
     }
 
     /**
-     * A method that replenishes the amount of items based on a given input
-     * @param itemsArr Array of items
-     * @param input Amount to be added
-     */
-    public void replenishItems(Items[] itemsArr, int input){
-        Items tempItems = itemsArr[0];
-        int origQuantity = this.getQuantity(), i;
-
-        this.quantity += input;
-
-        for(i = origQuantity - 1; i < this.quantity; i++){
-            itemsArr[i] = tempItems;
-        }
-    }
-
-    /**
      * Removes a certain amount of items in the given slot
      * @param itemArr Array of items
      * @param origQuantity Original quantity of the items

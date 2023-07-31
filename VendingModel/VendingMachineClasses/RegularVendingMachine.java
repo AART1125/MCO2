@@ -646,6 +646,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
             item = this.vendoItem[row][col];
 
+            
             item.increaseQuantity(1);
             item.updateItemsFromSlot(this.vendoItem[row][col].getProductItem());
             success = true;
@@ -739,7 +740,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * This method shows the newest <code>Transactions</code> that the maintenance hasn't seen yet
      */
     @Override
-    public String showNewTransactions(){
+    public String showTransactions(){
         StringBuilder builder = new StringBuilder();
         double sum = 0;
         int i = 0, j = 0, curQuantity = 0;
@@ -779,7 +780,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * This method shows the all the <code>Transactions</code> made
      */
     @Override
-    public String showTransactions(){
+    public String showNewTransactions(){
         StringBuilder builder = new StringBuilder();
         double sum = 0;
         int curQuantity = 0;
