@@ -298,54 +298,51 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method returns true if the purchased items are enough to buy the inputted product
      * @param input Product name being passed
      */
-    public boolean buyProduct(String input) {
-        boolean success = false;
-        int i = 0, j = 0;
-        double price= 0.0, change = 0.0, payment = 0.0;
-        String productName = input;
-        
-        Hashtable<String, Integer> requiredIngredients = findProd(productName);
-        Hashtable<String, Integer> itemCounts = new Hashtable<>();
+    public boolean buyProduct(String input, List<ItemsSlots> userCart, double userMoney, int transactionAmount) {
+    boolean success = true; 
+    int i = 0;
+    double price = 0.0, change = 0.0, payment = 0.0;
+    String productName = input.toLowerCase(); 
 
-        // Count the occurrences of each item in the cart
-        for (ItemsSlots cartItem : userCart) {
-            String itemName = cartItem.getProductItem()[0].getName().toLowerCase(); 
-            itemCounts.put(itemName, itemCounts.getOrDefault(itemName, 0) + 1);
-        }
+    Hashtable<String, Integer> requiredIngredients = findProd(productName);
+    Hashtable<String, Integer> itemCounts = new Hashtable<>();
 
-        while (i < this.userCart.size() && success) {
-            int requiredQuantity = 0;
-            int cartQuantity = 0;
-
-            for (String key : requiredIngredients.keySet()) {
-                if (key.contains(this.userCart.get(i).getProductItem()[0].getName().toLowerCase())){
-                    requiredQuantity = requiredIngredients.get(key);
-                    cartQuantity = itemCounts.getOrDefault(key, 0);
-                    if (cartQuantity < requiredQuantity) {
-                        success = false;
-                    }
-                }
-            }
-            i++;
-        }
-        
-        if (success){
-            while (i < this.userCart.size()) {
-                price += this.userCart.get(i).getPrice();
-                i++;
-            }
-
-            price *= 2;
-            payment = total(userMoney);
-            change = produceChange(userMoney, price);
-
-            for (i = 0; i < this.userCart.size(); i++){
-                this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], transactionAmount+1));
-            }
-            this.userCart.clear();
-        }
-        return success; 
+    for (ItemsSlots cartItem : this.userCart) {
+        String itemName = cartItem.getProductItem()[0].getName().toLowerCase();
+        itemCounts.put(itemName, itemCounts.getOrDefault(itemName, 0) + 1);
     }
+
+    while (i < this.userCart.size() && success) {
+        int requiredQuantity = 0;
+        int cartQuantity = 0;
+        for (String key : requiredIngredients.keySet()) {
+            if (key.contains(this.userCart.get(i).getProductItem()[0].getName().toLowerCase())) {
+                requiredQuantity = requiredIngredients.get(key);
+                cartQuantity = itemCounts.getOrDefault(key, 0);
+            }
+        }
+
+        if (cartQuantity < requiredQuantity) {
+            success = false;
+        }
+        i++;
+    }
+
+    if (success) {
+        for (i = 0; i < this.userCart.size(); i++) {
+            price += this.userCart.get(i).getPrice();
+        }
+
+        payment = userMoney;
+        change = produceChange(this.userMoney, price);
+
+        for (i = 0; i < this.userCart.size(); i++) {
+            this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], transactionAmount + 1));
+        }
+        this.userCart.clear();
+    }
+    return success;
+}
 
     /**
      * This method returns the quantity and itemNames of each product
