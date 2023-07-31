@@ -68,6 +68,7 @@ public class RegularVendingMachineUI {
 
     public RegularVendingMachineUI(RegularVendingMachine machine){
         this.pathNames = setPathNames();
+        this.items = new JLabel[6][5];
 
         //get the values of the machine
         //will be removed for controller
@@ -166,9 +167,11 @@ public class RegularVendingMachineUI {
         //Text area for the receipt panel
         this.receiptArea = new JTextArea("", 5, 25);
         this.receiptArea.setEditable(false);
+        this.receiptArea.setFont(digitalFont.deriveFont(15f));
         this.receiptPane = new JScrollPane(receiptArea);
         this.receiptPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         this.receiptPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.receiptPane.setPreferredSize(new Dimension(200, 250));
         this.receiptPane.setMinimumSize(new Dimension(200, 250));
 
         //Text area for the process
@@ -600,11 +603,13 @@ public class RegularVendingMachineUI {
 
         this.mDisplayArea = new JTextArea();
         this.mDisplayArea.setEditable(false);
+        this.mDisplayArea.setFont(digitalFont.deriveFont(17f));
+        this.mDisplayArea.setForeground(Color.RED);
         this.mDisplayPane = new JScrollPane(mDisplayArea);
-        this.mDisplayPane.setPreferredSize(new Dimension(480, 250));
-        this.mDisplayPane.setMinimumSize(new Dimension(480, 250));
+        this.mDisplayPane.setPreferredSize(new Dimension(480, 200));
+        this.mDisplayPane.setMinimumSize(new Dimension(480, 200));
         this.mDisplayPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.mDisplayPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.mDisplayPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         //Buttons for the add items
         this.addItemBtn = new JButton("Add");
@@ -1122,8 +1127,6 @@ public class RegularVendingMachineUI {
         int i,j, k = 0;
         ImageIcon image;
 
-        JLabel nameLabel;
-
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
         panel.setPreferredSize(new Dimension(485, 690));
@@ -1141,14 +1144,14 @@ public class RegularVendingMachineUI {
         for (i = 0; i < 6; i++) {
                 for (j = 0; j < 5; j++) {
                 image = new ImageIcon(new ImageIcon(this.pathNames[k]).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-                nameLabel = new JLabel((char)('A'+i)+""+(j+1) + "|" +  machine.getVendoItem()[i][j].getQuantity() + "| P:" + machine.getVendoItem()[i][j].getPrice(), image, SwingConstants.CENTER);
-                nameLabel.setPreferredSize(new Dimension(75, 63));
-                nameLabel.setMinimumSize(new Dimension(75, 63));
-                nameLabel.setHorizontalTextPosition(JLabel.CENTER);
-                nameLabel.setVerticalTextPosition(JLabel.BOTTOM);
-                nameLabel.setForeground(Color.BLACK);
-                nameLabel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-                panel.add(nameLabel, itemsCon);
+                this.items[i][j] = new JLabel(image, SwingConstants.CENTER);
+                this.items[i][j].setPreferredSize(new Dimension(75, 63));
+                this.items[i][j].setMinimumSize(new Dimension(75, 63));
+                this.items[i][j].setHorizontalTextPosition(JLabel.CENTER);
+                this.items[i][j].setVerticalTextPosition(JLabel.BOTTOM);
+                this.items[i][j].setForeground(Color.BLACK);
+                this.items[i][j].setBorder(BorderFactory.createLineBorder(Color.black, 2));
+                panel.add(this.items[i][j], itemsCon);
                 itemsCon.gridx++;
                 if (k < this.pathNames.length - 1) {
                     k++;
@@ -1158,10 +1161,6 @@ public class RegularVendingMachineUI {
             itemsCon.gridx = 0;
         }
         return panel;
-    }
-
-     public void clearItemsField(){
-        this.itemsField.setText("Input Item Label");
     }
 
     public void setCashBtn1Listener(ActionListener actn) {
@@ -1198,15 +1197,7 @@ public class RegularVendingMachineUI {
 
     public void setCashBtn9Listener(ActionListener actn) {
         this.cashBtn9.addActionListener(actn);
-    }
-
-    public void setCashFieldText(String text){ 
-        this.cashField.setText(text);
-    }
-    
-    public void setItemsText(int row, int col, String text){
-        this.items[row][col].setText(text);
-    }
+    }    
     
     public void setItemBtn1Listener(ActionListener actn) {
         this.itemBtn1.addActionListener(actn);
@@ -1260,15 +1251,6 @@ public class RegularVendingMachineUI {
         this.itemBtnCan.addActionListener(actn);
     }
 
-    public void setReceiptText(String text){
-        this.receiptArea.setText(text);
-    }
-
-
-    public void setItemsFieldText(String text) {
-        this.itemsField.setText(text);
-    }
-
     public void setOpenMListener(ActionListener actn) {
         this.openM.addActionListener(actn);
     }
@@ -1283,6 +1265,30 @@ public class RegularVendingMachineUI {
 
     public void setExitVListerner(ActionListener actn){
         this.exitV.addActionListener(actn);
+    }
+
+    public void setProcessAreaText(String text) {
+        this.processArea.setText(text);
+    }
+
+    public void clearItemsField(){
+        this.itemsField.setText("Input Item Label");
+    }
+
+    public void setCashFieldText(String text){ 
+        this.cashField.setText(text);
+    }
+    
+    public void setItemsText(int row, int col, String text){
+        this.items[row][col].setText(text);
+    }
+
+    public void setReceiptText(String text){
+        this.receiptArea.setText(text);
+    }
+
+    public void setItemsFieldText(String text) {
+        this.itemsField.setText(text);
     }
 
     public JFrame getMainFrame() {
@@ -1307,32 +1313,36 @@ public class RegularVendingMachineUI {
     
     // MAINTENANCE --------------------------
 
+    public void clearInputMoneyField() {
+        this.inputMoneyField.setText("Input Money");
+    }
+
     public void clearNameField() {
-        this.nameField.setText("INPUT NEW ITEM'S NAME");
+        this.nameField.setText("Input New Item's Name");
     }
 
     public void clearQuantityLabelField() {
-        this.quantityField.setText("INPUT NEW ITEM'S QUANTITY");
+        this.quantityField.setText("Input New Item's Quantity");
     }
 
     public void clearPriceLabelField() {
-        this.priceField.setText("INPUT NEW ITEM'S PRICE");
+        this.priceField.setText("Input New Items's Price");
     }
     
     public void clearCaloriesLabelField() {
-        this.caloriesField.setText("INPUT NEW ITEM'S CALORIES");
+        this.caloriesField.setText("Input New Items's Calories");
     }
 
     public void clearTypeLabelField() {
-        this.typeField.setText("INPUT NEW ITEM'S TYPE");
+        this.typeField.setText("Input New Item's Type");
     }
     
     public void clearNewPriceField() {
-        this.newPriceField.setText("PRICE");
+        this.newPriceField.setText("Price");
     }
 
     public void clearLabelField() {
-        this.labelField.setText("ITEM");
+        this.labelField.setText("Item");
     }
 
     public void setIncDecFieldText(String text) {
@@ -1386,7 +1396,7 @@ public class RegularVendingMachineUI {
         int quantity = Integer.parseInt(text);
 
         return quantity;
-    }
+    }   
 
     public void setPriceLabelFieldText(String text) {
         this.priceField.getText();

@@ -19,7 +19,7 @@ abstract class VendingMachine{
     protected ArrayList<Transactions> transactionList;
     protected ItemsSlots[][] vendoItem;
 
-    protected VendingMachine(){
+    public VendingMachine(){
         this.occupiedRow = 0;
         this.occupiedSlots = 0;
         this.storedMoneyAmount = 0;

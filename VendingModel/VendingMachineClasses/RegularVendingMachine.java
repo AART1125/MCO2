@@ -35,7 +35,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         String name, itemType;
         double price;
         try{
-            File contentFile = new File("./Files/Items.txt");
+            File contentFile = new File("./VendingModel/VendingMachineClasses/Files/Items.txt");
             Scanner reader = new Scanner(contentFile);
             this.occupiedRow = Integer.parseInt(reader.nextLine());
             this.occupiedSlots = Integer.parseInt(reader.nextLine());
@@ -59,7 +59,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             }
             reader.close();
         } catch(FileNotFoundException e){
-            System.out.println("\nFile can't be read....");
+            
         }
     }
 
@@ -70,7 +70,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     public void fileItemWrite(){
         int i, j;
         try {
-            File contentFile = new File("./Files/Items.txt");
+            File contentFile = new File("./VendingModel/VendingMachineClasses/Files/Items.txt");
             PrintWriter mainWriter = new PrintWriter(contentFile);
             mainWriter.println(this.occupiedRow);
             mainWriter.println(this.occupiedSlots);
@@ -93,7 +93,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             mainWriter.close();
 
         } catch (IOException e) {
-            System.out.println("\nAn error occurred.");
+            
         }
     }
 
@@ -106,7 +106,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         int amount, index;
 
         try {
-            File contentFile = new File("./Files/Money.txt");
+            File contentFile = new File("./VendingModel/VendingMachineClasses/Files/Money.txt");
             Scanner reader = new Scanner(contentFile);
             while (reader.hasNextLine()) {// reads file
                 index = Integer.parseInt(reader.nextLine());
@@ -119,7 +119,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             }
             reader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("\nFile can't be read....");
+            
         }
     }
 
@@ -130,7 +130,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     public void fileMoneyWrite(){
         int i;
         try {
-            File contentFile = new File("./Files/Money.txt");
+            File contentFile = new File("./VendingModel/VendingMachineClasses/Files/Money.txt");
             PrintWriter mainWriter = new PrintWriter(contentFile);
             for(i = 0; i < DENOMINATIONS; i++){
                 if(this.storedMoney[i] != null){// write to file
@@ -142,7 +142,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             }
             mainWriter.close();
         } catch (IOException e) {
-            System.out.println("\nAn error occurred.");
+            
         }
     }
 
@@ -158,9 +158,9 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         Items item;
         Transactions temp;
         try {
-            File contentFile = new File("./Files/Transactions.txt");
+            File contentFile = new File("./VendingModel/VendingMachineClasses/Files/Transactions.txt");
             Scanner reader = new Scanner(contentFile);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
             amount = Integer.parseInt(reader.nextLine());
             this.transactionAmount = amount;
             while (reader.hasNextLine()) {// reads file
@@ -181,7 +181,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             }
             reader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("\nFile can't be read....");
+            
         }
     }
 
@@ -191,7 +191,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     @Override
     public void fileTransactionWrite(){
         try {
-            File contentFile = new File("./Files/Transactions.txt");
+            File contentFile = new File("./VendingModel/VendingMachineClasses/Files/Transactions.txt");
             PrintWriter mainWriter = new PrintWriter(contentFile);
             mainWriter.println(this.transactionAmount);
             for (Transactions transactions : this.transactionList) {// write to file
@@ -209,7 +209,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             mainWriter.close();
             
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            
         }
     }
     
@@ -260,14 +260,14 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
 
         if(this.transactionList.get(this.transactionAmount) != null){
 
-            builder.append("\n\nTransaction #" + this.transactionList.get(this.transactionAmount).getNumber());
-            builder.append("Name: \n" + this.transactionList.get(this.transactionAmount).getItem().getName());
-            builder.append("Calories(g): \n"+ this.transactionList.get(this.transactionAmount).getItem().getCalories());
-            builder.append("Total: \n" + this.transactionList.get(this.transactionAmount).getTotal());
+            builder.append("Transaction #" + this.transactionList.get(this.transactionAmount).getNumber() + "\n");
+            builder.append("Name: " + this.transactionList.get(this.transactionAmount).getItem().getName()  + "\n");
+            builder.append("Calories(g): "+ this.transactionList.get(this.transactionAmount).getItem().getCalories()  + "\n");
+            builder.append("Total: " + this.transactionList.get(this.transactionAmount).getTotal()  + "\n");
             builder.append("----------------------------------------------\n");
-            builder.append("Total: \n"+ this.transactionList.get(this.transactionAmount).getTotal());
-            builder.append("Payment: \n"+ this.transactionList.get(this.transactionAmount).getPayment());
-            builder.append("Change: \n"+ change);
+            builder.append("Total: "+ this.transactionList.get(this.transactionAmount).getTotal()  + "\n");
+            builder.append("Payment: "+ this.transactionList.get(this.transactionAmount).getPayment()  + "\n");
+            builder.append("Change: "+ change + "\n");
             builder.append("----------------------------------------------\n");
             
             this.transactionAmount++;
@@ -312,7 +312,6 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         double change, price, payment = total(userMoney);
         ItemsSlots slot;
         
-
         
         row = input.charAt(0) - 'A';
         col = Integer.parseInt(input.substring(1)) - 1;
@@ -466,15 +465,15 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
 
     /**
      * This method dispenses the change of the user
-     * @return String of change
+     * @param userMoney User's Money
      */
     @Override
-    public String dispenseChange(){
+    public String dispenseChange() {
         StringBuilder builder = new StringBuilder();
         int i;
 
         if(total(this.userMoney) > 0){
-            for(i = 0; i < this.currentMon; i++){
+            for(i = 0; i < userMoney.length; i++){
                 if(this.userMoney[i].getValue() >= 20){
                     builder.append("\nDispensing change: P\n" + this.userMoney[i].getValue() + " bills | Amount : " + this.userMoney[i].getAmount() + "\n");
                 } else if (this.userMoney[i].getValue() < 20 && this.userMoney[i].getValue() > 0) {
@@ -530,6 +529,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             if (this.storedMoney[i].getValue() == price) {
                 exists = true;
                 this.storedMoney[i] = new Money(price, this.storedMoney[i].getAmount()+1);
+                sortMoney();
             }
             i++;
         }
@@ -537,6 +537,28 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         if (!exists) {
             this.storedMoney[this.storedMoneyAmount] = new Money(price, 1);
             this.storedMoneyAmount++;
+        }
+    }
+
+    /**
+     * This method sorts the money array in ascending order
+     */
+    private void sortMoney(){
+        int i, j, min;
+        Money temp;
+        for (i = 0; i < this.storedMoneyAmount - 1; i++) {
+            min = i;
+            for (j = i + 1; j < this.storedMoneyAmount; j++) {
+                if (this.storedMoney[j].getValue() < this.storedMoney[min].getValue()) {
+                    min = j;
+                }
+            }
+
+            if (min != i) {
+                temp = this.storedMoney[i];
+                this.storedMoney[i] = this.storedMoney[min];
+                this.storedMoney[min] = temp; 
+            }
         }
     }
 
@@ -569,6 +591,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * @param price Price of the Item
      * @param quantity Amount of the Item
      * @param calories Calories of the Item
+     * @return true or false
      */
     @Override
     public boolean inputItems(String name, String type, double price, int quantity, int calories){
@@ -631,7 +654,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     } 
 
     /**
-     * 
+     * This method increases the items in the item slots
      */
     public boolean increaseItem(String label){
         int row, col, origQuantity;
@@ -646,10 +669,14 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         if (row >= 0 && row < this.vendoItem.length && col >= 0 && col < this.vendoItem[row].length) {
             item = this.vendoItem[row][col];
 
+            if (origQuantity < MAXITEMS) {
+                item.increaseQuantity(1);
+                item.updateItemsFromSlot(this.vendoItem[row][col].getProductItem());
+                success = true;
+            } else {
+                success = false;
+            }
             
-            item.increaseQuantity(1);
-            item.updateItemsFromSlot(this.vendoItem[row][col].getProductItem());
-            success = true;
         } 
 
         return success;
@@ -740,6 +767,39 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
      * This method shows the newest <code>Transactions</code> that the maintenance hasn't seen yet
      */
     @Override
+    public String showNewTransactions(){
+        StringBuilder builder = new StringBuilder();
+        double sum = 0;
+        int curQuantity = 0;
+        if(this.transactionList != null && this.transactionAmount != 0){
+            
+            for (Transactions transaction : this.transactionList) {
+                if(!transaction.getCheck()){
+                    sum += transaction.getTotal();
+
+                    builder.append("Transaction #"+ transaction.getNumber() + "\n");
+                    builder.append("Name: " + transaction.getItem().getName() + "\n");
+                    builder.append("Amount of Items: " + "1 | Before - After (Inventory): " + curQuantity+1 + " - " + curQuantity + "\n");
+                    builder.append("Total: " + transaction.getTotal() + "\n");
+                    builder.append("Payment: " + transaction.getPayment() + "\n");
+                    builder.append("Change: " + transaction.getChange() + "\n");
+                    builder.append("Date and Time: " + transaction.toString());
+                    builder.append("------------------------------------------------------------------------------\n");
+                    transaction.setCheck(true);
+                }
+            }
+            builder.append("Total: " + sum + "\n\n");
+        } else {
+            builder.append("There are no transactions available to check");
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * This method shows the all the <code>Transactions</code> made
+     */
+    @Override
     public String showTransactions(){
         StringBuilder builder = new StringBuilder();
         double sum = 0;
@@ -775,38 +835,6 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
 
         return builder.toString();
     }
-
-    /**
-     * This method shows the all the <code>Transactions</code> made
-     */
-    @Override
-    public String showNewTransactions(){
-        StringBuilder builder = new StringBuilder();
-        double sum = 0;
-        int curQuantity = 0;
-        if(this.transactionList != null && this.transactionAmount != 0){
-            
-            for (Transactions transaction : this.transactionList) {
-                if(!transaction.getCheck()){
-                    sum += transaction.getTotal();
-
-                    builder.append("Transaction #"+ transaction.getNumber() + "\n");
-                    builder.append("Name: " + transaction.getItem().getName() + "\n");
-                    builder.append("Amount of Items: " + "1 | Before - After (Inventory): " + curQuantity+1 + " - " + curQuantity + "\n");
-                    builder.append("Total: " + transaction.getTotal() + "\n");
-                    builder.append("Payment: " + transaction.getPayment() + "\n");
-                    builder.append("Change: " + transaction.getChange() + "\n");
-                    builder.append("Date and Time: " + transaction.toString());
-                    builder.append("------------------------------------------------------------------------------\n");
-                    transaction.setCheck(true);
-                }
-            }
-            builder.append("Total: " + sum + "\n\n");
-        } else {
-            builder.append("There are no transactions available to check");
-        }
-
-        return builder.toString();
-    }
+    
 
 }

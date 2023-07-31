@@ -33,6 +33,9 @@ public class MenuController {
                regMachine.initialization(regMachine.getStoredMoney());
                regMachine.initialization(regMachine.getUserMoney());
                regMachine.initialization(regMachine.getVendoItem());
+               regMachine.fileItemScan();
+               regMachine.fileMoneyScan();
+               regMachine.fileTransactionScan();
                ui.getMainFrame().setContentPane(ui.getMainPanel());
             }
         });
@@ -47,6 +50,9 @@ public class MenuController {
                spcMachine.initialization(spcMachine.getStoredMoney());
                spcMachine.initialization(spcMachine.getUserMoney());
                spcMachine.initialization(spcMachine.getVendoItem());
+               spcMachine.fileItemScan();
+               spcMachine.fileMoneyScan();
+               spcMachine.fileTransactionScan();
                ui.getMainFrame().setContentPane(ui.getMainPanel());
             }
         });

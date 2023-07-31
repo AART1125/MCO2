@@ -2,12 +2,16 @@ package VendingController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Hashtable;
+
+import javax.swing.ImageIcon;
 
 import VendingModel.VendingMachineClasses.SpecialVendingMachine;
 import VendingView.MenuUi;
 import VendingView.SpecialVendingMachineUI;
 
 public class SpecialVendingMachineController {
+    private Hashtable<String,String> productPaths;
     private MenuUi menu;    
     private SpecialVendingMachine machine;
     private SpecialVendingMachineUI ui;
@@ -17,12 +21,17 @@ public class SpecialVendingMachineController {
         this.machine = machine;
         this.ui = ui;
         this.menu = menu;
+        this.productPaths = setProductImages();
 
         for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
             for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
                 String items = this.machine.getVendoItem()[i][j].getLabel() + "|" +  this.machine.getVendoItem()[i][j].getQuantity() + "|P " + this.machine.getVendoItem()[i][j].getPrice();
                 ui.setItemsText(i, j, items);
             }
+        }
+
+        if (machine.total(machine.getStoredMoney()) > 0) {
+            ui.setInputMoneyFieldText("P " + machine.total(machine.getStoredMoney()));
         }
         
         this.ui.setCashBtn1Listener(new ActionListener() {
@@ -270,7 +279,19 @@ public class SpecialVendingMachineController {
                 boolean success = machine.buyProduct(name);
 
                 if (success) {
-                    ui.setReceiptText("Success");
+                    for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
+                        for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
+                            String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();
+                            ui.setItemsText(i, j, items);
+                        }
+                    }
+                    ui.clearCartAreaField();
+                    ui.clearProductField();
+                    ui.setProcessArea(machine.displayProcess());
+                    ui.setInputMoneyFieldText("P " + machine.total(machine.getStoredMoney()));
+                    ui.setReceiptText(machine.createTransactions(machine.getTransactionsMade()) + machine.dispenseChange());
+                    ui.setMDisplayText(machine.showNewTransactions());
+                    ui.setProductIcon(new ImageIcon(productPaths.get(name)));
                 } else {
                     ui.setReceiptText("Fail");
                 }
@@ -308,6 +329,9 @@ public class SpecialVendingMachineController {
                 ui.getMainFrame().dispose();
                 ui.getMaintenanceFrame().dispose();
                 ui.getProductsFrame().dispose();
+                machine.fileItemWrite();
+                machine.fileMoneyWrite();
+                machine.fileTransactionWrite();
                 menu.getMainFrame().setVisible(true);
             }
         });
@@ -317,6 +341,9 @@ public class SpecialVendingMachineController {
                 ui.getMainFrame().dispose();
                 ui.getMaintenanceFrame().dispose();
                 ui.getProductsFrame().dispose();
+                machine.fileItemWrite();
+                machine.fileMoneyWrite();
+                machine.fileTransactionWrite();
                 menu.getMainFrame().setVisible(true);
             }
         });
@@ -778,6 +805,14 @@ public class SpecialVendingMachineController {
             }
         });  
                 
+    }
+
+    private Hashtable<String,String> setProductImages() {
+        Hashtable<String,String> pathNames = new Hashtable<String,String>();
+
+        pathNames.put("strawberry smoothie", "");
+
+        return pathNames;
     }
 }
 

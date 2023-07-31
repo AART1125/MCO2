@@ -3,6 +3,9 @@ package VendingModel.VendingMachineClasses;
 import VendingModel.ItemsSlotsClass.ItemsSlots;
 import VendingModel.MoneyClass.Money;
 
+/**
+ * Interface for the vending machine containing the general methods that it will contain
+ */
 interface InterfaceVendingMachine {
     // methods used for files
     public void fileItemScan();

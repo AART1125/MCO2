@@ -1,0 +1,11 @@
+0
+1
+
+0
+0
+Strawberry
+sellable
+15
+20
+10.0
+

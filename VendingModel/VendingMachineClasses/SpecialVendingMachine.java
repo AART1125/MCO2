@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
-import java.util.Set;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -95,7 +94,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             mainWriter.close();
 
         } catch (IOException e) {
-            System.out.println("\nAn error occurred.");
+            
         }
     }
 
@@ -153,7 +152,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      */
     @Override
     public void fileTransactionScan() {
-        int number;
+        int number, amount;
         double total, payment, change;
         boolean check;
         LocalDateTime date;
@@ -163,6 +162,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             File contentFile = new File("./VendingModel/VendingMachineClasses/Files/Transactions.txt");
             Scanner reader = new Scanner(contentFile);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
+            amount = Integer.parseInt(reader.nextLine());
             while (reader.hasNextLine()) {// reads file
                 number = Integer.parseInt(reader.nextLine());
                 item = new Items(reader.nextLine(), Integer.parseInt(reader.nextLine()), reader.nextLine());
@@ -262,8 +262,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             build.append("Name: " + this.userCart.get(i).getProductItem()[0].getName() + "\n");
             build.append("Price: " + this.userCart.get(i).getPrice() + "\n");
             build.append("Calories(g): " + this.userCart.get(i).getProductItem()[0].getCalories() + "\n");    
+            build.append("\n------------------------------------------------------------------------\n");
         }
-        build.append("\n------------------------------------------------------------------------\n");
 
         return build.toString();
     }
@@ -299,8 +299,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * @param input Product name being passed
      */
     public boolean buyProduct(String input) {
-        boolean success = false;
-        int i = 0, j = 0;
+        boolean success = true;
+        int i = 0;
         double price= 0.0, change = 0.0, payment = 0.0;
         String productName = input;
         
@@ -310,7 +310,18 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         // Count the occurrences of each item in the cart
         for (ItemsSlots cartItem : userCart) {
             String itemName = cartItem.getProductItem()[0].getName().toLowerCase(); 
-            itemCounts.put(itemName, itemCounts.getOrDefault(itemName, 0) + 1);
+            if (!itemCounts.containsKey(itemName)) {
+                if (cartItem.getProductItem()[0].getName().toLowerCase().contains("milk") && requiredIngredients.containsKey("milk")) {
+                    itemCounts.put("milk", 1);
+                } else {
+                    itemCounts.put(itemName.toLowerCase(), 1);
+                }
+                
+            } else {
+                itemCounts.replace(itemName.toLowerCase(), itemCounts.get(itemName) + 1);
+            }
+
+            System.out.println(itemName + " - " + itemCounts.get(itemName));
         }
 
         while (i < this.userCart.size() && success) {
@@ -318,18 +329,18 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             int cartQuantity = 0;
 
             for (String key : requiredIngredients.keySet()) {
-                if (key.contains(this.userCart.get(i).getProductItem()[0].getName().toLowerCase())){
                     requiredQuantity = requiredIngredients.get(key);
-                    cartQuantity = itemCounts.getOrDefault(key, 0);
+                    cartQuantity = itemCounts.get(key);
                     if (cartQuantity < requiredQuantity) {
                         success = false;
                     }
-                }
+                
             }
             i++;
         }
         
         if (success){
+            i=0;
             while (i < this.userCart.size()) {
                 price += this.userCart.get(i).getPrice();
                 i++;
@@ -339,10 +350,23 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             payment = total(userMoney);
             change = produceChange(userMoney, price);
 
-            for (i = 0; i < this.userCart.size(); i++){
-                this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], transactionAmount+1));
+            if (total(userMoney) >= price) {
+                for (i = 0; i < this.userCart.size(); i++){
+                    this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], this.transactionAmount+1));
+                    this.transactionsMade++;
+                    this.userCart.get(i).decreaseQuantity(1);
+                    this.userCart.get(i).updateItemsFromSlot(this.userCart.get(i).getProductItem());
+                    if (this.userCart.get(i).getQuantity() == 0) {
+                        this.occupiedSlots--;
+                        this.userCart.get(i).setPrice(0);
+                    }
+                }
+                this.salesWasDone = true;
+                this.userCart.clear();
+            } else {
+                success = false;
             }
-            this.userCart.clear();
+            
         }
         return success; 
     }
@@ -534,7 +558,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 try {
                     numBills = (int)temp/(int)this.storedMoney[i].getValue();
                 } catch (ArithmeticException e) {
-                    // TODO: handle exception
+                    
                 }
                 if(numBills > 0){
                     if(this.storedMoney[i].getAmount() >= numBills){
@@ -763,6 +787,9 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * This method sorts the money array in ascending order
+     */
     private void sortMoney(){
         int i, j, min;
         Money temp;
@@ -791,7 +818,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         int row = 0, col = 0, i = 0, j = 0;
 
         //looks for an empty slot within the occupied range
-        while(i < this.occupiedRow+1 && !found){
+        while(i < MAXROW && !found){
             while(j < this.occupiedSlots % MAXCOL && !found){
                 if (this.vendoItem[i][j % MAXCOL].getQuantity() == 0 && this.vendoItem[i][j % MAXCOL].getProductItem()[0].getName() == null) {
                     row = i;
@@ -811,10 +838,10 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             this.vendoItem[row][col].setProductItems(this.vendoItem[row][col].getProductItem()[0]);
         } else {
             success = true;
-            this.vendoItem[this.occupiedRow][this.occupiedSlots].setPrice(price);
-            this.vendoItem[this.occupiedRow][this.occupiedSlots].setQuantity(quantity);
-            this.vendoItem[this.occupiedRow][this.occupiedSlots].getProductItem()[0] = new Items(name, calories, type);
-            this.vendoItem[this.occupiedRow][this.occupiedSlots].setProductItems(this.vendoItem[this.occupiedRow][this.occupiedSlots].getProductItem()[0]);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].setPrice(price);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].setQuantity(quantity);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getProductItem()[0] = new Items(name, calories, type);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].setProductItems(this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getProductItem()[0]);
         
             this.occupiedSlots++;
         
@@ -977,18 +1004,21 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                     transaction.setCheck(true);
                     sum += transaction.getTotal();
 
-                    while(i < this.occupiedRow && !found){
-                        while (j < this.occupiedSlots % 5 && !found) {
+                    while(i < MAXROW && !found){
+                        while (j < this.occupiedSlots % MAXCOL && !found) {
+                            System.out.println(curQuantity);
                             if (this.vendoItem[i][j].getProductItem()[0].getName().equals(transaction.getItem().getName())) {
                                 curQuantity = this.vendoItem[i][j].getQuantity();
                                 found = true;
                             }
+                            j++;
                         }
+                        i++;
                     }
 
                     builder.append("Transaction #"+ transaction.getNumber() + "\n");
                     builder.append("Name: " + transaction.getItem().getName() + "\n");
-                    builder.append("Amount of Items: " + "1 | Before - After (Inventory): " + curQuantity+1 + " - " + curQuantity + "\n");
+                    builder.append("Amount of Items: " + "1 | Before - After (Inventory): " + (curQuantity+1) + " - " + curQuantity + "\n");
                     builder.append("Total: " + transaction.getTotal() + "\n");
                     builder.append("Payment: " + transaction.getPayment() + "\n");
                     builder.append("Change: " + transaction.getChange() + "\n");
@@ -1018,13 +1048,15 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             for (Transactions transaction : this.transactionList) {
                 sum += transaction.getTotal();
 
-                while(i < this.occupiedRow && !found){
-                    while (j < this.occupiedSlots % 5 && !found) {
+                while(i < MAXROW && !found){
+                    while (j < this.occupiedSlots % MAXCOL && !found) {
                         if (this.vendoItem[i][j].getProductItem()[0].getName().equals(transaction.getItem().getName())) {
                             curQuantity = this.vendoItem[i][j].getQuantity();
                             found = true;
                         }
+                        j++;
                     }
+                    i++;
                 }
 
                 builder.append("Transaction #"+ transaction.getNumber() + "\n");

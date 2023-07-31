@@ -32,7 +32,7 @@ import java.awt.GridBagConstraints;
 
 public class SpecialVendingMachineUI {
 
-    private String[] pathNames, productPaths;
+    private String[] pathNames;
     private JFrame mainFrame, maintenanceFrame, productsFrame;
     private JMenuBar menu, maintenanceMenu;
     private JMenu maintenanceMItem, vendingMItem, productMItem;
@@ -71,7 +71,7 @@ public class SpecialVendingMachineUI {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(digitalFont);
         } catch (Exception e) {
-            // TODO: handle exception
+            
         }
 
         //Icon of the program
@@ -197,6 +197,7 @@ public class SpecialVendingMachineUI {
         this.processArea.setForeground(Color.green);
         this.processArea.setCaretColor(Color.green);
         this.processArea.setEditable(true);
+        this.processArea.setLineWrap(true);
         this.processArea.setMinimumSize(new Dimension(200, 200));
 
         //Input cash buttons
@@ -1226,28 +1227,6 @@ public class SpecialVendingMachineUI {
         return pathNames;
     }
 
-    public String[] setProductPath(){
-        String[] pathNames = {
-                                "VendingView/Images/Items/Strawberry.png",
-                                "VendingView/Images/Items/Mango.jpg",
-                                "VendingView/Images/Items/MixedBerries.png",
-                                "VendingView/Images/Items/Banana.png",
-                                "VendingView/Images/Items/Orange.png",
-                                "VendingView/Images/Items/DragonFruit.jpg",
-                                "VendingView/Images/Items/Watermelon.jpg",
-                                "VendingView/Images/Items/Grapes.jpg",
-                                "VendingView/Images/Items/Peach.jpg",
-                                "VendingView/Images/Items/Apple.png",
-                                "VendingView/Images/Items/Carrot.png",
-                                "VendingView/Images/Items/Spinach.jpg",
-                                "VendingView/Images/Items/Kale.jpg",
-                                "VendingView/Images/Items/Milk.jpg",
-                                "VendingView/Images/Items/AlmondMilk.png",
-                                "VendingView/Images/Items/OatMilk.jpg"
-                            };
-        return pathNames;
-    }
-
     public JPanel setItems(){
         int i,j, k = 0;
         ImageIcon image;
@@ -1288,6 +1267,10 @@ public class SpecialVendingMachineUI {
         return panel;
     }
 
+    public void clearProductField() {
+        this.productNameField.setText("Input Product Name");
+    }
+
     public void clearItemsField(){
         this.itemsField.setText("Input Item Label");
     }
@@ -1304,8 +1287,12 @@ public class SpecialVendingMachineUI {
         this.cashField.setText("Cash Amount");
     }
 
-    public void clearInputMoneyField() {
-        this.inputMoneyField.setText("Input Money");
+    public void setProductIcon(ImageIcon image) {
+        this.productLabel.setIcon(image);
+    }
+
+    public void setProcessArea(String text) {
+        this.processArea.setText(text);
     }
 
     public void setCashBtn1Listener(ActionListener actn) {
@@ -1469,6 +1456,10 @@ public class SpecialVendingMachineUI {
     }
     
     // MAINTENANCE --------------------------
+
+    public void clearInputMoneyField() {
+        this.inputMoneyField.setText("Input Money");
+    }
 
     public void clearNameField() {
         this.nameField.setText("Input New Item's Name");
