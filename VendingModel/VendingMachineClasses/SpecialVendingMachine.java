@@ -298,7 +298,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method returns true if the purchased items are enough to buy the inputted product
      * @param input Product name being passed
      */
-    public boolean buyProduct(String input, List<ItemsSlots> userCart, double userMoney, int transactionAmount) {
+    public boolean buyProduct(String input) {
     boolean success = true; 
     int i = 0;
     double price = 0.0, change = 0.0, payment = 0.0;
@@ -333,7 +333,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             price += this.userCart.get(i).getPrice();
         }
 
-        payment = userMoney;
+        price *= 2;
+        payment = total(this.userMoney);
         change = produceChange(this.userMoney, price);
 
         for (i = 0; i < this.userCart.size(); i++) {
