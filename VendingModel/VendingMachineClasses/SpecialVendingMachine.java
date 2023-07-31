@@ -298,14 +298,14 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      * This method returns true if the purchased items are enough to buy the inputted product
      * @param input Product name being passed
      */
-    public boolean buyProduct(String input) {
-        boolean success = true;
+    public boolean buyProduct(String input) {   
+        boolean success = true; 
         int i = 0;
-        double price= 0.0, change = 0.0, payment = 0.0;
-        String productName = input;
-        
+        double price = 0.0, change = 0.0, payment = 0.0;
+        String productName = input.toLowerCase(); 
+
         Hashtable<String, Integer> requiredIngredients = findProd(productName);
-        Hashtable<String, Integer> itemCounts = new Hashtable<>();
+        Hashtable<String, Integer> itemCounts = new Hashtable<String, Integer>();
 
         // Count the occurrences of each item in the cart
         for (ItemsSlots cartItem : userCart) {
