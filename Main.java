@@ -1,5 +1,5 @@
-import VendingController.MenuController;
-import VendingView.MenuUi;
+import VendingController.MenuControllerPack.MenuController;
+import VendingView.MenuUIPack.MenuUi;
 
 public class Main {
     public static void main(String[] args) {
