@@ -1,25 +1,41 @@
 package VendingController;
 
+import java.util.Hashtable;
+
+import javax.swing.ImageIcon;
+
 import java.awt.event.ActionListener;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 
 import VendingModel.VendingMachineClasses.RegularVendingMachine;
-import VendingModel.VendingMachineClasses.SpecialVendingMachine;
-import VendingView.MenuUi;
 import VendingView.RegularVendingMachineUI;
+import VendingView.MenuUi;
 
+/**
+ * This is the controller for the Regular Vending Machine. It contains the ui, the machine processes, as well as the initial menu ui.
+ * All of the function calls are placed here for the processes of the vending machine
+ */
 public class RegularVendingMachineController {
+    private Hashtable<String,String> pathNames;
     private RegularVendingMachineUI ui;
     private RegularVendingMachine machine;
     private MenuUi menu;
 
+     /**
+     * Contructor of the <code>RegularVendingMachineController</code>. Function calls are set here
+     * @param machine Regular Vending Machine
+     * @param ui UI of the Regular Vending Machine
+     * @param menu menu UI
+     */
     public RegularVendingMachineController(RegularVendingMachine machine, RegularVendingMachineUI ui, MenuUi menu){
         this.machine = machine;
         this.ui = ui;
         this.menu = menu;
+        this.pathNames = setItemsImage();
 
-        for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
-            for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
+        for (int i = 0; i < RegularVendingMachine.getMaxrow(); i++) {
+            for (int j = 0; j < RegularVendingMachine.getMaxcol(); j++) {
                 String items = this.machine.getVendoItem()[i][j].getLabel() + "|" +  this.machine.getVendoItem()[i][j].getQuantity() + "|P " + this.machine.getVendoItem()[i][j].getPrice();
                 ui.setItemsText(i, j, items);
             }
@@ -218,17 +234,19 @@ public class RegularVendingMachineController {
                 boolean success = machine.buyItem(label);
 
                 if (success) {
-                    ui.setReceiptText(machine.display() + machine.dispenseChange());
+                    ui.setReceiptAreaText(machine.display() + machine.dispenseChange());
                     ui.setInputMoneyFieldText("P " + machine.total(machine.getStoredMoney()));
                     ui.clearItemsField();
+                    ui.clearCashField();
                     ui.setProcessAreaText(machine.displayProcess());
                     ui.setMDisplayText(machine.showNewTransactions());
-                    for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
-                        for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
+                    for (int i = 0; i < RegularVendingMachine.getMaxrow(); i++) {
+                        for (int j = 0; j < RegularVendingMachine.getMaxcol(); j++) {
                             String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();
                             ui.setItemsText(i, j, items);
                         }
                     }
+                    ui.setProductIcon(new ImageIcon(new ImageIcon(pathNames.getOrDefault(label, "./VendingView/Images/Items/Empty.png")).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
                     ui.getMainFrame().revalidate();
                     ui.getMaintenanceFrame().revalidate();
                 } else {
@@ -284,7 +302,7 @@ public class RegularVendingMachineController {
 
         this.ui.setAddItemBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                boolean success = machine.inputItems(ui.getNameFieldText(), ui.getTypeLabelFieldText(), ui.getPriceLabelFieldText(), ui.getQuantityLabelFieldText(), ui.getCaloriesLabelFieldText());
+                boolean success = machine.inputItems(ui.getNameFieldText(), ui.getTypeFieldText(), ui.getPriceFieldText(), ui.getQuantityFieldText(), ui.getCaloriesFieldText());
 
                 if (success) {
                     ui.clearCaloriesLabelField();
@@ -293,8 +311,8 @@ public class RegularVendingMachineController {
                     ui.clearTypeLabelField();
                     ui.clearQuantityLabelField();
                     ui.setMDisplayText("Successfully Added!");
-                    for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
-                        for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
+                    for (int i = 0; i < RegularVendingMachine.getMaxrow(); i++) {
+                        for (int j = 0; j < RegularVendingMachine.getMaxcol(); j++) {
                             String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();
                             ui.setItemsText(i, j, items);
                         }
@@ -637,8 +655,8 @@ public class RegularVendingMachineController {
 
                 if (added) {
                     ui.setMDisplayText("Successfully Increased!");
-                    for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
-                        for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
+                    for (int i = 0; i < RegularVendingMachine.getMaxrow(); i++) {
+                        for (int j = 0; j < RegularVendingMachine.getMaxcol(); j++) {
                             String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();
                             ui.setItemsText(i, j, items);
                         }
@@ -657,8 +675,8 @@ public class RegularVendingMachineController {
 
                 if (added) {
                     ui.setMDisplayText("Successfully Increased!");
-                    for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
-                        for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
+                    for (int i = 0; i < RegularVendingMachine.getMaxrow(); i++) {
+                        for (int j = 0; j < RegularVendingMachine.getMaxcol(); j++) {
                             String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();
                             ui.setItemsText(i, j, items);
                         }
@@ -683,8 +701,8 @@ public class RegularVendingMachineController {
                         ui.clearLabelField();
                         ui.clearNewPriceField();
                         ui.setMDisplayText("Successfully Changed!");
-                        for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
-                            for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
+                        for (int i = 0; i < RegularVendingMachine.getMaxrow(); i++) {
+                            for (int j = 0; j < RegularVendingMachine.getMaxcol(); j++) {
                                 String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();
                                 ui.setItemsText(i, j, items);
                             }
@@ -737,5 +755,39 @@ public class RegularVendingMachineController {
             }
         });  
                 
+    }
+    
+    private Hashtable<String, String> setItemsImage() {
+        Hashtable<String, String> pathNames = new Hashtable<String, String>();
+
+        pathNames.put("A1", "./VendingView/Images/Items/A1.png");
+        pathNames.put("A2", "./VendingView/Images/Items/A2.jpg");
+        pathNames.put("A3", "./VendingView/Images/Items/A3.png");
+        pathNames.put("A4", "./VendingView/Images/Items/A4.png");
+        pathNames.put("A5", "./VendingView/Images/Items/A5.png");
+        pathNames.put("B1", "./VendingView/Images/Items/B1.jpg");
+        pathNames.put("B2", "./VendingView/Images/Items/B2.jpg");
+        pathNames.put("B3", "./VendingView/Images/Items/B3.jpg");
+        pathNames.put("B4", "./VendingView/Images/Items/B4.jpg");
+        pathNames.put("B5", "./VendingView/Images/Items/B5.png");
+        pathNames.put("C1", "./VendingView/Images/Items/C1.png");
+        pathNames.put("C2", "./VendingView/Images/Items/C2.jpg");
+        pathNames.put("C3", "./VendingView/Images/Items/C3.jpg");
+        pathNames.put("C4", "./VendingView/Images/Items/C4.jpg");
+        pathNames.put("C5", "./VendingView/Images/Items/C5.png");
+        pathNames.put("D1", "./VendingView/Images/Items/D1.jpg");
+        pathNames.put("D2", "./VendingView/Images/Items/D2.png");
+        pathNames.put("D3", "./VendingView/Images/Items/D3.png");
+        pathNames.put("D4", "./VendingView/Images/Items/D4.jpg");
+        pathNames.put("D5", "./VendingView/Images/Items/D5.png");
+        pathNames.put("E1", "./VendingView/Images/Items/E1.jpg");
+        pathNames.put("E2", "./VendingView/Images/Items/E2.jpg");
+        pathNames.put("E3", "./VendingView/Images/Items/E3.png");
+        pathNames.put("E4", "./VendingView/Images/Items/E4.jpg");
+        pathNames.put("E5", "./VendingView/Images/Items/E5.png");
+        pathNames.put("F1", "./VendingView/Images/Items/F1.jpg");
+        pathNames.put("empty", "./VendingView/Images/Items/Empty.png");
+
+        return pathNames;
     }
 }

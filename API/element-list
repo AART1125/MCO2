@@ -1,0 +1,7 @@
+VendingController
+VendingModel.ItemsClass
+VendingModel.ItemsSlotsClass
+VendingModel.MoneyClass
+VendingModel.TransactionsClass
+VendingModel.VendingMachineClasses
+VendingView

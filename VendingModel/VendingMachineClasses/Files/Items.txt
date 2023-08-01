@@ -6,7 +6,7 @@
 Strawberry
 sellable
 15
-8
+14
 10.0
 
 0
@@ -14,7 +14,7 @@ sellable
 mango
 sellable
 19
-18
+15
 15.0
 
 0
@@ -22,7 +22,7 @@ sellable
 ice
 1
 1
-11
+8
 1.0
 
 0
@@ -30,7 +30,7 @@ ice
 wholemilk
 1
 1
-11
+8
 1.0
 
 0
@@ -38,6 +38,6 @@ wholemilk
 sugar
 1
 1
-11
+8
 1.0
 

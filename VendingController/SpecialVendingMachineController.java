@@ -1,5 +1,6 @@
 package VendingController;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;
@@ -10,13 +11,22 @@ import VendingModel.VendingMachineClasses.SpecialVendingMachine;
 import VendingView.MenuUi;
 import VendingView.SpecialVendingMachineUI;
 
+/**
+ * This is the controller for the Special Vending Machine program. This contains the ui, machine processes, as well as the initial menu ui.
+ * All the function calls for the program are set here.
+ */
 public class SpecialVendingMachineController {
     private Hashtable<String,String> productPaths;
     private MenuUi menu;    
     private SpecialVendingMachine machine;
     private SpecialVendingMachineUI ui;
-    private StringBuilder cartItemsBuilder = new StringBuilder();
 
+    /**
+     * Contructor of the <code>SpecialVendingMachineController</code>. Function calls are set here
+     * @param machine Special Vending Machine
+     * @param ui UI of the Special Vending Machine
+     * @param menu menu UI
+     */
     public SpecialVendingMachineController(SpecialVendingMachine machine, SpecialVendingMachineUI ui, MenuUi menu){
         this.machine = machine;
         this.ui = ui;
@@ -227,7 +237,6 @@ public class SpecialVendingMachineController {
                 boolean success = machine.addItemToCart(label);
 
                 if (success) {
-                cartItemsBuilder.append(label).append("\n");
                 ui.setCartAreaFieldText(machine.display());
                 ui.clearItemsField();
                 ui.getMainFrame().revalidate();
@@ -287,16 +296,16 @@ public class SpecialVendingMachineController {
                     }
                     ui.clearCartAreaField();
                     ui.clearProductField();
+                    ui.clearCashField();
                     ui.setProcessArea(machine.displayProcess());
                     ui.setInputMoneyFieldText("P " + machine.total(machine.getStoredMoney()));
                     ui.setReceiptText(machine.createProductTransactions(machine.getTransactionsMade()) + machine.dispenseChange());
                     ui.setMDisplayText(machine.showNewTransactions());
-                    ui.setProductIcon(new ImageIcon(productPaths.get(name)));
+                    ui.setProductIcon(new ImageIcon(new ImageIcon(productPaths.get(name)).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
                 } else {
                     ui.setReceiptText("Fail");
                 }
                 
-
             }   
         });
 
@@ -312,6 +321,9 @@ public class SpecialVendingMachineController {
                 ui.getMainFrame().setVisible(false);
                 ui.getMaintenanceFrame().setVisible(true);
                 ui.clearReceiptArea();
+                ui.clearProductField();
+                ui.setProductIcon(new ImageIcon(new ImageIcon("./VendingView/Images/mainIcon.jpg").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
+
             }
         });
 
@@ -352,7 +364,7 @@ public class SpecialVendingMachineController {
 
         this.ui.setAddItemBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                boolean success = machine.inputItems(ui.getNameFieldText(), ui.getTypeLabelFieldText(), ui.getPriceLabelFieldText(), ui.getQuantityLabelFieldText(), ui.getCaloriesLabelFieldText());
+                boolean success = machine.inputItems(ui.getNameFieldText(), ui.getTypeFieldText(), ui.getPriceFieldText(), ui.getQuantityFieldText(), ui.getCaloriesFieldText());
 
                 if (success) {
                     ui.clearCaloriesLabelField();
@@ -763,7 +775,6 @@ public class SpecialVendingMachineController {
                         ui.setMDisplayText("Unsuccessful");
                     }  
                 }
-
             });
 
         this.ui.setmPriceBtnCanListener(new ActionListener() {
@@ -810,7 +821,21 @@ public class SpecialVendingMachineController {
     private Hashtable<String,String> setProductImages() {
         Hashtable<String,String> pathNames = new Hashtable<String,String>();
 
-        pathNames.put("strawberry smoothie", "");
+        pathNames.put("strawberry smoothie", "./VendingView/Images/Product/Strawberry Smoothie.png");
+        pathNames.put("mango smoothie", "./VendingView/Images/Product/Mango Smoothie.png");
+        pathNames.put("mixed berry smoothie", "./VendingView/Images/Product/Mixed Berry Smoothie.png");
+        pathNames.put("strawberry banana smoothie", "./VendingView/Images/Product/Strawberry Banana Smoothie.png");
+        pathNames.put("mango graham smoothie", "./VendingView/Images/Product/Mango Graham Smoothie.png");
+        pathNames.put("mango graham smoothie", "./VendingView/Images/Product/Mango Graham Smoothie.png");
+        pathNames.put("spring smoothie", "./VendingView/Images/Product/Spring Smoothie.png");
+        pathNames.put("tropical dragon smoothie", "./VendingView/Images/Product/Tropical Dragon Smoothie.png");
+        pathNames.put("watermelon smoothie", "./VendingView/Images/Product/Watermelon Smoothie.png");
+        pathNames.put("peach smoothie", "./VendingView/Images/Product/Peach Smoothie.png");
+        pathNames.put("oreo banana smoothie", "./VendingView/Images/Product/Oreo Banana Smoothie.png");
+        pathNames.put("pb banana Smoothie", "./VendingView/Images/Product/PB Banana Smoothie.png");
+        pathNames.put("health Smoothie", "./VendingView/Images/Product/Health Smoothie.png");
+        pathNames.put("forest Smoothie", "./VendingView/Images/Product/PB Banana Smoothie.png");
+        pathNames.put("protein Smoothie", "./VendingView/Images/Product/Protein Smoothie.png");
 
         return pathNames;
     }

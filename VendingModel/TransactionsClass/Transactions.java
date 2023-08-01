@@ -2,15 +2,13 @@ package VendingModel.TransactionsClass;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 import VendingModel.ItemsClass.Items;
-import VendingModel.ItemsSlotsClass.ItemsSlots;
 
 /**
  * This is the <code>Transactions</code> class. This represent the transactiions made in the vending machine.
  * It contains the total, the payment, the change, the transaction number, the boolean to check if it was seen
- * by maintenance, the item bought, and the date of the transaction.
+ * by maintenance as well as a boolean value if the transaction was a product or item, the item bought, and the date of the transaction.
  */
 public class Transactions {
     private double total, payment, change;
@@ -26,7 +24,7 @@ public class Transactions {
      * @param change Change produced in transaction
      * @param item Item bought in transaction
      * @param number Transaction number
-     * @param isProduct Transaction was by product
+     * @param isProduct if Transaction was by product
      */
     public Transactions(double total, double payment, double change, Items item, int number, boolean isProduct){
         this.total = total;
@@ -48,6 +46,7 @@ public class Transactions {
      * @param number Transaction number
      * @param check Transaction was checked
      * @param date Date of the transaction
+     * @param isProduct if Transaction was by product
      */
     public Transactions(double total, double payment, double change, Items item, int number, LocalDateTime date, boolean check, boolean isProduct){
         this.total = total;
@@ -120,12 +119,16 @@ public class Transactions {
 
     /**
      * Gets the check value of the <code>Transactions</code> object
-     * @return Check
+     * @return true or false
      */
     public boolean getCheck(){
         return this.check;
     }
 
+    /**
+     * Gets the isProduct value of the <code>Transactions</code> object
+     * @return true or false
+     */
     public boolean getIsProduct() {
         return this.isProduct;
     }

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"VendingController"},{"l":"VendingModel.ItemsClass"},{"l":"VendingModel.ItemsSlotsClass"},{"l":"VendingModel.MoneyClass"},{"l":"VendingModel.TransactionsClass"},{"l":"VendingModel.VendingMachineClasses"},{"l":"VendingView"}];updateSearchResults();

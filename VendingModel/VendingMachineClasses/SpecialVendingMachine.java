@@ -15,20 +15,24 @@ import VendingModel.ItemsSlotsClass.ItemsSlots;
 import VendingModel.MoneyClass.Money;
 import VendingModel.TransactionsClass.Transactions;   
 
-
+/**
+ * This is the <code>SpecialVendingMachine</code> class. It is a subclass of the VendingMachine class and it inherits the methods of the InterfaceVendingMachine.
+ * It has additional attributes from the superclass which are an ArrayList of ItemsSlots for the user, and a counter attribute for the transactions made in a single sale,
+ * Here, not only is the buying of items is done. but the creation of a product as well.
+ */
 public class SpecialVendingMachine extends VendingMachine implements InterfaceVendingMachine{
     private ArrayList<ItemsSlots> userCart;
     private int transactionsMade;
 
+    /**
+     * This is the contructor for the <code>SpecialVendingMachine</code> that initializes its extended attributes from the <code>VendingMachine></code> class and its local attributes
+     */
     public SpecialVendingMachine(){
         super();
         this.userCart = new ArrayList<ItemsSlots>();
         this.transactionsMade = 0;
     }
 
-    /**
-     * A method that scans a file for the <code>Items</code> made in the program
-     */
     @Override
     public void fileItemScan() {
         int quantity, calories, row = 0, col = 0;
@@ -64,9 +68,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * A method that creates/overwrite a file for the <code>Items</code> in the program
-     */
     @Override
     public void fileItemWrite(){
         int i, j;
@@ -98,9 +99,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * A method that scans a file for the <code>Money</code> made in the program
-     */
     @Override
     public void fileMoneyScan() {
         double value;
@@ -124,9 +122,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * A method that creates/overwrite a file for the <code>Transactions</code> made in the program
-     */
     @Override
     public void fileMoneyWrite() {
         int i;
@@ -147,9 +142,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * A method that scans a file for the <code>Transactions</code> made in the program
-     */
     @Override
     public void fileTransactionScan() {
         int number, amount;
@@ -175,9 +167,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 isProduct = Boolean.parseBoolean(reader.nextLine());
                 reader.nextLine();
 
-                if (!check)
-                    this.salesWasDone = true;
-
                 temp = new Transactions(total, payment, change, item, number, date, check, isProduct);
                 this.transactionList.add(temp);
             }
@@ -187,9 +176,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * A method that creates/overwrite a file for the <code>Transactions</code> made in the program
-     */
     @Override
     public void fileTransactionWrite() {
         try {
@@ -216,10 +202,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * Initializes all <code>ItemSlots</code> instances in the array
-     * @param vendoItems ItemsSlots array
-     */
     @Override
     public void initialization(ItemsSlots[][] vendoItems) {
         int i, j;
@@ -240,10 +222,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * Initializes all <code>Money</code> instances in the array
-     * @param moneys Money array
-     */
     @Override
      public void initialization(Money[] moneys){
         int i;
@@ -252,10 +230,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * Displays the cart items of the user
-     * @return Display of cart items
-     */
     @Override
     public String display(){
         int i;
@@ -300,6 +274,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     /**
      * This method returns true if the purchased items are enough to buy the inputted product
      * @param input Product name being passed
+     * @return true or false
      */
     public boolean buyProduct(String input) {   
         boolean success = true; 
@@ -362,7 +337,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                         this.userCart.get(i).setPrice(0);
                     }
                 }
-                this.salesWasDone = true;
                 this.userCart.clear();
             } else {
                 success = false;
@@ -372,11 +346,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success; 
     }
 
-    /**
-     * This method returns the quantity and itemNames of each product
-     * @param productName Product name being passed
-     */
-    public static Hashtable<String, Integer> findProd(String productName) {
+    //Creates a hashtable for the products
+    private Hashtable<String, Integer> findProd(String productName) {
 
             Hashtable<String, Integer> requiredIngredients = new Hashtable<String, Integer>();
             if ("strawberry smoothie".equalsIgnoreCase(productName)) {
@@ -465,10 +436,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             return requiredIngredients;
         }
     
-    /**
-     * This method collects the money of the user and add it in the machines userMoney array
-     * @param userMoney User's money in the machine
-     */
     @Override
     public boolean collectMoney(double price) {
         boolean exists = false, success = false;
@@ -492,7 +459,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
     /**
      * This method is where the buying of an item will be done
-     * @param input
      * @return true or false
      */
     public boolean buyItem() {
@@ -532,18 +498,12 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
         if (success) {
             this.userCart.clear();
-            this.salesWasDone = true;
         }
 
         return success;
     }
 
-    /**
-     * This method produces the change for the user. It is used in the buyItems method
-     * @param userMoneys User's money
-     * @param total Total price
-     * @return change
-     */
+    //Produce the denominations for change
     private double produceChange(Money[] userMoneys, double total){
         double change = total(userMoneys) - total,
                temp = change;
@@ -584,11 +544,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return change;
     }
     
-    /**
-     * This method removes the denominations of <code>Money</code> objects in an array. It is used in the buyItems method
-     * @param value Value of the money
-     * @param amount Ammount of the money
-     */
+    //Remove some of these denomination
     private void removeDenomination(double value, int amount) {
         int denominationIndex = -1,
             decrement = 0;
@@ -613,11 +569,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * This method checks if the item is sellaable. It is used in the buyItems method
-     * @param item item to be checked
-     * @returnn true or false
-     */
+    //Checks if item is sellable in buy meny
     private boolean isItemSellable(Items item){
         boolean sellable = true;
 
@@ -633,10 +585,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return sellable;
     }
 
-    /**
-     * This method gets all the <code>Money</code> in the user. It is used in the buyItems method
-     * @param userMoney User's Money 
-     */
+    //Adds the payment into the machine
     private void addPaymentToMachine(Money[] userMoney){
         int newAmount;
         int i, j;
@@ -695,7 +644,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     }
 
     /**
-     * This method generates the transaction of the sale. It is used in the buyItems method
+     * This method generates the transaction of the sale for products. It is used in the buyItems method
      * @param num number of items in transaction
      * @return String of the transactions
      */
@@ -751,10 +700,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return builder.toString();
     }
 
-    /**
-     * This method dispenses the change of the user
-     * @param userMoney User's Money
-     */
     @Override
     public String dispenseChange() {
         StringBuilder builder = new StringBuilder();
@@ -775,6 +720,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return builder.toString();
     }
 
+    @Override
     public String displayProcess(){
         StringBuilder process = new StringBuilder();
         
@@ -787,11 +733,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return process.toString();
     }
 
-    /**
-     * This method generates the total of a <code>Money</code> array
-     * @param moneys Money array
-     * @return Sum
-     */
     @Override
     public double total(Money[] moneys){
         int i;
@@ -802,10 +743,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return sum;
     }
 
-    /**
-     * This method checks the amount of every denomination left in the machine
-     * @return String of denominations
-     */
     @Override
     public String checkDenom(){
         StringBuilder builder = new StringBuilder();
@@ -825,32 +762,26 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return builder.toString();
     }
 
-    /**
-     * This method inputs the denomination of money
-     */
     @Override
-    public void inputDenomenations(double price){
+    public void inputDenomenations(double value){
         int i = 0;
         boolean exists = false;
 
         while (i < this.storedMoney.length && !exists) {
-            if (this.storedMoney[i].getValue() == price) {
+            if (this.storedMoney[i].getValue() == value) {
                 exists = true;
-                this.storedMoney[i] = new Money(price, this.storedMoney[i].getAmount()+1);
+                this.storedMoney[i] = new Money(value, this.storedMoney[i].getAmount()+1);
                 sortMoney();
             }
             i++;
         }
 
         if (!exists) {
-            this.storedMoney[this.storedMoneyAmount] = new Money(price, 1);
+            this.storedMoney[this.storedMoneyAmount] = new Money(value, 1);
             this.storedMoneyAmount++;
         }
     }
 
-    /**
-     * This method sorts the money array in ascending order
-     */
     private void sortMoney(){
         int i, j, min;
         Money temp;
@@ -870,9 +801,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
-    /**
-     * This method inputs <code>Items</code> objects into the <code>ItemsSlots</code> array
-     */
     @Override
     public boolean inputItems(String name, String type, double price, int quantity, int calories){
         boolean found = false, success = false;
@@ -914,9 +842,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
-    /**
-     * This method changes the price of <code>Items</code>
-     */
     @Override
     public boolean changePrice(double newPrice, String label){
         int row, col;
@@ -933,9 +858,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     } 
 
-    /**
-     * This method increases the items in the item slots
-     */
+    @Override
     public boolean increaseItem(String label){
         int row, col, origQuantity;
         boolean success = false;
@@ -961,10 +884,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
-    /**
-     * This method decreases the <code>Items</code> in a <code>ItemsSlots</code> array
-     * @param itemArr Item Slot
-     */
     @Override
     public boolean decreaseItem(String label) {
         int row, col, origQuantity;
@@ -996,9 +915,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
-    /**
-     * This method collects the <code>Money</code> in the machine and saves them in a file
-     */
     @Override
     public boolean collectMoneyInMachine(){
         int i = 0, amount = 0;
@@ -1049,14 +965,11 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
-    /**
-     * This method shows the newest <code>Transactions</code> that the maintenance hasn't seen yet
-     */
     @Override
     public String showNewTransactions(){
         StringBuilder builder = new StringBuilder();
         double sum = 0;
-        int i = 0, j = 0, k, count = 0, curQuantity = 0, prevQuantity = -1;
+        int i = 0, j = 0, k, count = 0, curQuantity = 0;
         boolean found;
 
         if(this.transactionList != null && this.transactionAmount != 0){
@@ -1067,7 +980,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                     found = false;
 
                     count = 0;
-                    for (k = 0; k < this.transactionList.size() - 1; k++) {
+                    for (k = 0; k < this.transactionList.size(); k++) {
                         if (this.transactionList.get(k).getNumber() == transaction.getNumber() && this.transactionList.get(k).getItem().getName().equals(transaction.getItem().getName())) {
                             count++;
                         }
@@ -1110,9 +1023,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return builder.toString();
     }
 
-    /**
-     * This method shows the all the <code>Transactions</code> made
-     */
     @Override
     public String showTransactions(){
         StringBuilder builder = new StringBuilder();
@@ -1139,10 +1049,18 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         return builder.toString();
     }
 
+    /**
+     * Gets the cart of the user
+     * @return Usercart
+     */
     public ArrayList<ItemsSlots> getUserCart() {
         return this.userCart;
     }
 
+    /**
+     * Gets the amount of transaction made in one sale
+     * @return transactions made in a sale
+     */
     public int getTransactionsMade() {
         return this.transactionsMade;
     }

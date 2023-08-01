@@ -28,7 +28,6 @@ public class ItemsSlots{
     /**
      * Removes a certain amount of items in the given slot
      * @param itemArr Array of items
-     * @param origQuantity Original quantity of the items
      */
     public void updateItemsFromSlot(Items[] itemArr){
         int i;
@@ -42,8 +41,8 @@ public class ItemsSlots{
     }
 
     /**
-     * Decreases the quantity of items in the slot
-     * @param decrease quantity to decreast
+     * Increase the quantity of items in the slot
+     * @param increase quantity to decreast
      */
     public void increaseQuantity(int increase){
         this.quantity += increase;

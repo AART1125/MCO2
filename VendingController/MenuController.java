@@ -9,6 +9,9 @@ import VendingView.MenuUi;
 import VendingView.RegularVendingMachineUI;
 import VendingView.SpecialVendingMachineUI;
 
+/**
+ * This it the <code>MenuController</code>. This is where the function call of the main menu happens. Here we can create and test a <code>VendingMachine</code>.
+ */
 public class MenuController {
     private MenuUi ui;
 
@@ -20,6 +23,10 @@ public class MenuController {
     private RegularVendingMachineUI regUi;
     private RegularVendingMachineController regController;
 
+    /**
+     * This is the constructor for the <code>MenuController</code>. It takes in a <code>MenuUI</code> and this constructor adds the functions for the button in the UI
+     * @param ui MenuUI
+     */
     public MenuController(MenuUi ui){
         this.ui = ui;
 
@@ -73,7 +80,7 @@ public class MenuController {
                     
                     
                 } else if (regMachine != null && spcMachine == null){
-                    regUi = new RegularVendingMachineUI(regMachine);
+                    regUi = new RegularVendingMachineUI();
                     regController = new RegularVendingMachineController(regMachine, regUi, ui);
                     ui.getMainFrame().setVisible(false);
                 }

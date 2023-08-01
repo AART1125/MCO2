@@ -6,36 +6,60 @@ import VendingModel.TransactionsClass.Transactions;
 
 import java.util.ArrayList;
 
+/**
+ * This is an abstract class for the <code>VendingMachine</code>. It serves as a template for both the Regular and Special Vending Machine.
+ * It contains the consatants for the total aount of Items, Denominations, Row, and Collumn. It also contains counting attributes for the different arrays.
+ * It has two arrays of <code>Money</code> for user and the machine itself, an ArrayList of <code>Transactions</code>,
+ * and a 2 dimensional array for the <code>ItemsSlots</code> 
+ */
 abstract class VendingMachine{
+    /**Constant for max row */
     protected static final int MAXROW = 6;
+    /**Constant for max collumn */
     protected static final int MAXCOL = 5;
+    /**Constant for max denominations */
     protected static final int DENOMINATIONS = 9;
+    /**Constant for max items*/
     protected static final int MAXITEMS = 20;
-
+    /**Counting variables for row */ /**Counting variables for slots */ 
+    /**Counting variables for money of user */ /**Counting variables for transacions */
     protected int occupiedRow, occupiedSlots, storedMoneyAmount, currentMon, transactionAmount;
-    protected boolean salesWasDone;
+    /**<code>Money</code> array for the machine's money */
     protected Money[] storedMoney;
+    /**<code>Money</code> array for the user's money */
     protected Money[] userMoney;
+    /**<code>ArrayList</code> for the list of <code>Transactions</code>*/
     protected ArrayList<Transactions> transactionList;
+    /**<code>ItemsSlots</code> array for the items in the vending machine */
     protected ItemsSlots[][] vendoItem;
 
+    /**
+     * This is a contructor that initializes the values of a <code>VendingMachine</code>
+     */
     public VendingMachine(){
         this.occupiedRow = 0;
         this.occupiedSlots = 0;
         this.storedMoneyAmount = 0;
         this.currentMon = 0;
         this.transactionAmount = 0;
-        this.salesWasDone = false;
         this.storedMoney = new Money[DENOMINATIONS];
         this.userMoney = new Money[DENOMINATIONS];
         this.transactionList = new ArrayList<Transactions>();
         this.vendoItem = new ItemsSlots[MAXROW][MAXCOL];
     }
 
+    /**
+     * Gets the maximunm row of an <code>ItemsSlots</code> array
+     * @return Maximum row
+     */
     public static int getMaxrow() {
         return MAXROW;
     }
 
+    /**
+     * Gets the maximunm collumn of an <code>ItemsSlots</code> array
+     * @return Maximum collumn
+     */
     public static int getMaxcol() {
         return MAXCOL;
     }
@@ -46,14 +70,6 @@ abstract class VendingMachine{
      */
     public int getOccupiedSlots() {
         return this.occupiedSlots;
-    }
-
-    /**
-     * Gets the value of whether a sale has been done
-     * @return true or false
-     */
-    public boolean getSalesWasDone() {
-        return this.salesWasDone;
     }
 
     /**
@@ -78,13 +94,5 @@ abstract class VendingMachine{
      */
     public Money[] getUserMoney() {
          return this.userMoney;
-    }
-
-    /**
-     * Sets the value of salesWasDone variable
-     * @param salesWasDone Value used to set the variable
-     */
-    public void setSalesWasDone(boolean salesWasDone) {
-        this.salesWasDone = salesWasDone;
     }
 }

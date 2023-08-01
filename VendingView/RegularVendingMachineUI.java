@@ -13,9 +13,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
-import VendingModel.VendingMachineClasses.RegularVendingMachine;
-import VendingModel.VendingMachineClasses.SpecialVendingMachine;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,23 +25,24 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
+/**
+ * This is the UI for the <code>RegularVendingMachine</code>.
+ */
 public class RegularVendingMachineUI {
-    private RegularVendingMachine machine;
 
     private String[] pathNames;
-    private JFrame mainFrame, maintenanceFrame, productsFrame;
+    private JFrame mainFrame, maintenanceFrame;
     private JMenuBar menu, maintenanceMenu;
     private JMenu maintenanceMItem, vendingMItem;
     private JMenuItem openM, exitM, openV, exitV;
     private Font digitalFont;
     private ImageIcon icon;
-    private JLabel displayLabel, receiptLabel, productLabel;
+    private JLabel receiptLabel, productLabel;
     private JPanel itemsPanel, productPanel, inputsPanel;// Front portion
     private JLabel[][] items;
     private JTextField cashField, itemsField;
@@ -66,20 +64,19 @@ public class RegularVendingMachineUI {
     private JTextArea mDisplayArea;
     private JScrollPane mDisplayPane;
 
-    public RegularVendingMachineUI(RegularVendingMachine machine){
+    /**
+     * This is the constructor for the <code>RegularVendingMachine</code> UI. It will show the different components of the machine
+     */
+    public RegularVendingMachineUI(){
         this.pathNames = setPathNames();
         this.items = new JLabel[6][5];
-
-        //get the values of the machine
-        //will be removed for controller
-        this.machine = machine;
 
         try {
             this.digitalFont = Font.createFont(Font.TRUETYPE_FONT, new File("VendingView/Images/neon_pixel-7.ttf")).deriveFont(Font.BOLD);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(digitalFont);
         } catch (Exception e) {
-            // TODO: handle exception
+            
         }
 
         //Icon of the program
@@ -1090,40 +1087,40 @@ public class RegularVendingMachineUI {
         this.maintenanceFrame.revalidate();
     }
 
-    public String[] setPathNames(){
+    private String[] setPathNames(){
         String[] pathNames = {
-                                "VendingView/Images/Items/Strawberry.png",
-                                "VendingView/Images/Items/Mango.jpg",
-                                "VendingView/Images/Items/MixedBerries.png",
-                                "VendingView/Images/Items/Banana.png",
-                                "VendingView/Images/Items/Orange.png",
-                                "VendingView/Images/Items/DragonFruit.jpg",
-                                "VendingView/Images/Items/Watermelon.jpg",
-                                "VendingView/Images/Items/Grapes.jpg",
-                                "VendingView/Images/Items/Peach.jpg",
-                                "VendingView/Images/Items/Apple.png",
-                                "VendingView/Images/Items/Carrot.png",
-                                "VendingView/Images/Items/Spinach.jpg",
-                                "VendingView/Images/Items/Kale.jpg",
-                                "VendingView/Images/Items/Milk.jpg",
-                                "VendingView/Images/Items/AlmondMilk.png",
-                                "VendingView/Images/Items/OatMilk.jpg",
-                                "VendingView/Images/Items/Ice.png",
-                                "VendingView/Images/Items/Sugar.png",
-                                "VendingView/Images/Items/Graham.jpg",
-                                "VendingView/Images/Items/Honey.png",
-                                "VendingView/Images/Items/Oats.jpg",
-                                "VendingView/Images/Items/Wafer.jpg",
-                                "VendingView/Images/Items/Oreo.png",
-                                "VendingView/Images/Items/PB.jpg",
-                                "VendingView/Images/Items/SP.png",
-                                "VendingView/Images/Items/PP.jpg",
+                                "VendingView/Images/Items/A1.png",
+                                "VendingView/Images/Items/A2.jpg",
+                                "VendingView/Images/Items/A3.png",
+                                "VendingView/Images/Items/A4.png",
+                                "VendingView/Images/Items/A5.png",
+                                "VendingView/Images/Items/B1.jpg",
+                                "VendingView/Images/Items/B2.jpg",
+                                "VendingView/Images/Items/B3.jpg",
+                                "VendingView/Images/Items/B4.jpg",
+                                "VendingView/Images/Items/B5.png",
+                                "VendingView/Images/Items/C1.png",
+                                "VendingView/Images/Items/C2.jpg",
+                                "VendingView/Images/Items/C3.jpg",
+                                "VendingView/Images/Items/C4.jpg",
+                                "VendingView/Images/Items/C5.png",
+                                "VendingView/Images/Items/D1.jpg",
+                                "VendingView/Images/Items/D2.png",
+                                "VendingView/Images/Items/D3.png",
+                                "VendingView/Images/Items/D4.jpg",
+                                "VendingView/Images/Items/D5.png",
+                                "VendingView/Images/Items/E1.jpg",
+                                "VendingView/Images/Items/E2.jpg",
+                                "VendingView/Images/Items/E3.png",
+                                "VendingView/Images/Items/E4.jpg",
+                                "VendingView/Images/Items/E5.png",
+                                "VendingView/Images/Items/F1.jpg",
                                 "VendingView/Images/Items/Empty.png"
                             };
         return pathNames;
     }
 
-    public JPanel setItems(){
+    private JPanel setItems(){
         int i,j, k = 0;
         ImageIcon image;
 
@@ -1163,446 +1160,811 @@ public class RegularVendingMachineUI {
         return panel;
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Cash button of P1
+     * @param actn input P1
+     */
     public void setCashBtn1Listener(ActionListener actn) {
         this.cashBtn1.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Cash button of P5
+     * @param actn input P5
+     */
     public void setCashBtn2Listener(ActionListener actn) {
         this.cashBtn2.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Cash button of P10
+     * @param actn input P10
+     */
     public void setCashBtn3Listener(ActionListener actn) {
         this.cashBtn3.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Cash button of P20
+     * @param actn input P20
+     */
     public void setCashBtn4Listener(ActionListener actn) {
         this.cashBtn4.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Cash button of P50
+     * @param actn input P50
+     */
     public void setCashBtn5Listener(ActionListener actn) {
         this.cashBtn5.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Cash button of P100
+     * @param actn input P100
+     */
     public void setCashBtn6Listener(ActionListener actn) {
         this.cashBtn6.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Cash button of P200
+     * @param actn input P200
+     */
     public void setCashBtn7Listener(ActionListener actn) {
         this.cashBtn7.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Cash button of P500
+     * @param actn input P500
+     */
     public void setCashBtn8Listener(ActionListener actn) {
         this.cashBtn8.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Cash button of P1000
+     * @param actn input P1000
+     */
     public void setCashBtn9Listener(ActionListener actn) {
         this.cashBtn9.addActionListener(actn);
     }    
     
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input 1
+     * @param actn input 1
+     */
     public void setItemBtn1Listener(ActionListener actn) {
         this.itemBtn1.addActionListener(actn);
     }
     
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input 2
+     * @param actn input 2
+     */
     public void setItemBtn2Listener(ActionListener actn) {
         this.itemBtn2.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input 3
+     * @param actn input 3
+     */
     public void setItemBtn3Listener(ActionListener actn) {
         this.itemBtn3.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input 4
+     * @param actn input 5
+     */
     public void setItemBtn4Listener(ActionListener actn) {
         this.itemBtn4.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input 5
+     * @param actn input 5
+     */
     public void setItemBtn5Listener(ActionListener actn) {
         this.itemBtn5.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input A
+     * @param actn input A
+     */
     public void setItemBtnAListener(ActionListener actn) {
         this.itemBtnA.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input B
+     * @param actn input B
+     */
     public void setItemBtnBListener(ActionListener actn) {
         this.itemBtnB.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input C
+     * @param actn input C
+     */
     public void setItemBtnCListener(ActionListener actn) {
         this.itemBtnC.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input D
+     * @param actn input D
+     */
     public void setItemBtnDListener(ActionListener actn) {
         this.itemBtnD.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input E
+     * @param actn input E
+     */
     public void setItemBtnEListener(ActionListener actn) {
         this.itemBtnE.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the Item button of input F
+     * @param actn input F
+     */
     public void setItemBtnFListener(ActionListener actn) {
         this.itemBtnF.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the buy item button
+     * @param actn buy item
+     */
     public void setItemBtnConListener(ActionListener actn) {
         this.itemBtnCon.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the clear button
+     * @param actn clear fields
+     */
     public void setItemBtnCanListener(ActionListener actn) {
         this.itemBtnCan.addActionListener(actn);
     }
 
+    /**
+     * Sets the <code>actionListener</code> for the openM menu item
+     * @param actn opens maintenance
+     */
     public void setOpenMListener(ActionListener actn) {
         this.openM.addActionListener(actn);
     }
 
-    public void setOpenVListener(ActionListener actn) {
-        this.openV.addActionListener(actn);
-    }
-
+    /**
+     * Sets the <code>actionListener</code> for the exitM menu item
+     * @param actn exit maintenance
+     */
     public void setExitMListerner(ActionListener actn){
         this.exitM.addActionListener(actn);
     }
 
-    public void setExitVListerner(ActionListener actn){
-        this.exitV.addActionListener(actn);
-    }
-
+    /**
+     * Sets the text for the process area
+     * @param text processing text
+     */
     public void setProcessAreaText(String text) {
         this.processArea.setText(text);
     }
 
-    public void clearItemsField(){
-        this.itemsField.setText("Input Item Label");
-    }
-
+    /**
+     * Sets the text on the cash field
+     * @param text total money string
+     */
     public void setCashFieldText(String text){ 
         this.cashField.setText(text);
     }
     
+    /**
+     * Sets the text for the array of labels for items
+     * @param row row value of the array
+     * @param col collumn value of the array
+     * @param text text of the label
+     */
     public void setItemsText(int row, int col, String text){
         this.items[row][col].setText(text);
     }
 
-    public void setReceiptText(String text){
+    /**
+     * Sets the image icon of the product
+     * @param image image of product
+     */
+    public void setProductIcon(ImageIcon image) {
+        this.productLabel.setIcon(image);
+    }
+
+    /**
+     * Sets the text in the receipt area
+     * @param text receipt
+     */
+    public void setReceiptAreaText(String text){
         this.receiptArea.setText(text);
     }
 
+    /**
+     * Sets the texts in the items field
+     * @param text item label
+     */
     public void setItemsFieldText(String text) {
         this.itemsField.setText(text);
     }
 
+    /**
+     * Sets the cash field to its initial text
+     */
+    public void clearCashField() {
+        this.cashField.setText("Cash Amount");
+    }
+
+    /**
+     * Sets the initial text of items field
+     */
+    public void clearItemsField(){
+        this.itemsField.setText("Input Item Label");
+    }
+
+    /**
+     * Gets the main frame of the ui
+     * @return main frame
+     */
     public JFrame getMainFrame() {
         return this.mainFrame;
     }
-
-    public JFrame getMaintenanceFrame() {
-        return this.maintenanceFrame;
-    }
-
-    public JFrame getProductsFrame() {
-        return this.productsFrame;
-    }
-
+    
+    /**
+     * Gets the text from the items field
+     * @return label of slot
+     */
     public String getItemsFieldText() {
         return this.itemsField.getText();
     }
-
-    public String getCashFieldText() {
-        return this.cashField.getText();
-    }
     
     // MAINTENANCE --------------------------
+    
+    /**
+     * Sets the <code>actionListener</code> for the add items button
+     * @param actn add item
+     */
+    public void setAddItemBtnListener(ActionListener actn) {
+        this.addItemBtn.addActionListener(actn);
+    }
 
+    /**
+     * Sets the <code>actionListener</code> for the clear items field button
+     * @param actn clear items field
+     */
+    public void setClearBtnBtnListener(ActionListener actn) {
+        this.clearBtn.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MCash button of P1
+     * @param actn input P1 to stored money
+     */
+     public void setMCashBtn1Listener(ActionListener actn) {
+        this.mCashBtn1.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MCash button of P5
+     * @param actn input P5 to stored money
+     */
+    public void setMCashBtn2Listener(ActionListener actn) {
+        this.mCashBtn2.addActionListener(actn);
+    }
+    
+    /**
+     * Sets the <code>actionListener</code> for the MCash button of P10
+     * @param actn input P10 to stored money
+     */
+    public void setMCashBtn3Listener(ActionListener actn) {
+        this.mCashBtn3.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MCash button of P20
+     * @param actn input P20 to stored money
+     */
+    public void setMCashBtn4Listener(ActionListener actn) {
+        this.mCashBtn4.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MCash button of P50
+     * @param actn input P50 to stored money
+     */
+    public void setMCashBtn5Listener(ActionListener actn) {
+        this.mCashBtn5.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MCash button of P100
+     * @param actn input P100 to stored money
+     */
+    public void setMCashBtn6Listener(ActionListener actn) {
+        this.mCashBtn6.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MCash button of P200
+     * @param actn input P200 to stored money
+     */
+    public void setMCashBtn7Listener(ActionListener actn) {
+        this.mCashBtn7.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MCash button of P500
+     * @param actn input P500 to stored money
+     */
+    public void setMCashBtn8Listener(ActionListener actn) {
+        this.mCashBtn8.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MCash button of P1000
+     * @param actn input P1000 to stored money
+     */
+    public void setMCashBtn9Listener(ActionListener actn) {
+        this.mCashBtn9.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 1
+     * @param actn input 1
+     */
+    public void setMItemBtn1Listener(ActionListener actn) {
+        this.mItemBtn1.addActionListener(actn);
+    }
+    
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 2
+     * @param actn input 2
+     */
+    public void setMItemBtn2Listener(ActionListener actn) {
+        this.mItemBtn2.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 3
+     * @param actn input 3
+     */
+    public void setMItemBtn3Listener(ActionListener actn) {
+        this.mItemBtn3.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 4
+     * @param actn input 4
+     */
+    public void setMItemBtn4Listener(ActionListener actn) {
+        this.mItemBtn4.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 5
+     * @param actn input 5
+     */
+    public void setMItemBtn5Listener(ActionListener actn) {
+        this.mItemBtn5.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input A
+     * @param actn input A
+     */
+    public void setMItemBtnAListener(ActionListener actn) {
+        this.mItemBtnA.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input B
+     * @param actn input B
+     */
+    public void setMItemBtnBListener(ActionListener actn) {
+        this.mItemBtnB.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input C
+     * @param actn input C
+     */
+    public void setMItemBtnCListener(ActionListener actn) {
+        this.mItemBtnC.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input D
+     * @param actn input D
+     */
+    public void setMItemBtnDListener(ActionListener actn) {
+        this.mItemBtnD.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input E
+     * @param actn input E
+     */
+    public void setMItemBtnEListener(ActionListener actn) {
+        this.mItemBtnE.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input F
+     * @param actn input F
+     */
+    public void setMItemBtnFListener(ActionListener actn) {
+        this.mItemBtnF.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the increase button
+     * @param actn increase quantity
+     */
+    public void setMItemBtnAddListener(ActionListener actn) {
+        this.mItemBtnAdd.addActionListener(actn);
+    }
+    
+    /**
+     * Sets the <code>actionListener</code> for the decrease button
+     * @param actn decrease quantity
+     */
+    public void setMItemBtnDecListener(ActionListener actn) {
+        this.mItemBtnDec.addActionListener(actn);
+    }
+    
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 1
+     * @param actn input 1
+     */
+    public void setMPriceBtn1Listener(ActionListener actn) {
+    this.mPriceBtn1.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 2
+     * @param actn input 2
+     */
+    public void setMPriceBtn2Listener(ActionListener actn) {
+        this.mPriceBtn2.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 3
+     * @param actn input 3
+     */
+    public void setMPriceBtn3Listener(ActionListener actn) {
+        this.mPriceBtn3.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 4
+     * @param actn input 4
+     */
+    public void setMPriceBtn4Listener(ActionListener actn) {
+        this.mPriceBtn4.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input 5
+     * @param actn input 5
+     */
+    public void setMPriceBtn5Listener(ActionListener actn) {
+        this.mPriceBtn5.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input A
+     * @param actn input A
+     */
+    public void setMPriceBtnAListener(ActionListener actn) {
+        this.mPriceBtnA.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input B
+     * @param actn input B
+     */
+    public void setMPriceBtnBListener(ActionListener actn) {
+        this.mPriceBtnB.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input C
+     * @param actn input C
+     */
+    public void setMPriceBtnCListener(ActionListener actn) {
+        this.mPriceBtnC.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input D
+     * @param actn input D
+     */
+    public void setMPriceBtnDListener(ActionListener actn) {
+        this.mPriceBtnD.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input E
+     * @param actn input E
+     */
+    public void setMPriceBtnEListener(ActionListener actn) {
+        this.mPriceBtnE.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the MItem button of input F
+     * @param actn input F
+     */
+    public void setMPriceBtnFListener(ActionListener actn) {
+        this.mPriceBtnF.addActionListener(actn);
+    }
+    
+    /**
+     * Sets the <code>actionListener</code> for the change price button
+     * @param actn change price
+     */
+    public void setmPriceBtnConListener(ActionListener actn) {
+        this.mPriceBtnCon.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the clear  button for change price
+     * @param actn clear 
+     */
+    public void setmPriceBtnCanListener(ActionListener actn) {
+        this.mPriceBtnCan.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the clear button for increase decrease field
+     * @param actn clear increase decrease field
+     */
+    public void setMItemBtnClearListener(ActionListener actn) {
+        this.mItemBtnClear.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the check denominations button
+     * @param actn check denominations
+     */
+    public void setCheckDenomBtnAddListener(ActionListener actn) {
+        this.checkDenomBtn.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the show transactions button
+     * @param actn show transactions
+     */
+    public void setShowTransactionsBtnListener(ActionListener actn) {
+        this.showTransactionsBtn.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the collect money button
+     * @param actn collect money
+     */
+    public void setCollectMoneyBtnListener(ActionListener actn) {
+        this.collectMoneyBtn.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the openV button
+     * @param actn opens vending machine
+     */
+    public void setOpenVListener(ActionListener actn) {
+        this.openV.addActionListener(actn);
+    }
+
+    /**
+     * Sets the <code>actionListener</code> for the exitV button
+     * @param actn exits vending machine
+     */
+    public void setExitVListerner(ActionListener actn){
+        this.exitV.addActionListener(actn);
+    }
+
+    /**
+     * Sets the increase decrease field to its initial text
+     */
+    public void clearIncDecFieldText() {
+        this.incDecField.setText("Input Item Label");
+    }
+
+    /**
+     * Sets the input money field to its initial text
+     */
     public void clearInputMoneyField() {
         this.inputMoneyField.setText("Input Money");
     }
 
+    /**
+     * Sets the name field to its initial text
+     */
     public void clearNameField() {
         this.nameField.setText("Input New Item's Name");
     }
 
+    /**
+     * Sets the quantity field to its initial text
+     */
     public void clearQuantityLabelField() {
         this.quantityField.setText("Input New Item's Quantity");
     }
 
+    /**
+     * Sets the price field to its initial text
+     */
     public void clearPriceLabelField() {
         this.priceField.setText("Input New Items's Price");
     }
     
+    /**
+     * Sets the calories field to its initial text
+     */
     public void clearCaloriesLabelField() {
         this.caloriesField.setText("Input New Items's Calories");
     }
 
+    /**
+     * Sets the type field to its initial text
+     */
     public void clearTypeLabelField() {
         this.typeField.setText("Input New Item's Type");
     }
     
+    /**
+     * Sets the new price field to its initial text
+     */
     public void clearNewPriceField() {
         this.newPriceField.setText("Price");
     }
 
+    /**
+     * Sets the label field to its initial text
+     */
     public void clearLabelField() {
         this.labelField.setText("Item");
     }
 
+    /**
+     * Clears the MDisplay area
+     */
+    public void clearMDisplayText(){
+        this.mDisplayArea.setText("");
+    }
+
+    /**
+     * Sets the text in the increase decrease field
+     * @param text label
+     */
     public void setIncDecFieldText(String text) {
         this.incDecField.setText(text);
     }
 
-    public String getIncDecFieldText() {
-        return this.incDecField.getText();
-    }
-
+    /**
+     * Sets the text in the label field 
+     * @param text label
+     */
     public void setLabelFieldText(String text) {
         this.labelField.setText(text);
     }
-    
-    public String getLabelFieldText() {
-        return this.labelField.getText();
-    }
 
+    /**
+     * Sets the text in the new price field
+     * @param text new price
+     */
     public void setNewPriceFieldText(String text) {
         this.newPriceField.setText(text);
     }
     
+    /**
+     * Sets the text in the input money field
+     * @param text stored money
+     */
+    public void setInputMoneyFieldText(String text){
+        this.inputMoneyField.setText(text);
+    }
+
+    /**
+     * Sets the text in the MDisplay area
+     * @param text string outputs
+     */
+    public void setMDisplayText(String text){
+        this.mDisplayArea.setText(text);
+    }
+    
+    /**
+     * Gets the text in the increase decrease field
+     * @return label
+     */
+    public String getIncDecFieldText() {
+        return this.incDecField.getText();
+    }
+
+    /**
+     * Gets the text in the label field
+     * @return label
+     */
+    public String getLabelFieldText() {
+        return this.labelField.getText();
+    }
+
+    /**
+     * Gets the text in the new price field
+     * @return new price
+     */
     public String getNewPriceFieldText() {
         return this.newPriceField.getText();
     }
 
-    public void setInputMoneyFieldText(String text){
-        this.inputMoneyField.setText(text);
-    }
-    
-    public String getinputMoneyFieldText() {
-        return this.inputMoneyField.getText();
-    }
-
-    public void setNameFieldText(String text) {
-       this.nameField.getText();
-    }
-
+    /**
+     * Gets the text in the name field
+     * @return name
+     */
     public String getNameFieldText() {
         return this.nameField.getText();
     }
 
-   
-
-    public void setQuantityLabelFieldText(String text) {
-        this.quantityField.getText();
+    /**
+     * Gets the text in the type field 
+     * @return item type
+     */
+    public String getTypeFieldText() {
+        return this.typeField.getText();
     }
 
-    public int getQuantityLabelFieldText() {
+    /**
+     * Gets the integer value in the quantity text
+     * @return quantity
+     */
+    public int getQuantityFieldText() {
         String text = this.quantityField.getText();
         int quantity = Integer.parseInt(text);
 
         return quantity;
-    }   
+    } 
 
-    public void setPriceLabelFieldText(String text) {
-        this.priceField.getText();
-    }
-
-    public double getPriceLabelFieldText() {
+    /**
+     * Gets the double value in the price field
+     * @return price
+     */
+    public double getPriceFieldText() {
         String text = this.priceField.getText();
         double price = Double.parseDouble(text);
         return price;
     }
 
-    public void setCaloriesLabelFieldText(String text) {
-        this.caloriesField.getText();
-    }
-
-    public int getCaloriesLabelFieldText() {
+    /**
+     * Gets the integer value in the calories field
+     * @return calories
+     */
+    public int getCaloriesFieldText() {
         String text = this.caloriesField.getText();
         int calories = Integer.parseInt(text);
         return calories;
     }
 
-    public void setTypeLabelFieldText(String text) {
-        this.typeField.getText();
+    /**
+     * Gets the maintenance frame
+     * @return maintenance frame
+     */
+    public JFrame getMaintenanceFrame() {
+        return this.maintenanceFrame;
     }
 
-    public String getTypeLabelFieldText() {
-        return this.typeField.getText();
-    }
-    
-    public void setAddItemBtnListener(ActionListener actn) {
-        this.addItemBtn.addActionListener(actn);
-    }
-
-    public void setClearBtnBtnListener(ActionListener actn) {
-        this.clearBtn.addActionListener(actn);
-    }
-
-     public void setMCashBtn1Listener(ActionListener actn) {
-        this.mCashBtn1.addActionListener(actn);
-    }
-
-    public void setMCashBtn2Listener(ActionListener actn) {
-        this.mCashBtn2.addActionListener(actn);
-    }
-    
-    public void setMCashBtn3Listener(ActionListener actn) {
-        this.mCashBtn3.addActionListener(actn);
-    }
-
-    public void setMCashBtn4Listener(ActionListener actn) {
-        this.mCashBtn4.addActionListener(actn);
-    }
-
-    public void setMCashBtn5Listener(ActionListener actn) {
-        this.mCashBtn5.addActionListener(actn);
-    }
-
-    public void setMCashBtn6Listener(ActionListener actn) {
-        this.mCashBtn6.addActionListener(actn);
-    }
-
-    public void setMCashBtn7Listener(ActionListener actn) {
-        this.mCashBtn7.addActionListener(actn);
-    }
-
-    public void setMCashBtn8Listener(ActionListener actn) {
-        this.mCashBtn8.addActionListener(actn);
-    }
-
-    public void setMCashBtn9Listener(ActionListener actn) {
-        this.mCashBtn9.addActionListener(actn);
-    }
-
-    public void setMItemBtn1Listener(ActionListener actn) {
-        this.mItemBtn1.addActionListener(actn);
-    }
-    
-    public void setMItemBtn2Listener(ActionListener actn) {
-        this.mItemBtn2.addActionListener(actn);
-    }
-
-    public void setMItemBtn3Listener(ActionListener actn) {
-        this.mItemBtn3.addActionListener(actn);
-    }
-
-    public void setMItemBtn4Listener(ActionListener actn) {
-        this.mItemBtn4.addActionListener(actn);
-    }
-
-    public void setMItemBtn5Listener(ActionListener actn) {
-        this.mItemBtn5.addActionListener(actn);
-    }
-
-    public void setMItemBtnAListener(ActionListener actn) {
-        this.mItemBtnA.addActionListener(actn);
-    }
-
-    public void setMItemBtnBListener(ActionListener actn) {
-        this.mItemBtnB.addActionListener(actn);
-    }
-
-    public void setMItemBtnCListener(ActionListener actn) {
-        this.mItemBtnC.addActionListener(actn);
-    }
-
-    public void setMItemBtnDListener(ActionListener actn) {
-        this.mItemBtnD.addActionListener(actn);
-    }
-
-    public void setMItemBtnEListener(ActionListener actn) {
-        this.mItemBtnE.addActionListener(actn);
-    }
-
-    public void setMItemBtnFListener(ActionListener actn) {
-        this.mItemBtnF.addActionListener(actn);
-    }
-    
-    public void setMPriceBtn1Listener(ActionListener actn) {
-    this.mPriceBtn1.addActionListener(actn);
-    }
-
-    public void setMPriceBtn2Listener(ActionListener actn) {
-        this.mPriceBtn2.addActionListener(actn);
-    }
-
-    public void setMPriceBtn3Listener(ActionListener actn) {
-        this.mPriceBtn3.addActionListener(actn);
-    }
-
-    public void setMPriceBtn4Listener(ActionListener actn) {
-        this.mPriceBtn4.addActionListener(actn);
-    }
-
-    public void setMPriceBtn5Listener(ActionListener actn) {
-        this.mPriceBtn5.addActionListener(actn);
-    }
-
-    public void setMPriceBtnAListener(ActionListener actn) {
-        this.mPriceBtnA.addActionListener(actn);
-    }
-
-    public void setMPriceBtnBListener(ActionListener actn) {
-        this.mPriceBtnB.addActionListener(actn);
-    }
-
-    public void setMPriceBtnCListener(ActionListener actn) {
-        this.mPriceBtnC.addActionListener(actn);
-    }
-
-    public void setMPriceBtnDListener(ActionListener actn) {
-        this.mPriceBtnD.addActionListener(actn);
-    }
-
-    public void setMPriceBtnEListener(ActionListener actn) {
-        this.mPriceBtnE.addActionListener(actn);
-    }
-
-    public void setMPriceBtnFListener(ActionListener actn) {
-        this.mPriceBtnF.addActionListener(actn);
-    }
-
-    
-    public void setmPriceBtnConListener(ActionListener actn) {
-        this.mPriceBtnCon.addActionListener(actn);
-    }
-
-    public void setmPriceBtnCanListener(ActionListener actn) {
-        this.mPriceBtnCan.addActionListener(actn);
-    }
-    
-    public void setMItemBtnDecListener(ActionListener actn) {
-        this.mItemBtnDec.addActionListener(actn);
-    }
-
-    public void setMItemBtnAddListener(ActionListener actn) {
-        this.mItemBtnAdd.addActionListener(actn);
-    }
-
-    public void setMItemBtnClearListener(ActionListener actn) {
-        this.mItemBtnClear.addActionListener(actn);
-    }
-
-    public void setCheckDenomBtnAddListener(ActionListener actn) {
-        this.checkDenomBtn.addActionListener(actn);
-    }
-
-    public void setShowTransactionsBtnListener(ActionListener actn) {
-        this.showTransactionsBtn.addActionListener(actn);
-    }
-
-    public void setCollectMoneyBtnListener(ActionListener actn) {
-        this.collectMoneyBtn.addActionListener(actn);
-    }
-
-    public void clearIncDecFieldText() {
-        this.incDecField.setText("Input Item Label");
-    }
-
-    public void setMDisplayText(String text){
-        this.mDisplayArea.setText(text);
-    }
-    public String getMDisplayText(){
-        return this.mDisplayArea.getText();
-    }
-    public void clearMDisplayText(){
-        this.mDisplayArea.setText("");
-    }
 }
-

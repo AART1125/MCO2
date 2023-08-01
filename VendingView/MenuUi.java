@@ -16,6 +16,9 @@ import java.io.File;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 
+/**
+ * This is the menu of the program
+ */
 public class MenuUi {
    private ImageIcon mainIcon;
    private JFrame mainFrame;
@@ -24,6 +27,9 @@ public class MenuUi {
    private JPanel mainPanel, optionsPanel;
    private Font digitalFont;
 
+   /**
+    * This is the constructor of the <code>MenuUI</code>. Components of the menu are shown here.
+    */
    public MenuUi(){
       this.mainIcon = new ImageIcon("VendingView/Images/mainIcon.jpg");
 
@@ -32,7 +38,7 @@ public class MenuUi {
          GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
          ge.registerFont(digitalFont);
       } catch (Exception e) {
-         // TODO: handle exception
+         
       }
 
       this.mainFrame = new JFrame("Smoothie Machine Factory");
@@ -126,34 +132,66 @@ public class MenuUi {
       this.mainFrame.setVisible(true);
    }
 
+   /**
+     * Sets the <code>actionListener</code> for the Create button in the menu
+     * @param actn switch panel
+     */
    public void setCreateBtnListener(ActionListener actn) {
        this.createBtn.addActionListener(actn);
    }
 
+    /**
+     * Sets the <code>actionListener</code> for the Test button in the menu
+     * @param actn test vending machine
+     */
    public void setTestBtnListener(ActionListener actn) {
        this.testBtn.addActionListener(actn);
    }
 
+    /**
+     * Sets the <code>actionListener</code> for the Exit button in the menu
+     * @param actn exits program
+     */
    public void setExitBtnListener(ActionListener actn) {
        this.exitBtn.addActionListener(actn);
    }
 
+    /**
+     * Sets the <code>actionListener</code> for the <code>RegularVendingMachine</code> creation button in the menu
+     * @param actn create regular vending machine
+     */
    public void setRegBtnListener(ActionListener actn) {
        this.regBtn.addActionListener(actn);
    }
 
+    /**
+     * Sets the <code>actionListener</code> for the <code>SpecialVendingMachine</code> creation button in the menu
+     * @param actn create regular vending machine
+     */
    public void setSpcBtnListener(ActionListener actn) {
        this.spcBtn.addActionListener(actn);
    }
 
+    /**
+     * Gets the main frame of the ui
+     * @return main frame
+     */
    public JFrame getMainFrame() {
        return this.mainFrame;
    }
 
+   /**
+    * Gets the main panel of the ui
+    * @return main panel
+    */
    public JPanel getMainPanel() {
        return this.mainPanel;
    }
 
+   /**
+    * Gets the options panel of the ui
+    * @return options panel
+    */
    public JPanel getOptionsPanel() {
        return this.optionsPanel;
    }
