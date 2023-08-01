@@ -154,7 +154,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public void fileTransactionScan() {
         int number, amount;
         double total, payment, change;
-        boolean check;
+        boolean check, isProduct;
         LocalDateTime date;
         Items item;
         Transactions temp;
@@ -163,6 +163,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             Scanner reader = new Scanner(contentFile);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
             amount = Integer.parseInt(reader.nextLine());
+            this.transactionAmount = amount;
             while (reader.hasNextLine()) {// reads file
                 number = Integer.parseInt(reader.nextLine());
                 item = new Items(reader.nextLine(), Integer.parseInt(reader.nextLine()), reader.nextLine());
@@ -171,12 +172,13 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 change = Double.parseDouble(reader.nextLine());
                 date = LocalDateTime.parse(reader.nextLine(), formatter);
                 check = Boolean.parseBoolean(reader.nextLine());
+                isProduct = Boolean.parseBoolean(reader.nextLine());
                 reader.nextLine();
 
                 if (!check)
                     this.salesWasDone = true;
 
-                temp = new Transactions(total, payment, change, item, number, date, check);
+                temp = new Transactions(total, payment, change, item, number, date, check, isProduct);
                 this.transactionList.add(temp);
             }
             reader.close();
@@ -204,6 +206,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 mainWriter.println(transactions.getChange());
                 mainWriter.println(transactions.toString());
                 mainWriter.println(transactions.getCheck());
+                mainWriter.println(transactions.getIsProduct());
                 mainWriter.print("\n");
             }
             mainWriter.close();
@@ -320,8 +323,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             } else {
                 itemCounts.replace(itemName.toLowerCase(), itemCounts.get(itemName) + 1);
             }
-
-            System.out.println(itemName + " - " + itemCounts.get(itemName));
         }
 
         while (i < this.userCart.size() && success) {
@@ -352,7 +353,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
             if (total(userMoney) >= price) {
                 for (i = 0; i < this.userCart.size(); i++){
-                    this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], this.transactionAmount+1));
+                    this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], this.transactionAmount+1, true));
                     this.transactionsMade++;
                     this.userCart.get(i).decreaseQuantity(1);
                     this.userCart.get(i).updateItemsFromSlot(this.userCart.get(i).getProductItem());
@@ -507,13 +508,17 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 
                 if (origQuantity > 0){
                     change = produceChange(userMoney, price);
-                    this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], this.transactionAmount+1));
-                    this.transactionsMade++;
-                    this.userCart.get(i).decreaseQuantity(1);
-                    this.userCart.get(i).updateItemsFromSlot(this.userCart.get(i).getProductItem());
-                    if (this.userCart.get(i).getQuantity() == 0) {
-                        this.occupiedSlots--;
-                        this.userCart.get(i).setPrice(0);
+                    if (change >= 0) {
+                        this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], this.transactionAmount+1, false));
+                        this.transactionsMade++;
+                        this.userCart.get(i).decreaseQuantity(1);
+                        this.userCart.get(i).updateItemsFromSlot(this.userCart.get(i).getProductItem());
+                        if (this.userCart.get(i).getQuantity() == 0) {
+                            this.occupiedSlots--;
+                            this.userCart.get(i).setPrice(0);
+                        }
+                    } else {
+                        success = false;
                     }
                 } else {
                     success = false;
@@ -546,20 +551,16 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         int i = DENOMINATIONS-1, j = 0;
         Money[] tempMoney = new Money[DENOMINATIONS];
 
-        if(change < 0){
-           
-        } else {
-            for (Money money : userMoney) {
+        if(change >= 0){
+           for (Money money : userMoney) {
                 tempMoney[j] = new Money(money.getValue(), money.getAmount());
                 j++;
             }
             addPaymentToMachine(userMoney);
             while(i >= 0){
-                try {
+                
                     numBills = (int)temp/(int)this.storedMoney[i].getValue();
-                } catch (ArithmeticException e) {
-                    
-                }
+                
                 if(numBills > 0){
                     if(this.storedMoney[i].getAmount() >= numBills){
                         temp -= this.storedMoney[i].getValue()*numBills;
@@ -578,8 +579,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 }
                 i--;
             }
+        } 
 
-        }
         return change;
     }
     
@@ -659,22 +660,82 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      */
     public String createTransactions(int num){
         StringBuilder builder = new StringBuilder();
-        int i, transactionNum, calories;
-        double price, total = 0, change = 0, payment = this.transactionList.get(this.transactionAmount).getPayment();
+        int i, transactionNum, calories, latestNum = this.transactionList.size()-this.transactionsMade;;
+        double price, total = 0, change = 0, payment = this.transactionList.get(latestNum).getPayment();
         String name;
         for (i = 0; i < num; i++) {
-            transactionNum =  this.transactionList.get(this.transactionAmount + i).getNumber();
-            name =  this.transactionList.get(this.transactionAmount + i).getItem().getName();
-            calories =  this.transactionList.get(this.transactionAmount + i).getItem().getCalories();
-            price = this.transactionList.get(this.transactionAmount + i).getTotal();
-            total += this.transactionList.get(this.transactionAmount + i).getTotal();
-            
-            builder.append("Transaction #" + transactionNum + "\n");
-            builder.append("Name: " + name + "\n");
-            builder.append("Calories: " + calories + "\n");
-            builder.append("Price: " + price + "\n\n");
+            latestNum = this.transactionList.size()-this.transactionsMade;
+            if (this.transactionAmount+1 == this.transactionList.get(latestNum).getNumber()) {
+                transactionNum =  this.transactionList.get(latestNum).getNumber();
+                name =  this.transactionList.get(latestNum).getItem().getName();
+                calories =  this.transactionList.get(latestNum).getItem().getCalories();
+                price = this.transactionList.get(latestNum).getTotal();
+                total += this.transactionList.get(latestNum).getTotal();
+                
+                builder.append("Transaction #" + transactionNum + "\n");
+                builder.append("Name: " + name + "\n");
+                builder.append("Calories: " + calories + "\n");
+                builder.append("Price: " + price + "\n\n");
+                this.transactionsMade--;
+            }
 
-            this.transactionsMade--;
+        }
+
+        change = payment - total;
+
+        builder.append("----------------------------------------------\n");
+        builder.append("Total  : " + total + "\n");
+        builder.append("Payment: " + payment + "\n");
+        builder.append("Change : " + change + "\n");
+        builder.append("----------------------------------------------\n\n");
+        
+        this.transactionAmount++;
+        
+        return builder.toString();
+    }
+
+    /**
+     * This method generates the transaction of the sale. It is used in the buyItems method
+     * @param num number of items in transaction
+     * @return String of the transactions
+     */
+    public String createProductTransactions(int num){
+        StringBuilder builder = new StringBuilder();
+        int i, j, k, transactionNum, calories, latestNum = this.transactionList.size()-this.transactionsMade;
+        double total = this.transactionList.get(latestNum).getTotal(), payment = this.transactionList.get(latestNum).getPayment();
+        double price = 0, change = 0;
+        boolean found = false;
+        String name;
+        for (i = 0; i < num; i++) {
+            latestNum = this.transactionList.size()-this.transactionsMade;
+            if (this.transactionAmount+1 == this.transactionList.get(latestNum).getNumber()) {
+                transactionNum =  this.transactionList.get(latestNum).getNumber();
+                name =  this.transactionList.get(latestNum).getItem().getName();
+                calories =  this.transactionList.get(latestNum).getItem().getCalories();
+                
+                k=0;
+                j=0;
+                found = false;
+
+                while (j < MAXROW && !found) {
+                    while (k < MAXCOL && !found) {
+                        if (this.vendoItem[j][k].getProductItem()[0].getName().equals(name)) {
+                            found = true;
+                            price = this.vendoItem[j][k].getPrice();
+                        }
+                        k++;
+                    }
+                    k=0;
+                    j++;
+                }
+
+                builder.append("Transaction #" + transactionNum + "\n");
+                builder.append("Name: " + name + "\n");
+                builder.append("Calories: " + calories + "\n");
+                builder.append("Price: " + price + "\n\n");
+                this.transactionsMade--;
+            }
+
         }
 
         change = payment - total;
@@ -995,37 +1056,52 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public String showNewTransactions(){
         StringBuilder builder = new StringBuilder();
         double sum = 0;
-        int i = 0, j = 0, curQuantity = 0;
-        boolean found = false;
+        int i = 0, j = 0, k, count = 0, curQuantity = 0, prevQuantity = -1;
+        boolean found;
 
         if(this.transactionList != null && this.transactionAmount != 0){
             for (Transactions transaction : this.transactionList) {
                 if(!transaction.getCheck()){
                     transaction.setCheck(true);
                     sum += transaction.getTotal();
+                    found = false;
 
+                    count = 0;
+                    for (k = 0; k < this.transactionList.size() - 1; k++) {
+                        if (this.transactionList.get(k).getNumber() == transaction.getNumber() && this.transactionList.get(k).getItem().getName().equals(transaction.getItem().getName())) {
+                            count++;
+                        }
+                    }
+
+                    i = 0;
+                    j = 0;
+                    
                     while(i < MAXROW && !found){
-                        while (j < this.occupiedSlots % MAXCOL && !found) {
-                            System.out.println(curQuantity);
+                        while (j <  MAXCOL && !found) {
                             if (this.vendoItem[i][j].getProductItem()[0].getName().equals(transaction.getItem().getName())) {
-                                curQuantity = this.vendoItem[i][j].getQuantity();
-                                found = true;
-                            }
+                                curQuantity = this.vendoItem[i][j].getQuantity();        
+                                found = true;                 
+                            } 
                             j++;
                         }
+                        j=0;
                         i++;
                     }
 
                     builder.append("Transaction #"+ transaction.getNumber() + "\n");
                     builder.append("Name: " + transaction.getItem().getName() + "\n");
-                    builder.append("Amount of Items: " + "1 | Before - After (Inventory): " + (curQuantity+1) + " - " + curQuantity + "\n");
+                    builder.append("Amount of Items: " + "1 | Before - After (Inventory): " + (curQuantity+count) + " - " + curQuantity + "\n");
                     builder.append("Total: " + transaction.getTotal() + "\n");
                     builder.append("Payment: " + transaction.getPayment() + "\n");
                     builder.append("Change: " + transaction.getChange() + "\n");
-                    builder.append("Date and Time: " + transaction.toString());
+                    builder.append("Date and Time: " + transaction.toString() + "\n");
+                    builder.append("Is a Product?: " + transaction.getIsProduct() + "\n");
                     builder.append("\n----------------------------------------------------------------------------------------------------------\n");
+                    this.transactionsMade--;
                 }
+                
             }
+            
             builder.append("Total: " + sum + "\n");
         } else {
             builder.append("There are no transactions available to check");
@@ -1041,31 +1117,18 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public String showTransactions(){
         StringBuilder builder = new StringBuilder();
         double sum = 0;
-        int i = 0, j = 0, curQuantity = 0;
-        boolean found = false;
         if(this.transactionList != null && this.transactionAmount != 0){
             
             for (Transactions transaction : this.transactionList) {
                 sum += transaction.getTotal();
 
-                while(i < MAXROW && !found){
-                    while (j < this.occupiedSlots % MAXCOL && !found) {
-                        if (this.vendoItem[i][j].getProductItem()[0].getName().equals(transaction.getItem().getName())) {
-                            curQuantity = this.vendoItem[i][j].getQuantity();
-                            found = true;
-                        }
-                        j++;
-                    }
-                    i++;
-                }
-
                 builder.append("Transaction #"+ transaction.getNumber() + "\n");
                 builder.append("Name: " + transaction.getItem().getName() + "\n");
-                builder.append("Amount of Items: " + "1 | Before - After (Inventory): " + curQuantity+1 + " - " + curQuantity + "\n");
                 builder.append("Total: " + transaction.getTotal() + "\n");
                 builder.append("Payment: " + transaction.getPayment() + "\n");
                 builder.append("Change: " + transaction.getChange() + "\n");
-                builder.append("Date and Time: " + transaction.toString());
+                builder.append("Date and Time: " + transaction.toString() + "\n");
+                builder.append("Is a Product?: " + transaction.getIsProduct() + "\n");
                 
                 builder.append("\n----------------------------------------------------------------------------------------------------------\n");
             }
@@ -1083,5 +1146,5 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     public int getTransactionsMade() {
         return this.transactionsMade;
     }
-       
+    
 }

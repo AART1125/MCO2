@@ -15,7 +15,7 @@ import VendingModel.ItemsSlotsClass.ItemsSlots;
 public class Transactions {
     private double total, payment, change;
     private int number;
-    private boolean check;
+    private boolean check, isProduct;
     private Items item;
     private LocalDateTime date;
 
@@ -26,8 +26,9 @@ public class Transactions {
      * @param change Change produced in transaction
      * @param item Item bought in transaction
      * @param number Transaction number
+     * @param isProduct Transaction was by product
      */
-    public Transactions(double total, double payment, double change, Items item, int number){
+    public Transactions(double total, double payment, double change, Items item, int number, boolean isProduct){
         this.total = total;
         this.item = item;
         this.number = number;
@@ -35,6 +36,7 @@ public class Transactions {
         this.payment = payment;
         this.change = change;
         this.check = false;
+        this.isProduct = isProduct;
     }
 
     /**
@@ -47,7 +49,7 @@ public class Transactions {
      * @param check Transaction was checked
      * @param date Date of the transaction
      */
-    public Transactions(double total, double payment, double change, Items item, int number, LocalDateTime date, boolean check){
+    public Transactions(double total, double payment, double change, Items item, int number, LocalDateTime date, boolean check, boolean isProduct){
         this.total = total;
         this.payment = payment;
         this.change = change;
@@ -55,6 +57,7 @@ public class Transactions {
         this.number = number;
         this.date = date;
         this.check = check;
+        this.isProduct = isProduct;
     }
 
 
@@ -121,6 +124,10 @@ public class Transactions {
      */
     public boolean getCheck(){
         return this.check;
+    }
+
+    public boolean getIsProduct() {
+        return this.isProduct;
     }
 
     /**

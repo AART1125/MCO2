@@ -153,7 +153,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     public void fileTransactionScan(){
         int amount, number;
         double total, payment, change;
-        boolean check;
+        boolean check, isProduct;
         LocalDateTime date;
         Items item;
         Transactions temp;
@@ -171,12 +171,13 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                 change = Double.parseDouble(reader.nextLine());
                 date = LocalDateTime.parse(reader.nextLine(), formatter);
                 check = Boolean.parseBoolean(reader.nextLine());
+                isProduct = Boolean.parseBoolean(reader.nextLine());
                 reader.nextLine();
                 
                 if(!check)
                     this.salesWasDone = true;
 
-                temp = new Transactions(total, payment, change, item, number, date, check);
+                temp = new Transactions(total, payment, change, item, number, date, check, isProduct);
                 this.transactionList.add(temp);
             }
             reader.close();
@@ -204,6 +205,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                 mainWriter.println(transactions.getChange());
                 mainWriter.println(transactions.toString());
                 mainWriter.println(transactions.getCheck());
+                mainWriter.println(transactions.getIsProduct());
                 mainWriter.print("\n");
             }
             mainWriter.close();
@@ -327,7 +329,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                         if(change >= 0 && total(this.storedMoney) > 0){
                             success = true;
                             //create transaction
-                            this.transactionList.add(new Transactions(slot.getPrice(), payment, change, slot.getProductItem()[0], this.transactionAmount + 1));
+                            this.transactionList.add(new Transactions(slot.getPrice(), payment, change, slot.getProductItem()[0], this.transactionAmount + 1, false));
 
                             //decrease item from slot
                             origQuantity = slot.getQuantity();
@@ -391,21 +393,17 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     private double produceChange(Money[] userMoneys, double total){
         double change = total(userMoneys) - total,
                temp = change;
-        boolean isEnough = true;
         int numBills = 0,  denomCount = 0;
         int i = DENOMINATIONS-1, j = 0;
         Money[] tempMoney = new Money[DENOMINATIONS];
 
-        if(change < 0){
-            
-        } else {
-            //puts the denominations of user in temp in case of lacking denominations in machine
+        if(change > 0){
             for (Money money : userMoneys) {
                 tempMoney[j] = new Money(money.getValue(), money.getAmount());
                 j++;
             }
             addPaymentToMachine(userMoneys);
-            while(i >= 0 && isEnough){
+            while(i >= 0){
                 numBills = (int)temp/(int)this.storedMoney[i].getValue();
                 if(numBills > 0){
                     if(this.storedMoney[i].getAmount() >= numBills){
@@ -425,8 +423,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                 }
                 i--;
             }
-
-        }
+        } 
         return change;
     }
 

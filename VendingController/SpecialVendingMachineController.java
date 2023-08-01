@@ -289,7 +289,7 @@ public class SpecialVendingMachineController {
                     ui.clearProductField();
                     ui.setProcessArea(machine.displayProcess());
                     ui.setInputMoneyFieldText("P " + machine.total(machine.getStoredMoney()));
-                    ui.setReceiptText(machine.createTransactions(machine.getTransactionsMade()) + machine.dispenseChange());
+                    ui.setReceiptText(machine.createProductTransactions(machine.getTransactionsMade()) + machine.dispenseChange());
                     ui.setMDisplayText(machine.showNewTransactions());
                     ui.setProductIcon(new ImageIcon(productPaths.get(name)));
                 } else {
