@@ -787,7 +787,6 @@ public class RegularVendingMachineController {
         pathNames.put("E4", "./VendingView/Images/Items/E4.jpg");
         pathNames.put("E5", "./VendingView/Images/Items/E5.png");
         pathNames.put("F1", "./VendingView/Images/Items/F1.jpg");
-        pathNames.put("empty", "./VendingView/Images/Items/Empty.png");
 
         return pathNames;
     }

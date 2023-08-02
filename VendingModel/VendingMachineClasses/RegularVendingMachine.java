@@ -598,10 +598,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             this.vendoItem[row][col].setProductItems(this.vendoItem[row][col].getProductItem()[0]);
         } else {
             success = true;
-            this.vendoItem[this.occupiedRow][this.occupiedSlots].setPrice(price);
-            this.vendoItem[this.occupiedRow][this.occupiedSlots].setQuantity(quantity);
-            this.vendoItem[this.occupiedRow][this.occupiedSlots].getProductItem()[0] = new Items(name, calories, type);
-            this.vendoItem[this.occupiedRow][this.occupiedSlots].setProductItems(this.vendoItem[this.occupiedRow][this.occupiedSlots].getProductItem()[0]);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].setPrice(price);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].setQuantity(quantity);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getProductItem()[0] = new Items(name, calories, type);
+            this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].setProductItems(this.vendoItem[this.occupiedRow][this.occupiedSlots % MAXCOL].getProductItem()[0]);
         
             this.occupiedSlots++;
         

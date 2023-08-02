@@ -1,12 +1,12 @@
-1
 5
+26
 
 0
 0
 Strawberry
 Fruits
 10
-16
+8
 10.0
 
 0
@@ -14,7 +14,7 @@ Fruits
 Mango
 Fruits
 20
-20
+19
 15.0
 
 0
@@ -110,7 +110,7 @@ Veggies
 Whole Milk
 Liquids
 20
-19
+17
 25.0
 
 2
@@ -134,7 +134,7 @@ Liquids
 Ice
 Liquids
 20
-19
+17
 1.0
 
 3
@@ -142,7 +142,7 @@ Liquids
 Sugar
 Add-Ons
 20
-19
+17
 5.0
 
 3
