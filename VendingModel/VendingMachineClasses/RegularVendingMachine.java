@@ -23,6 +23,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         super();
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public void fileItemScan(){
         int quantity, calories, row = 0, col = 0;
@@ -57,6 +61,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public void fileItemWrite(){
         int i, j;
@@ -88,6 +96,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public void fileMoneyScan(){
         double value;
@@ -111,6 +123,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public void fileMoneyWrite(){
         int i;
@@ -131,6 +147,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public void fileTransactionScan(){
         int amount, number;
@@ -165,6 +185,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public void fileTransactionWrite(){
         try {
@@ -191,6 +215,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
     
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public void initialization(ItemsSlots[][] vendoItems){
         int i, j;
@@ -211,6 +239,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public void initialization(Money[] moneys){
         int i;
@@ -219,6 +251,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public String display(){
         StringBuilder builder = new StringBuilder();
@@ -241,6 +277,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return builder.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public boolean collectMoney(double price) {
         boolean exists = false, success = false;
@@ -401,6 +441,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public String dispenseChange() {
         StringBuilder builder = new StringBuilder();
@@ -421,6 +465,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return builder.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public String displayProcess(){
         StringBuilder process = new StringBuilder();
@@ -433,6 +481,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return process.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public double total(Money[] moneys){
         int i;
@@ -443,6 +495,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return sum;
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public void inputDenomenations(double price){
         int i = 0;
@@ -463,6 +519,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    //sorts money array using selection sort
     private void sortMoney(){
         int i, j, min;
         Money temp;
@@ -482,6 +539,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public String checkDenom(){
         StringBuilder builder = new StringBuilder();
@@ -500,6 +561,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return builder.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public boolean inputItems(String name, String type, double price, int quantity, int calories){
         boolean found = false, success = false;
@@ -540,6 +605,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public boolean changePrice(double newPrice, String label){
         int row, col;
@@ -556,6 +625,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     } 
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public boolean increaseItem(String label){
         int row, col, origQuantity;
@@ -583,6 +656,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public boolean decreaseItem(String label) {
         int row, col;
@@ -607,6 +684,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public boolean collectMoneyInMachine(){
         int i = 0, amount = 0;
@@ -657,6 +738,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return success;
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public String showNewTransactions(){
         StringBuilder builder = new StringBuilder();
@@ -687,6 +772,10 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         return builder.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     * Inherited from <code>InterfaceVendingMachine</code>
+     */
     @Override
     public String showTransactions(){
         StringBuilder builder = new StringBuilder();
