@@ -334,7 +334,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             } else {
                 itemCounts.replace(itemName.toLowerCase(), itemCounts.get(itemName) + 1);
             }
-            System.out.println(itemName + " " + itemCounts.get(itemName));
         }
 
         int requiredQuantity = 0;
