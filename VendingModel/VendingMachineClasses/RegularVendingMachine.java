@@ -440,12 +440,8 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
             if (this.storedMoney[denominationIndex].getAmount() > 0) {
                 decrement = this.storedMoney[denominationIndex].getAmount() - amount;
                 this.storedMoney[denominationIndex].setAmount(decrement);
-            } else {
-                System.out.println("Denomination of P" + value + " not available.");
-            }
-        } else {
-            System.out.println("Invalid denomination.");
-        }
+            } 
+        } 
     }
 
     /**
