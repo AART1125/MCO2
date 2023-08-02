@@ -16,10 +16,10 @@ import VendingView.SpecialVendingMachineUIPack.SpecialVendingMachineUI;
  * All the function calls for the program are set here.
  */
 public class SpecialVendingMachineController {
-    private Hashtable<String,String> productPaths;
-    private MenuUi menu;    
+    private Hashtable<String,String> productPaths;    
     private SpecialVendingMachine machine;
     private SpecialVendingMachineUI ui;
+    private MenuUi menu;
 
     /**
      * Contructor of the <code>SpecialVendingMachineController</code>. Function calls are set here
@@ -277,6 +277,9 @@ public class SpecialVendingMachineController {
                     ui.getMainFrame().revalidate();
                     ui.getMaintenanceFrame().revalidate();
                 } else {
+                    ui.setProductIcon(new ImageIcon(new ImageIcon("./VendingView/Images/mainIcon.jpg").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
+                    ui.clearProcessArea();
+                    ui.setReceiptText("Failed");
                     ui.clearItemsField();
                 }
             }
@@ -304,6 +307,8 @@ public class SpecialVendingMachineController {
                     ui.setMDisplayText(machine.showNewTransactions());
                     ui.setProductIcon(new ImageIcon(new ImageIcon(productPaths.get(name.toLowerCase())).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
                 } else {
+                    ui.setProductIcon(new ImageIcon(new ImageIcon("./VendingView/Images/mainIcon.jpg").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
+                    ui.clearProcessArea();
                     ui.setReceiptText("Fail");
                 }
                 
@@ -323,6 +328,7 @@ public class SpecialVendingMachineController {
                 ui.getMainFrame().setVisible(false);
                 ui.getMaintenanceFrame().setVisible(true);
                 ui.clearReceiptArea();
+                ui.clearProcessArea();
                 ui.clearProductField();
                 ui.setProductIcon(new ImageIcon(new ImageIcon("./VendingView/Images/mainIcon.jpg").getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
 
@@ -840,9 +846,9 @@ public class SpecialVendingMachineController {
         pathNames.put("watermelon smoothie", "./VendingView/Images/Product/Watermelon Smoothie.png");
         pathNames.put("peach smoothie", "./VendingView/Images/Product/Peach Smoothie.png");
         pathNames.put("oreo banana smoothie", "./VendingView/Images/Product/Oreo Banana Smoothie.png");
-        pathNames.put("pb banana Smoothie", "./VendingView/Images/Product/PB Banana Smoothie.png");
-        pathNames.put("health Smoothie", "./VendingView/Images/Product/Health Smoothie.png");
-        pathNames.put("forest Smoothie", "./VendingView/Images/Product/PB Banana Smoothie.png");
+        pathNames.put("pb banana smoothie", "./VendingView/Images/Product/PB Banana Smoothie.png");
+        pathNames.put("health smoothie", "./VendingView/Images/Product/Health Smoothie.png");
+        pathNames.put("forest smoothie", "./VendingView/Images/Product/PB Banana Smoothie.png");
         pathNames.put("protein Smoothie", "./VendingView/Images/Product/Protein Smoothie.png");
 
         return pathNames;

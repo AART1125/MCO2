@@ -390,7 +390,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
         int i = DENOMINATIONS-1, j = 0;
         Money[] tempMoney = new Money[DENOMINATIONS];
 
-        if(change > 0){
+        if(change >= 0){
             for (Money money : userMoneys) {
                 tempMoney[j] = new Money(money.getValue(), money.getAmount());
                 j++;
@@ -402,7 +402,6 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                     if(this.storedMoney[i].getAmount() >= numBills){
                         temp -= this.storedMoney[i].getValue()*numBills;
                         removeDenomination(this.storedMoney[i].getValue(), numBills);
-
                         userMoneys[denomCount] = new Money(this.storedMoney[i].getValue(), numBills);
                         denomCount++;
                     } else {

@@ -1495,6 +1495,13 @@ public class SpecialVendingMachineUI {
     }
 
     /**
+     * Sets the process area to its initial text
+     */
+    public void clearProcessArea(){
+        this.processArea.setText("");
+    }
+
+    /**
      * Clears the cart area
      */
     public void clearCartAreaField() {

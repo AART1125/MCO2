@@ -318,7 +318,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         double price = 0.0, change = 0.0, payment = 0.0;
         String productName = input.toLowerCase(); 
 
-        Hashtable<String, Integer> requiredIngredients = findProd(productName);
+        Hashtable<String, Integer> requiredIngredients = new Hashtable<String,Integer>();
+        requiredIngredients = findProd(productName);
         Hashtable<String, Integer> itemCounts = new Hashtable<String, Integer>();
 
         // Count the occurrences of each item in the cart
@@ -330,26 +331,24 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 } else {
                     itemCounts.put(itemName.toLowerCase(), 1);
                 }
-                
             } else {
                 itemCounts.replace(itemName.toLowerCase(), itemCounts.get(itemName) + 1);
             }
+            System.out.println(itemName + " " + itemCounts.get(itemName));
         }
 
-        while (i < this.userCart.size() && success) {
-            int requiredQuantity = 0;
-            int cartQuantity = 0;
+        int requiredQuantity = 0;
+        int cartQuantity = 0;
 
-            for (String key : requiredIngredients.keySet()) {
-                    requiredQuantity = requiredIngredients.get(key);
-                    cartQuantity = itemCounts.getOrDefault(key, 0);
-                    if (cartQuantity < requiredQuantity) {
-                        success = false;
-                    }
-                
-            }
-            i++;
+        for (String key : requiredIngredients.keySet()) {
+                requiredQuantity = requiredIngredients.get(key);
+                cartQuantity = itemCounts.getOrDefault(key, 0);
+                if (cartQuantity < requiredQuantity) {
+                    success = false;
+                }
+            
         }
+        
         
         if (success){
             i=0;
@@ -361,7 +360,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             price *= 2;
             payment = total(userMoney);
             change = produceChange(userMoney, price);
-
             if (change >= 0) {
                 for (i = 0; i < this.userCart.size(); i++){
                     this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], this.transactionAmount+1, true));
@@ -384,85 +382,84 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
     //Creates a hashtable for the products
     private Hashtable<String, Integer> findProd(String productName) {
-
-            Hashtable<String, Integer> requiredIngredients = new Hashtable<String, Integer>();
-            if ("strawberry smoothie".equalsIgnoreCase(productName)) {
+        Hashtable<String, Integer> requiredIngredients = new Hashtable<String, Integer>();
+            if ("strawberry smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("strawberry", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("mango smoothie".equalsIgnoreCase(productName)) {
+            } else if ("mango smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("mango", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("mixed berry smoothie".equalsIgnoreCase(productName)) {
+            } else if ("mixed berry smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("mixedberries", 2);
                 requiredIngredients.put("strawberry", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("strawberry banana smoothie".equalsIgnoreCase(productName)) {
+            } else if ("strawberry banana smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("strawberry", 2);
                 requiredIngredients.put("banana", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("mango graham smoothie".equalsIgnoreCase(productName)) {
+            } else if ("mango graham smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("mango", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("graham", 1);
                 requiredIngredients.put("sugar", 1);
-            } else if ("spring smoothie".equalsIgnoreCase(productName)) {
+            } else if ("spring smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("mango", 1);
                 requiredIngredients.put("orange", 1);
                 requiredIngredients.put("carrot", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("honey", 1);
-            } else if ("tropical dragon smoothie".equalsIgnoreCase(productName)) {
+            } else if ("tropical dragon smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("dragonfruit", 2);
                 requiredIngredients.put("mixedberries", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("oats", 1);
-            } else if ("watermelon smoothie".equalsIgnoreCase(productName)) {
+            } else if ("watermelon smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("watermelon", 2);
                 requiredIngredients.put("grapes", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("honey", 1);
-            } else if ("peach smoothie".equalsIgnoreCase(productName)) {
+            } else if ("peach smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("peach", 2);
                 requiredIngredients.put("orange", 1);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("wafer", 1);
-            } else if ("oreo banana smoothie".equalsIgnoreCase(productName)) {
+            } else if ("oreo banana smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("banana", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("oreo", 1);
-            } else if ("pb banana smoothie".equalsIgnoreCase(productName)) {
+            } else if ("pb banana smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("banana", 3);
                 requiredIngredients.put("milk", 1);
                 requiredIngredients.put("ice", 1);
-                requiredIngredients.put("peanutbutter", 1);
-            } else if ("health smoothie".equalsIgnoreCase(productName)) {
+                requiredIngredients.put("peanut butter", 1);
+            } else if ("health smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("apple", 2);
                 requiredIngredients.put("spinach", 1);
                 requiredIngredients.put("almond milk", 1);
                 requiredIngredients.put("ice", 1);
-                requiredIngredients.put("spirulinapowder", 1);
-            } else if ("forest smoothie".equalsIgnoreCase(productName)) {
+                requiredIngredients.put("spirulina powder", 1);
+            } else if ("forest smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("mango", 1);
                 requiredIngredients.put("orange", 1);
                 requiredIngredients.put("kale", 1);
                 requiredIngredients.put("oat milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("honey", 1);
-            } else if ("protein smoothie".equalsIgnoreCase(productName)) {
+            } else if ("protein smoothie".equals(productName.toLowerCase())) {
                 requiredIngredients.put("banana", 3);
                 requiredIngredients.put("oat milk", 1);
                 requiredIngredients.put("ice", 1);
@@ -526,9 +523,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                     } else {
                         success = false;
                     }
-                } else {
-                    success = false;
-                }
+                } 
                 
             } else {
                 success = false;
@@ -635,6 +630,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 if(this.storedMoney[i].getValue() == userMoney[j].getValue()){
                     newAmount = this.storedMoney[i].getAmount() + userMoney[j].getAmount();
                     this.storedMoney[i] = new Money(this.storedMoney[i].getValue(), newAmount);
+                    this.currentMon--;
                 }
             }
         }
@@ -649,12 +645,12 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      */
     public String createTransactions(int num){
         StringBuilder builder = new StringBuilder();
-        int i, transactionNum, calories, latestNum = this.transactionList.size()-this.transactionsMade;;
+        int i, transactionNum, calories;
+        int temp = this.transactionsMade, latestNum = this.transactionList.size()-temp;
         double price, total = 0, change = 0, payment = this.transactionList.get(latestNum).getPayment();
         String name;
         for (i = 0; i < num; i++) {
-            latestNum = this.transactionList.size()-this.transactionsMade;
-            if (this.transactionAmount+1 == this.transactionList.get(latestNum).getNumber()) {
+                latestNum = this.transactionList.size()-temp;
                 transactionNum =  this.transactionList.get(latestNum).getNumber();
                 name =  this.transactionList.get(latestNum).getItem().getName();
                 calories =  this.transactionList.get(latestNum).getItem().getCalories();
@@ -665,11 +661,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 builder.append("Name: " + name + "\n");
                 builder.append("Calories: " + calories + "\n");
                 builder.append("Price: " + price + "\n\n");
-                this.transactionsMade--;
-            }
-
+                temp--;
         }
-
         change = payment - total;
 
         builder.append("\n----------------------------\n");
@@ -690,13 +683,14 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
      */
     public String createProductTransactions(int num){
         StringBuilder builder = new StringBuilder();
-        int i, j, k, transactionNum, calories, latestNum = this.transactionList.size()-this.transactionsMade;
+        int i, j, k, transactionNum, calories;
+        int temp = this.transactionsMade, latestNum = this.transactionList.size()-temp;
         double total = this.transactionList.get(latestNum).getTotal(), payment = this.transactionList.get(latestNum).getPayment();
         double price = 0, change = 0;
         boolean found = false;
         String name;
         for (i = 0; i < num; i++) {
-            latestNum = this.transactionList.size()-this.transactionsMade;
+            latestNum = this.transactionList.size()-temp;
             if (this.transactionAmount+1 == this.transactionList.get(latestNum).getNumber()) {
                 transactionNum =  this.transactionList.get(latestNum).getNumber();
                 name =  this.transactionList.get(latestNum).getItem().getName();
@@ -722,11 +716,10 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 builder.append("Name: " + name + "\n");
                 builder.append("Calories: " + calories + "\n");
                 builder.append("Price: " + price + "\n\n");
-                this.transactionsMade--;
+                temp--;
             }
 
         }
-
         change = payment - total;
 
         builder.append("\n----------------------------\n");
@@ -1053,7 +1046,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
     @Override
     public String showNewTransactions(){
         StringBuilder builder = new StringBuilder();
-        double sum = 0;
         int i = 0, j = 0, k, count = 0, curQuantity = 0;
         boolean found;
 
@@ -1061,7 +1053,6 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             for (Transactions transaction : this.transactionList) {
                 if(!transaction.getCheck()){
                     transaction.setCheck(true);
-                    sum += transaction.getTotal();
                     found = false;
 
                     count = 0;
@@ -1095,12 +1086,11 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                     builder.append("Date and Time: " + transaction.toString() + "\n");
                     builder.append("Is a Product?: " + transaction.getIsProduct() + "\n");
                     builder.append("\n--------------------------------------------------------------\n");
-                    this.transactionsMade--;
                     transaction.setCheck(false);
                 }
                 
             }
-            
+            this.transactionsMade=0;
         } else {
             builder.append("There are no transactions available to check");
         }
