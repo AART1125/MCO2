@@ -275,7 +275,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             build.append("Name: " + this.userCart.get(i).getProductItem()[0].getName() + "\n");
             build.append("Price: " + this.userCart.get(i).getPrice() + "\n");
             build.append("Calories(g): " + this.userCart.get(i).getProductItem()[0].getCalories() + "\n");    
-            build.append("\n------------------------------------------------------------------------\n");
+            build.append("\n----------------------------\n");
         }
 
         return build.toString();
@@ -342,7 +342,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
             for (String key : requiredIngredients.keySet()) {
                     requiredQuantity = requiredIngredients.get(key);
-                    cartQuantity = itemCounts.get(key);
+                    cartQuantity = itemCounts.getOrDefault(key, 0);
                     if (cartQuantity < requiredQuantity) {
                         success = false;
                     }
@@ -362,7 +362,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             payment = total(userMoney);
             change = produceChange(userMoney, price);
 
-            if (total(userMoney) >= price) {
+            if (change >= 0) {
                 for (i = 0; i < this.userCart.size(); i++){
                     this.transactionList.add(new Transactions(price, payment, change, this.userCart.get(i).getProductItem()[0], this.transactionAmount+1, true));
                     this.transactionsMade++;
@@ -452,19 +452,19 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
             } else if ("health smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("apple", 2);
                 requiredIngredients.put("spinach", 1);
-                requiredIngredients.put("almondmilk", 1);
+                requiredIngredients.put("almond milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("spirulinapowder", 1);
             } else if ("forest smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("mango", 1);
                 requiredIngredients.put("orange", 1);
                 requiredIngredients.put("kale", 1);
-                requiredIngredients.put("oatmilk", 1);
+                requiredIngredients.put("oat milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("honey", 1);
             } else if ("protein smoothie".equalsIgnoreCase(productName)) {
                 requiredIngredients.put("banana", 3);
-                requiredIngredients.put("oatmilk", 1);
+                requiredIngredients.put("oat milk", 1);
                 requiredIngredients.put("ice", 1);
                 requiredIngredients.put("protein powder", 1);
             }
@@ -672,11 +672,11 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
         change = payment - total;
 
-        builder.append("----------------------------------------------\n");
+        builder.append("\n----------------------------\n");
         builder.append("Total  : " + total + "\n");
         builder.append("Payment: " + payment + "\n");
         builder.append("Change : " + change + "\n");
-        builder.append("----------------------------------------------\n\n");
+        builder.append("\n----------------------------\n");
         
         this.transactionAmount++;
         
@@ -729,11 +729,11 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
 
         change = payment - total;
 
-        builder.append("----------------------------------------------\n");
-        builder.append("Total  : " + total + "\n");
+        builder.append("\n----------------------------\n");
+        builder.append("Total: " + total + "\n");
         builder.append("Payment: " + payment + "\n");
         builder.append("Change : " + change + "\n");
-        builder.append("----------------------------------------------\n\n");
+        builder.append("\n----------------------------\n");
         
         this.transactionAmount++;
         
@@ -773,8 +773,8 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         StringBuilder process = new StringBuilder();
         
         process.append("Getting Ingridients...\n");
-        process.append("Chopping Ingredients...\n");
-        process.append("Placing ingredients in blender..\n\n");
+        process.append("Chopping Ingredients..\n");
+        process.append("Putting ingredients inblender..\n\n");
         process.append("Blending...\n\n");
         process.append("Success!");
 
@@ -842,6 +842,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
         }
     }
 
+    //Sorts the money array using selection sort
     private void sortMoney(){
         int i, j, min;
         Money temp;
@@ -1093,13 +1094,13 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                     builder.append("Change: " + transaction.getChange() + "\n");
                     builder.append("Date and Time: " + transaction.toString() + "\n");
                     builder.append("Is a Product?: " + transaction.getIsProduct() + "\n");
-                    builder.append("\n----------------------------------------------------------------------------------------------------------\n");
+                    builder.append("\n--------------------------------------------------------------\n");
                     this.transactionsMade--;
+                    transaction.setCheck(false);
                 }
                 
             }
             
-            builder.append("Total: " + sum + "\n");
         } else {
             builder.append("There are no transactions available to check");
         }
@@ -1128,7 +1129,7 @@ public class SpecialVendingMachine extends VendingMachine implements InterfaceVe
                 builder.append("Date and Time: " + transaction.toString() + "\n");
                 builder.append("Is a Product?: " + transaction.getIsProduct() + "\n");
                 
-                builder.append("\n----------------------------------------------------------------------------------------------------------\n");
+                builder.append("\n--------------------------------------------------------------\n");
             }
             builder.append("Total: " + sum + "\n");
         } else {

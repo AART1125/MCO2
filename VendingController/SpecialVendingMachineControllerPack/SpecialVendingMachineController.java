@@ -266,6 +266,7 @@ public class SpecialVendingMachineController {
                     ui.clearCartAreaField();
                     ui.clearCashField();
                     ui.clearItemsField();
+                    ui.clearProductField();
                     ui.setMDisplayText(machine.showNewTransactions());
                     for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
                         for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
@@ -301,7 +302,7 @@ public class SpecialVendingMachineController {
                     ui.setInputMoneyFieldText("P " + machine.total(machine.getStoredMoney()));
                     ui.setReceiptText(machine.createProductTransactions(machine.getTransactionsMade()) + machine.dispenseChange());
                     ui.setMDisplayText(machine.showNewTransactions());
-                    ui.setProductIcon(new ImageIcon(new ImageIcon(productPaths.get(name)).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
+                    ui.setProductIcon(new ImageIcon(new ImageIcon(productPaths.get(name.toLowerCase())).getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT)));
                 } else {
                     ui.setReceiptText("Fail");
                 }
@@ -312,6 +313,7 @@ public class SpecialVendingMachineController {
         this.ui.setCancelBtnListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 machine.getUserCart().clear();
+                ui.clearProductField();
                 ui.clearCartAreaField();
             }
         });
@@ -815,6 +817,12 @@ public class SpecialVendingMachineController {
             
             }
         });  
+
+        this.ui.setOpenProductListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                ui.getProductsFrame().setVisible(true);
+            }
+        });
                 
     }
 

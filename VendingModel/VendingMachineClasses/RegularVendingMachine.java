@@ -258,19 +258,19 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     @Override
     public String display(){
         StringBuilder builder = new StringBuilder();
-        double change = this.transactionList.get(this.transactionAmount).getPayment() - this.transactionList.get(this.transactionAmount).getTotal();
+        double change = this.transactionList.get(this.transactionList.size()-1).getPayment() - this.transactionList.get(this.transactionList.size()-1).getTotal();
 
-        if(this.transactionList.get(this.transactionAmount) != null){
+        if(this.transactionList.get(this.transactionList.size()-1) != null){
 
-            builder.append("Transaction #" + this.transactionList.get(this.transactionAmount).getNumber() + "\n");
-            builder.append("Name: " + this.transactionList.get(this.transactionAmount).getItem().getName()  + "\n");
-            builder.append("Calories(g): "+ this.transactionList.get(this.transactionAmount).getItem().getCalories()  + "\n");
-            builder.append("Total: " + this.transactionList.get(this.transactionAmount).getTotal()  + "\n");
-            builder.append("----------------------------------------------\n");
-            builder.append("Total: "+ this.transactionList.get(this.transactionAmount).getTotal()  + "\n");
-            builder.append("Payment: "+ this.transactionList.get(this.transactionAmount).getPayment()  + "\n");
+            builder.append("Transaction #" + this.transactionList.get(this.transactionList.size()-1).getNumber() + "\n");
+            builder.append("Name: " + this.transactionList.get(this.transactionList.size()-1).getItem().getName()  + "\n");
+            builder.append("Calories(g): "+ this.transactionList.get(this.transactionList.size()-1).getItem().getCalories()  + "\n");
+            builder.append("Total: " + this.transactionList.get(this.transactionList.size()-1).getTotal()  + "\n");
+            builder.append("\n----------------------------\n");
+            builder.append("Total: "+ this.transactionList.get(this.transactionList.size()-1).getTotal()  + "\n");
+            builder.append("Payment: "+ this.transactionList.get(this.transactionList.size()-1).getPayment()  + "\n");
             builder.append("Change: "+ change + "\n");
-            builder.append("----------------------------------------------\n");
+            builder.append("\n----------------------------\n");
             
             this.transactionAmount++;
         }
@@ -336,9 +336,17 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                                 slot.decreaseQuantity(1);
                                 slot.updateItemsFromSlot(slot.getProductItem());
                             }
+                        } else {
+                            success = false;
                         }
+                    } else {
+                        success = false;
                     }
+                } else {
+                    success = false;
                 }
+            } else {
+                success = false;
             }
         return success;
     }
@@ -760,7 +768,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                     builder.append("Payment: " + transaction.getPayment() + "\n");
                     builder.append("Change: " + transaction.getChange() + "\n");
                     builder.append("Date and Time: " + transaction.toString());
-                    builder.append("------------------------------------------------------------------------------\n");
+                    builder.append("\n--------------------------------------------------------------\n");
                     transaction.setCheck(true);
                 }
             }
@@ -802,7 +810,7 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                 builder.append("Payment: " + transaction.getPayment() + "\n");
                 builder.append("Change: " + transaction.getChange() + "\n");
                 builder.append("Date and Time: " + transaction.toString());
-                builder.append("\n----------------------------------------------------------------------------------------------------------\n");
+                builder.append("\n--------------------------------------------------------------\n");
             }
             builder.append("Total: " + sum + "\n");
         } else {

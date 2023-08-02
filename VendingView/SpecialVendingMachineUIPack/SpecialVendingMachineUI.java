@@ -1180,22 +1180,22 @@ public class SpecialVendingMachineUI {
         this.productMItem.add(openProducts);
         this.menu.add(productMItem);
 
-        this.productMItem = new JMenu("View Products");
-        this.openProducts = new JMenuItem("View");
-
-        this.productMItem.add(openProducts);
-        this.maintenanceMenu.add(productMItem);
-
         this.productsFrame = new JFrame("Products Available");
-        this.productsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.productsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.productsFrame.setIconImage(this.icon.getImage());
-        this.productsFrame.setSize(1000, 750);
+        this.productsFrame.setSize(725, 1000);
         this.productsFrame.setResizable(false);
 
-        JLabel tempLabel = new JLabel(icon);
+        JLabel tempLabel = new JLabel(new ImageIcon(new ImageIcon("VendingView/Images/ProductMenu.jpg").getImage()));
         tempLabel.setVerticalAlignment(JLabel.TOP);
         tempLabel.setHorizontalAlignment(JLabel.LEFT);
-        this.productsFrame.add(tempLabel);
+
+        JScrollPane tempPane = new JScrollPane(tempLabel);
+        tempPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        tempPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        tempPane.setPreferredSize(new Dimension(700, 1000));
+        tempPane.setMinimumSize(new Dimension(700, 1000));
+        this.productsFrame.add(tempPane);
 
         this.productsFrame.setVisible(true);
     }
@@ -2139,6 +2139,17 @@ public class SpecialVendingMachineUI {
      */
     public JFrame getMaintenanceFrame() {
         return this.maintenanceFrame;
+    }
+
+    //-------------------------------------------------
+    //Menu Frame
+
+    /**
+     * Sets the <code>ActionListener</code> of the Open Products Menu button in the user interface
+     * @param actn Open Menu
+     */
+    public void setOpenProductListener(ActionListener actn){
+        this.openProducts.addActionListener(actn);
     }
 
     /**

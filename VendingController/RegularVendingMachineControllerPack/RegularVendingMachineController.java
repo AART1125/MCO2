@@ -250,6 +250,7 @@ public class RegularVendingMachineController {
                     ui.getMainFrame().revalidate();
                     ui.getMaintenanceFrame().revalidate();
                 } else {
+                    ui.setReceiptAreaText("Failed");
                     ui.clearItemsField();
                 }
             }
