@@ -548,7 +548,7 @@ public class SpecialVendingMachineUI {
         this.maintenanceFrame.setLayout(new GridBagLayout());
         this.maintenanceFrame.getContentPane().setBackground(Color.RED);
         this.maintenanceFrame.setSize(750, 1010);
-        this.maintenanceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.maintenanceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.maintenanceFrame.setLocationRelativeTo(null);
         this.maintenanceFrame.setResizable(false);
 

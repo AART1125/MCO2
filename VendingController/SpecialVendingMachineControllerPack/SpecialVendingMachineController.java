@@ -231,7 +231,7 @@ public class SpecialVendingMachineController {
             }
         });
 
-            this.ui.setItemBtnConListener(new ActionListener() {
+        this.ui.setItemBtnConListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 String label = ui.getItemsFieldText();
                 boolean success = machine.addItemToCart(label);
@@ -521,15 +521,15 @@ public class SpecialVendingMachineController {
             }
         });
 
-       this.ui.setMItemBtn4Listener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                if (ui.getIncDecFieldText().equals("Input Item Label")) {
-                    ui.setIncDecFieldText("4");
-                } else {
-                    ui.setIncDecFieldText(ui.getIncDecFieldText()+"4");
+        this.ui.setMItemBtn4Listener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    if (ui.getIncDecFieldText().equals("Input Item Label")) {
+                        ui.setIncDecFieldText("4");
+                    } else {
+                        ui.setIncDecFieldText(ui.getIncDecFieldText()+"4");
+                    }
                 }
-            }
-        });
+            });
 
         this.ui.setMItemBtn5Listener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
@@ -724,7 +724,7 @@ public class SpecialVendingMachineController {
                 boolean added = machine.decreaseItem(label);
 
                 if (added) {
-                    ui.setMDisplayText("Successfully Increased!");
+                    ui.setMDisplayText("Successfully Decreased!");
                     for (int i = 0; i < SpecialVendingMachine.getMaxrow(); i++) {
                         for (int j = 0; j < SpecialVendingMachine.getMaxcol(); j++) {
                             String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();

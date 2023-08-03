@@ -655,7 +655,7 @@ public class RegularVendingMachineController {
                 boolean added = machine.decreaseItem(label);
 
                 if (added) {
-                    ui.setMDisplayText("Successfully Increased!");
+                    ui.setMDisplayText("Successfully Decreased!");
                     for (int i = 0; i < RegularVendingMachine.getMaxrow(); i++) {
                         for (int j = 0; j < RegularVendingMachine.getMaxcol(); j++) {
                             String items = machine.getVendoItem()[i][j].getLabel() + "|" +  machine.getVendoItem()[i][j].getQuantity() + "|P " + machine.getVendoItem()[i][j].getPrice();
