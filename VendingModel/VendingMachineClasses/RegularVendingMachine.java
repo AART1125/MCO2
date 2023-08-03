@@ -748,17 +748,38 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
     @Override
     public String showNewTransactions(){
         StringBuilder builder = new StringBuilder();
-        double sum = 0;
-        int curQuantity = 0;
+        int curQuantity = 0, count=0, i=0, j=0, k;
+        boolean found = false;
         if(this.transactionList != null && this.transactionAmount != 0){
             
             for (Transactions transaction : this.transactionList) {
                 if(!transaction.getCheck()){
-                    sum += transaction.getTotal();
+                    count = 0;
+                    found = false;
+                    for (k = 0; k < this.transactionList.size(); k++) {
+                        if (this.transactionList.get(k).getNumber() == transaction.getNumber() && this.transactionList.get(k).getItem().getName().equals(transaction.getItem().getName())) {
+                            count++;
+                        }
+                    }
+
+                    i = 0;
+                    j = 0;
+
+                    while(i < MAXROW && !found){
+                        while (j <  MAXCOL && !found) {
+                            if (this.vendoItem[i][j].getProductItem()[0].getName().equals(transaction.getItem().getName())) {
+                                curQuantity = this.vendoItem[i][j].getQuantity();        
+                                found = true;                 
+                            } 
+                            j++;
+                        }
+                        j=0;
+                        i++;
+                    }
 
                     builder.append("Transaction #"+ transaction.getNumber() + "\n");
                     builder.append("Name: " + transaction.getItem().getName() + "\n");
-                    builder.append("Amount of Items: " + "1 | Before - After (Inventory): " + curQuantity+1 + " - " + curQuantity + "\n");
+                    builder.append("Amount of Items: " + "1 | Before - After (Inventory): " + (curQuantity+count) + " - " + curQuantity + "\n");
                     builder.append("Total: " + transaction.getTotal() + "\n");
                     builder.append("Payment: " + transaction.getPayment() + "\n");
                     builder.append("Change: " + transaction.getChange() + "\n");
@@ -767,7 +788,6 @@ public class RegularVendingMachine extends VendingMachine implements InterfaceVe
                     transaction.setCheck(true);
                 }
             }
-            builder.append("Total: " + sum + "\n\n");
         } else {
             builder.append("There are no transactions available to check");
         }

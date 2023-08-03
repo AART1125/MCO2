@@ -84,7 +84,7 @@ public class RegularVendingMachineUI {
         
         //Mainframe settings on start up
         this.mainFrame = new JFrame("Smoothie Machine");
-        this.mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.mainFrame.setIconImage(this.icon.getImage());
         this.mainFrame.setLayout(new GridBagLayout());
         this.mainFrame.getContentPane().setBackground(Color.RED);
@@ -243,7 +243,7 @@ public class RegularVendingMachineUI {
         this.itemBtnF = new JButton("F");
         this.itemBtnF.setFont(digitalFont.deriveFont(12.2f));
         this.itemBtnF.setMargin(new Insets(10, 12, 10, 12));
-        this.itemBtnCon = new JButton("✓");
+        this.itemBtnCon = new JButton("$");
         this.itemBtnCon.setBackground(Color.green);
         this.itemBtnCon.setForeground(Color.white);
         this.itemBtnCon.setMargin(new Insets(10, 12, 10, 12));
@@ -461,7 +461,7 @@ public class RegularVendingMachineUI {
         this.maintenanceFrame.setLayout(new GridBagLayout());
         this.maintenanceFrame.getContentPane().setBackground(Color.RED);
         this.maintenanceFrame.setSize(750, 1010);
-        this.maintenanceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.maintenanceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.maintenanceFrame.setLocationRelativeTo(null);
         this.maintenanceFrame.setResizable(false);
 

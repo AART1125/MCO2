@@ -85,7 +85,7 @@ public class SpecialVendingMachineUI {
         
         //Mainframe settings on start up
         this.mainFrame = new JFrame("Smoothie Machine");
-        this.mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.mainFrame.setIconImage(this.icon.getImage());
         this.mainFrame.setLayout(new GridBagLayout());
         this.mainFrame.getContentPane().setBackground(Color.RED);
